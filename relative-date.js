@@ -40,12 +40,12 @@ function dateBuild(datestring) {
 }
 
 
-console.log(dateBuild("as5AxxDbt!"))
-console.log(dateBuild("as5AxxY+1"))
-console.log(dateBuild("M-2"))
-console.log(dateBuild("Adfdas5AxxDbt!"))
-console.log(dateBuild("Yas5AxxDbt!"))
-console.log(dateBuild("YasY5AxxDbt!"))
+// console.log(dateBuild("as5AxxDbt!"))
+// console.log(dateBuild("as5AxxY+1"))
+// console.log(dateBuild("M-2"))
+// console.log(dateBuild("Adfdas5AxxDbt!"))
+// console.log(dateBuild("Yas5AxxDbt!"))
+// console.log(dateBuild("YasY5AxxDbt!"))
 
 
 let dateBuilt = dateBuild("M-28")
@@ -95,8 +95,6 @@ function getOffset(datepart) {
             position += 1
 
             let doffset = findConsecutiveNumbers(datepart.slice(position))
-            // console.log("doffset - " + doffset)
-            // console.log(position, datepart.length)
             position += String(doffset).length
 
             if (position === datepart.length) {
@@ -122,12 +120,9 @@ function getOffset(datepart) {
                     }
                 }
             }
-            // return dateChangeDays(today, Number(posNeg + doffset))
         } else {
             if (isNumber(datepart[position])) {
                 let offsetValue = findConsecutiveNumbers(datepart.slice(position))
-                // return dateChangeDays(new Date(today.getFullYear(), 0, 1), dayNumber - 1)
-                // console.log(position, datepart.length)
 
                 return {
                     datepart: adwmy,
@@ -154,8 +149,7 @@ function getOffset(datepart) {
             }
         }
     } else {
-        // 'd' entered only ie today
-        // return today
+        // "D" or "W" or "M" or "Y" entered only. Offset is zero
         return {
             datepart: adwmy,
             offset: 0,
