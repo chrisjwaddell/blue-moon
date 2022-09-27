@@ -48,18 +48,42 @@ console.log(dateBuild("Yas5AxxDbt!"))
 console.log(dateBuild("YasY5AxxDbt!"))
 
 
-let dateBuilt = dateBuild("M-2")
+let dateBuilt = dateBuild("M-28")
 
 if (dateBuilt.M) {
     console.log(dateBuilt.M)
-    let m = getOffsetNew(dateBuilt.M)
+    let m = getOffset(dateBuilt.M)
     console.log(m)
 }
 
 
+function dateObjectsPutTogether(dateobject) {
+    let result = []
 
-function getOffsetNew(datepart) {
+    console.log(dateobject)
+    if (dateobject.A)
+        result.push(getOffset(dateobject.A))
+    if (dateobject.D)
+        result.push(getOffset(dateobject.D))
+    if (dateobject.W)
+        result.push(getOffset(dateobject.W))
+    if (dateobject.M)
+        result.push(getOffset(dateobject.M))
+    if (dateobject.Y)
+        result.push(getOffset(dateobject.Y))
+
+    return result
+}
+
+console.log("HERE ***********************")
+console.log(dateBuild("AsuM-5"))
+console.log(dateObjectsPutTogether(dateBuild("AsuM-5")))
+
+
+
+function getOffset(datepart) {
     // which one is it - A, D, W, M, Y. It's in the first character
+    console.log("datepart - " + datepart)
     let adwmy = datepart[0]
     let position = 1
     let posNeg = ""
@@ -71,7 +95,9 @@ function getOffsetNew(datepart) {
             position += 1
 
             let doffset = findConsecutiveNumbers(datepart.slice(position))
-            console.log(position, datepart.length)
+            // console.log("doffset - " + doffset)
+            // console.log(position, datepart.length)
+            position += String(doffset).length
 
             if (position === datepart.length) {
                 return {
@@ -81,13 +107,19 @@ function getOffsetNew(datepart) {
                 }
 
             } else {
-                if (datepart[position] === "e") {
+                if (datepart[position] === "e" && adwmy === "M") {
                     return {
-                        offset: Number(posNeg + doffset),
+                        datepart: adwmy,
+                        offset: "e",
                         type: "relative " + datepart[position]
                     }
                 } else {
-                    dateRelative()
+                    // error
+                    return {
+                        datepart: adwmy,
+                        offset: 0,
+                        type: "error - " + adwmy + " is not the correct format"
+                    }
                 }
             }
             // return dateChangeDays(today, Number(posNeg + doffset))
@@ -95,24 +127,41 @@ function getOffsetNew(datepart) {
             if (isNumber(datepart[position])) {
                 let offsetValue = findConsecutiveNumbers(datepart.slice(position))
                 // return dateChangeDays(new Date(today.getFullYear(), 0, 1), dayNumber - 1)
-                console.log(position, datepart.length)
+                // console.log(position, datepart.length)
 
                 return {
+                    datepart: adwmy,
                     offset: Number(offsetValue),
                     type: "absolute"
                 }
 
             } else {
-                // error
-                return {
-                    offset: 0,
-                    type: "error"
+                if (datepart[position] === "e" && adwmy === "M") {
+                    return {
+                        datepart: adwmy,
+                        offset: "e",
+                        type: "relative " + datepart[position]
+                    }
+
+                } else {
+                    // error
+                    return {
+                        datepart: adwmy,
+                        offset: 0,
+                        type: "error - " + adwmy + " is not the correct format"
+                    }
                 }
             }
         }
     } else {
         // 'd' entered only ie today
-        return today
+        // return today
+        return {
+            datepart: adwmy,
+            offset: 0,
+            type: "absolute"
+        }
+
     }
 
 }
