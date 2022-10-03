@@ -8,3 +8,14 @@ An absolute date reference is D20M10 - the next occurence of 20th of October. D1
 
 You can go back or forwards in dates.
 
+
+
+## Day of week
+Day of week with Week number combines with Month, even if Month isn't specified.
+{ day: "Monday", week: 2 } means every month, Monday of the 2nd week of each month
+
+You can optionally set week as the week number of the year. You could do:
+{ day: "Monday", week: 15 }, options: { weekasYear: true } }
+
+
+
