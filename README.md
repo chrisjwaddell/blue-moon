@@ -11,7 +11,9 @@ Relative-date can be useful for setting dates for reports or generally finding s
 
 It can be relative to the current or pivot date or an absolute date.
 
-
+## Settings
+There are four main date settings: *day*, *week*, *month* and *year*.
+Each setting can be specific, relative or *current*.
 ## Day
 There are two main modes to *day*. It can be a specific day of the month such as the 3rd, or it can be a day such as Wednesday.
 The *day* property is mandatory.
@@ -109,6 +111,20 @@ Year must be either a four digit number, a relative number or *current*.
 
 
 *day*, *week*, *month* or *year* can be set as *current*.
+
+
+
+## Occur
+Occur lets you look ahead of backwards.
+``
+{ occur: "-1" }
+``
+Means the last one that occurred.
+*"+1"* is the defualt.
+
+// Default is 'occur: "+1"'
+let nextQueensBirthday = { day: "Monday", month: 6 }
+let lastQueensBirthday = { day: "Monday", month: 6, occur: "-1" }
 
 
 
