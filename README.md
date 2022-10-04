@@ -1,17 +1,13 @@
 # relative-date
 
-This library allows you to enter date formats to return one specific date that matches your criteria. It can be in the past or future.
+This library allows you to enter simple date settings to return one specific date that matches your criteria. It can be in the past or future.
+
+Relative-date can be useful for setting dates for reports or generally finding specific dates. It can be hard finding the last Wednesday of the month or Mothers day the second Sunday of May each year.
+
 It can be relative to the current or pivot date or an absolute date.
 
-Relative date references would be eg D-5 is 5 days ago. D1M+5, the 1st day of 5 months from now.
-An absolute date reference is D20M10 - the next occurence of 20th of October. D1M7P - The previous 1st of July.
 
-You can go back or forwards in dates.
-
-
-
-
-##Day
+## Day
 Refers to the day of the month, it can also refer to the day of the week.
 
 ### Day of the month
