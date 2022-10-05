@@ -5,9 +5,12 @@ This library allows you to enter simple date settings to return one specific dat
 ``
 relative-Date({ day: "Sunday L1" })
 ``
-Means the last Sunday of each month. It would return the next one, after that occurs, it would return the next one, the next months last Sunday.
+
+Means the last Sunday of each month. It would return the next one, after that occurs, it would return the next one, the next months last Sunday of the month.
 
 Relative-date can be useful for setting dates for reports or generally finding specific dates that can be tricky to code. It can be hard finding the last Wednesday of the month or Mothers day the second Sunday of May each year.
+
+relative-date is very verbose for getting specific dates for things like reports.
 
 It can be relative to the current or pivot date or an absolute date.
 
@@ -24,7 +27,7 @@ The *day* property is mandatory.
 ``
 Refers to the 5th of each month.
 
-``{day: 25, month: 3}``
+``{ day: 25, month: 3 }``
 Means 25th of March every year.
 ### Day of week
 Day of week with Week number combines with Month, even if Month isn't specified.
@@ -42,18 +45,22 @@ means Monday in two weeks. It will always give the Monday two weeks ahead of the
 You can optionally set week as the week number of the year. You could do:
 { day: "Monday", week: 15 }, options: { weekasYear: true } }
 
+*Note *- You must use quotes for relative values.
+
 ### Relative day
 For relative days, you cannot have any *week*, *month* or *year* settings.
 
 ``
-{ day: -90 }
+{ day: "-90" }
 ``
 90 days ago.
 
 ``
-{ day: -1 }
+{ day: "-1" }
 ``
 Yesterday
+
+*Note *- You must use quotes for relative values.
 
 ### Relative day of the month
 ``
@@ -76,8 +83,6 @@ Monday of this week.
 
 
 
-
-
 ## Month
 Week works with day and can work with month.
 ``{ day: "Tuesday", month: 2 }``
@@ -86,7 +91,7 @@ Tuesday in the second week of February. This specific case may be the first Tues
 ``{ day: "Tuesday 2", month: 2 }``
 This is the second Tuesday in February.
 
-``{ day: "15", month: 6, year: 2023 }``
+``{ day: 15, month: 6, year: 2023 }``
 The 15th of June, 2023.
 
 
@@ -103,6 +108,8 @@ Year must be either a four digit number, a relative number or *current*.
 { day: 1, year: "+1" }
 ``
 
+*Note *- You must use quotes for relative values.
+
 ### Current
 ``
 { day: 1, year: 2023 }
@@ -111,6 +118,16 @@ Year must be either a four digit number, a relative number or *current*.
 
 
 *day*, *week*, *month* or *year* can be set as *current*.
+
+
+
+## Pivot date
+This is the date you want to start from. You could find the first Sunday in March starting from 2000.
+You could set the pivot date as:
+``
+{ day: "Sunday 1", month: 3, pivotdate: { day: 1, month: 1, year: 2000 } }
+``
+
 
 
 
@@ -123,8 +140,8 @@ Means the last one that occurred.
 *"+1"* is the defualt.
 
 // Default is 'occur: "+1"'
-let nextQueensBirthday = { day: "Monday", month: 6 }
-let lastQueensBirthday = { day: "Monday", month: 6, occur: "-1" }
+let nextMothersDay = { day: "Sunday", month: 5 }
+let lastMothersDay = { day: "Sunday", month: 5, occur: "-1" }
 
 
 
