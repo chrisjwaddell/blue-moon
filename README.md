@@ -17,6 +17,7 @@ It can be relative to the current or pivot date or an absolute date.
 ## Settings
 There are four main date settings: *day*, *week*, *month* and *year*.
 Each setting can be specific, relative or *current*.
+
 ## Day
 There are two main modes to *day*. It can be a specific day of the month such as the 3rd, or it can be a day such as Wednesday.
 The *day* property is mandatory.
@@ -29,6 +30,15 @@ Refers to the 5th of each month.
 
 ``{ day: 25, month: 3 }``
 Means 25th of March every year.
+
+``
+{ day: "monthend", month: 2 }
+``
+This calculates the end of month, whether it's 29th of February or 28th in this case, or 30th or 31st for other months.
+
+
+
+
 ### Day of week
 Day of week with Week number combines with Month, even if Month isn't specified.
 ``
@@ -47,6 +57,14 @@ You can optionally set week as the week number of the year. You could do:
 
 *Note *- You must use quotes for relative values.
 
+``
+{ day: "current" }
+``
+Today is set like this.
+*"current"* can be put on *week*, *month* or *year*. *current* is a relative date type, it's like *"+1"* except that it really means *"+0"*.
+If that date is June 30, 2022 and you have `` { day: "current", month: 7 }`` This would return `` { year: 2022, month: 7, day: 30 }, but when the date is 1st July, 2022, it would return `` { day: 1, month: 6, year: 2022 }
+
+
 ### Relative day
 For relative days, you cannot have any *week*, *month* or *year* settings.
 
@@ -56,9 +74,9 @@ For relative days, you cannot have any *week*, *month* or *year* settings.
 90 days ago.
 
 ``
-{ day: "-1" }
+{ day: "+1" }
 ``
-Yesterday
+Tomorrow
 
 *Note *- You must use quotes for relative values.
 
@@ -84,19 +102,21 @@ Monday of this week.
 
 
 ## Month
-Week works with day and can work with month.
-``{ day: "Tuesday", month: 2 }``
-Tuesday in the second week of February. This specific case may be the first Tuesday in February depending on when the first week of February starts.
+If month is omitted, it assumed current month if other settings are specific values.
 
-``{ day: "Tuesday 2", month: 2 }``
-This is the second Tuesday in February.
+*day* and *week* work together and *day* and can work with *month*.
+``{ day: "Tuesday", week: 2, month: 6 }``
+Tuesday in the second week of June. This specific case may be the first Tuesday in June depending on when the first week of June starts.
+
+``{ day: "Tuesday 2", month: 6 }``
+This is the second Tuesday in June.
 
 ``{ day: 15, month: 6, year: 2023 }``
 The 15th of June, 2023.
 
 
 ## Year
-Year must be either a four digit number, a relative number or *current*.
+Year must be either a four digit specific year eg *2024*, a relative number *"+1" or *current*.
 
 ### Specific year
 ``
