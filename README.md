@@ -3,12 +3,13 @@
 This library allows you to enter simple date settings to return one specific date that matches your criteria. It can be in the past or future.
 
 ``
-relative-Date({ day: "Sunday L1" })
+relative-Date({ day: "Sunday -1" })
 ``
 
-Means the last Sunday of each month. It would return the next one, after that occurs, it would return the next one, the next months last Sunday of the month.
+This returns the last Sunday of each month. After that occurs, it would return the next one, the next months last Sunday of the month.
 
-Relative-date can be useful for setting dates for reports or generally finding specific dates that can be tricky to code. It can be hard finding the last Wednesday of the month or Mothers day the second Sunday of May each year.
+## Uses
+Relative-date can be useful for setting dates for reports or generally finding specific dates that can be tricky to code. Finding public holidays are another use. It can be hard finding the last Wednesday of the month or Mothers day the second Sunday of May each year.
 
 relative-date is very verbose for getting specific dates for things like reports.
 
@@ -89,7 +90,7 @@ There are some handy options if you are specific about full week or part week.
 The third Sunday of each month.
 
 ``
-{ day: "Wednesday L2", month: 10 }
+{ day: "Wednesday -2", month: 10 }
 ``
 The second last Wednesday of the month.
 
@@ -108,7 +109,7 @@ Tuesday in two weeks from now.
 Monday of this week.
 
 ``
-{ day: "su", week: 2}
+{ day: "sun", week: 2}
 ``
 Sunday on week 2 of this month.
 

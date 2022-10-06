@@ -87,8 +87,8 @@ function dayToNumber(dayname) {
     return daysNameList.findIndex(day => day.toLowerCase() === dayname.toLowerCase());
 }
 
-function dayToNumberTwoLetter(daynametwoletter) {
-    return daysNameList.findIndex(day => day.slice(0, 2).toLowerCase() === daynametwoletter.toLowerCase());
+function dayToNumberThreeLetter(daynamethreeletter) {
+    return daysNameList.findIndex(day => day.slice(0, 3).toLowerCase() === daynamethreeletter.toLowerCase());
 }
 
 
@@ -221,7 +221,7 @@ debugger
 // })
 
 // if (!isNumber(Y)) {
-//     result["error"] = errorstring(Y, result.error)
+//     resultError = errorstring(Y, resultError)
 //     // return result
 // }
 
@@ -240,20 +240,30 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
     // debugger
 
     let result = {}
-    result.warning = ""
-    result.error = ""
+    resultWarning = ""
+    resultError = ""
     let Dvt = Wvt = Mvt = Yvt = Ovt = {}
     let D, W, M, Y, O
 
     let firstOfMonth
 
 
+    function resultsShow() {
+        if (resultWarning !== "")
+            console.log(`%c${resultWarning}`, 'color: blue; font-size: 18px');
+        // console.log('%cColor of text is blue plus big', 'color: blue; font-size: 35px');
+        if (resultError !== "")
+            console.error(`%c${resultError}`, 'color: red; font-size: 18px');
+        return result
+    }
+
+
     // a quick parse
     if (relativedateobject.day) {
         Dvt = valuetype(relativedateobject.day)
     } else {
-        result["error"] = errorstring("'day' property is empty. It must have a value such as 1 (1st of the month), +4 (4 days ahead), 'Monday'.", result.error)
-        return result
+        resultError = errorstring("'day' property is empty. It must have a value such as 1 (1st of the month), +4 (4 days ahead), 'Monday'.", resultError)
+        return resultsShow()
     }
 
     if (relativedateobject.week) {
@@ -267,7 +277,8 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
         } else if (Mvt.type === "current") {
             M = today.getMonth() + 1
         }
-
+    } else {
+        M = today.getMonth() + 1
     }
 
     if (relativedateobject.year) {
@@ -285,25 +296,25 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
         if (Dvt.type === "absolute") {
             // check D is not too high eg 29, use "end"
             if (D > 28) {
-                result["warning"] = "'day' is higher than 28. It shouldn't be higher than 28. Use 'monthend' to get the end of the month whether it's 30th or 31st, it will be the end of the month."
+                resultWarning = "'day' is higher than 28. It shouldn't be higher than 28. Use 'monthend' to get the end of the month whether it's 30th or 31st, it will be the end of the month."
                 if (D > 31) {
-                    result["error"] = "'day' is higher than 31. It shouldn't be higher than 28. Use 'monthend' to get the end of the month whether it's 30th or 31st, it will be the end of the month."
-                    return result
+                    resultError = "'day' is higher than 31. It shouldn't be higher than 28. Use 'monthend' to get the end of the month whether it's 30th or 31st, it will be the end of the month."
+                    return resultsShow()
                 }
             }
 
 
             if (relativedateobject.week) {
-                result["error"] = "'day' is an absolute number. You can't have any setting for 'week'. You can optionally have settings for 'month' and 'year', they must be absolute ie a specific number, but not for 'week'."
-                return result
+                resultError = "'day' is an absolute number. You can't have any setting for 'week'. You can optionally have settings for 'month' and 'year', they must be absolute ie a specific number, but not for 'week'."
+                return resultsShow()
             }
 
 
             debugger
             Y = yearoffset(Yvt)
             if (!isNumber(Y)) {
-                result["error"] = errorstring(Y, result.error)
-                return result
+                resultError = errorstring(Y, resultError)
+                return resultsShow()
             }
 
 
@@ -323,22 +334,23 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
                 D = (D === "monthend") ? daysInMonth(M, Y) : D
 
                 if (!Y) {
-                    result["error"] = errorstring("You can't change the month to this month, probably because the number is something like 31 when you are changing to a month that has 30 days in it. You can use days: 'monthend'.", result.error)
-                    return result
+                    resultError = errorstring("You can't change the month to this month, probably because the number is something like 31 when you are changing to a month that has 30 days in it. You can use days: 'monthend'.", resultError)
+                    return resultsShow()
                 }
 
-                return {
+                result = {
                     year: Y,
                     month: M,
                     day: D
                 }
+                return resultsShow()
             } else {
-                return {
+                result = {
                     year: Y,
                     month: M,
-                    // day: D
                     day: (Dvt.offset === "monthend") ? daysInMonth(today.getMonth() + 1, Y) : D
                 }
+                return resultsShow()
             }
 
 
@@ -349,30 +361,30 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
 
             // if (Wvt.type === "relative" || Mvt.type === "relative" || Yvt.type === "relative") {
             if (!isObjectEmpty(Wvt) || !isObjectEmpty(Mvt) || !isObjectEmpty(Yvt)) {
-                result["error"] = errorstring("'day' is relative. You can't have 'week', 'month' or 'year' settings. Eg if it's tomorrow (day: -1), you can't set week, month or year.", result.error)
-                return result
+                resultError = errorstring("'day' is relative. You can't have 'week', 'month' or 'year' settings. Eg if it's tomorrow (day: -1), you can't set week, month or year.", resultError)
+                return resultsShow()
             }
 
 
-            return changeDay({
+            result = changeDay({
                 year: today.getFullYear(),
                 month: today.getMonth() + 1,
                 day: today.getDate()
             }, DAY_MS * Number(Dvt.offset))
-
+            return resultsShow()
 
 
         } else if (Dvt.type === "current") {
 
             // if (relativedateobject.week) {
-            //     result["error"] = "'day' is 'current'. You can't have any setting for 'week'. You can optionally have settings for 'month' and 'year', they must be absolute ie a specific number, but not for 'week'."
+            //     resultError"] = "'day' is 'current'. You can't have any setting for 'week'. You can optionally have settings for 'month' and 'year', they must be absolute ie a specific number, but not for 'week'."
             //     return result
             // }
 
             Y = yearoffset(Yvt)
             if (!isNumber(Y)) {
-                result["error"] = errorstring(Y, result.error)
-                return result
+                resultError = errorstring(Y, resultError)
+                return resultsShow()
             }
 
             if (Mvt.type === "relative") {
@@ -391,21 +403,24 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
                 D = dd
 
                 if (!Y) {
-                    result["error"] = errorstring("You can't change the month to this month, probably because the number is something like 31 when you are changing to a month that has 30 days in it. You can use days: 'monthend'.", result.error)
-                    return result
+                    resultError = errorstring("You can't change the month to this month, probably because the number is something like 31 when you are changing to a month that has 30 days in it. You can use days: 'monthend'.", resultError)
+                    return resultsShow()
                 }
 
-                return {
+                result = {
                     year: Y,
                     month: M,
                     day: D
                 }
+                return resultsShow()
+
             } else {
-                return {
+                result = {
                     year: Y,
                     month: M,
                     day: today.getDate()
                 }
+                return resultsShow()
             }
 
 
@@ -414,8 +429,8 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
 
             Y = yearoffset(Yvt)
             if (!isNumber(Y)) {
-                result["error"] = errorstring(Y, result.error)
-                return result
+                resultError = errorstring(Y, resultError)
+                return resultsShow()
             }
 
             if (Mvt.type === "relative") {
@@ -457,32 +472,35 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
 
                 let diff = sameWeekCountDays(dateToDay(firstOfMonth), Dvt.offset, startofweek) + ((Number(Wvt.offset) - 1) * 7)
 
-                return changeDay(firstOfMonth, diff * DAY_MS)
+                result = changeDay(firstOfMonth, diff * DAY_MS)
+                return resultsShow()
 
             } else if ((Wvt.type === "current") || (!Wvt.type)) {
 
                 let diff = sameWeekCountDays(dateToDay(monthcurrent), Dvt.offset, startofweek)
 
-                return changeDay(monthcurrent, diff * DAY_MS)
+                result = changeDay(monthcurrent, diff * DAY_MS)
+                return resultsShow()
 
             } else if (Wvt.type === "relative") {
                 let diff = sameWeekCountDays(dateToDay(monthcurrent), Dvt.offset, startofweek) + ((Number(Wvt.offset)) * 7)
 
-                return changeDay(monthcurrent, diff * DAY_MS)
+                result = changeDay(monthcurrent, diff * DAY_MS)
+                return resultsShow()
             }
 
 
         } else if (Dvt.type === "dayofweek weeknum") {
 
             if (!isObjectEmpty(Wvt)) {
-                result["error"] = errorstring("'day' is a dayname with a number eg 'Sunday 2', but it means 2nd Sunday of each month, it can't have a 'week' setting.", result.error)
-                return result
+                resultError = errorstring("'day' is a dayname with a number eg 'Sunday 2', but it means 2nd Sunday of each month, it can't have a 'week' setting.", result.error)
+                return resultsShow()
             }
 
             Y = yearoffset(Yvt)
             if (!isNumber(Y)) {
-                result["error"] = errorstring(Y, result.error)
-                return result
+                resultError = errorstring(Y, resultError)
+                return resultsShow()
             }
 
 
@@ -515,27 +533,31 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
 
             if (Dvt.offset[1][0] === "*") {
                 if (Number(Dvt.offset[1].slice(1)) > 0) {
-                    return weekFullFirst(firstOfMonth, Number(Dvt.offset[0]), Number(Dvt.offset[1].slice(1)), startofweek)
+                    result = weekFullFirst(firstOfMonth, Number(Dvt.offset[0]), Number(Dvt.offset[1].slice(1)), startofweek)
+                    return resultsShow()
                 } else {
-                    return weekFullLast(lastOfMonth, Number(Dvt.offset[0]), Math.abs(Number(Dvt.offset[1].slice(1))), startofweek)
+                    result = weekFullLast(lastOfMonth, Number(Dvt.offset[0]), Math.abs(Number(Dvt.offset[1].slice(1))), startofweek)
+                    return resultsShow()
                 }
             } else {
                 if (Number(Dvt.offset[1]) > 0) {
-                    return weekFirst(firstOfMonth, Number(Dvt.offset[0]), Number(Dvt.offset[1]), startofweek)
+                    result = weekFirst(firstOfMonth, Number(Dvt.offset[0]), Number(Dvt.offset[1]), startofweek)
+                    return resultsShow()
                 } else {
-                    return weekLast(lastOfMonth, Number(Dvt.offset[0]), Math.abs(Number(Dvt.offset[1])), startofweek)
+                    result = weekLast(lastOfMonth, Number(Dvt.offset[0]), Math.abs(Number(Dvt.offset[1])), startofweek)
+                    return resultsShow()
                 }
             }
 
 
         } else {
             // nothing entered, return current day
-            result.value = {
+            result = {
                 year: today.getFullYear(),
                 month: today.getMonth() + 1,
                 day: today.getDate()
             }
-            result.error = errorstring("'day' property has no value. It must have a value such as 1 (1st of the month), +4 (4 days ahead), 'Monday'.", result.error)
+            resultError = errorstring("'day' property has no value. It must have a value such as 1 (1st of the month), +4 (4 days ahead), 'Monday'.", resultError)
             return result
         }
     }
@@ -550,14 +572,14 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
     if (Dvt.type === "absolute") {
         // if (Wvt.type === "absolute" || Wvt.type === "relative") {
         if (relativedateobject.week) {
-            result.error = errorstring("'week' property is in when you have 'day' in. You can't specify a specific day of the month and then specify a week.", result.error)
+            resultError = errorstring("'week' property is in when you have 'day' in. You can't specify a specific day of the month and then specify a week.", resultError)
         }
     }
 
 
     if (Dvt.type === "relative") {
         if ((!relativedateobject.week) || (!relativedateobject.month) || (!relativedateobject.year)) {
-            // result.error = errorstring("'day' property is relative. You can't specify a week, month or year when you are specifying a relative day eg yesterday ('day: -1') or 90 day from now ('day: +90')", result.error)
+            // resultError = errorstring("'day' property is relative. You can't specify a week, month or year when you are specifying a relative day eg yesterday ('day: -1') or 90 day from now ('day: +90')", resultError)
         }
     }
 
@@ -577,8 +599,8 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
 
     // --------------------------------------
 
-    if (result.error) {
-        console.error(result.error)
+    if (resultError) {
+        console.error(resultError)
     }
 
 
@@ -621,8 +643,8 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
                     part2 = val.slice(seperator + 1)
                 }
 
-                if (part1.length === 2) {
-                    let daynumber = dayToNumberTwoLetter(part1)
+                if (part1.length === 3) {
+                    let daynumber = dayToNumberThreeLetter(part1)
                     if (daynumber !== -1) {
                         if (seperator === -1) {
                             return {
@@ -1015,9 +1037,9 @@ function weekLast(dateobj, daynumber, weeknum, startofweek = 1) {
 
 // console.log("===========================")
 
-// console.log(sameWeekCountDays(dayToNumberTwoLetter("mo"), dayToNumberTwoLetter("fr"), dayToNumberTwoLetter("mo"))) // 0
-// console.log(sameWeekCountDays(dayToNumberTwoLetter("mo"), dayToNumberTwoLetter("sa"), dayToNumberTwoLetter("we"))) // 0
+// console.log(sameWeekCountDays(dayToNumberThreeLetter("mo"), dayToNumberThreeLetter("fr"), dayToNumberThreeLetter("mo"))) // 0
+// console.log(sameWeekCountDays(dayToNumberThreeLetter("mo"), dayToNumberThreeLetter("sa"), dayToNumberThreeLetter("we"))) // 0
 
-// console.log(sameWeekCountDays(dayToNumberTwoLetter("th"), dayToNumberTwoLetter("mo"), dayToNumberTwoLetter("sa"))) // 3
+// console.log(sameWeekCountDays(dayToNumberThreeLetter("th"), dayToNumberThreeLetter("mo"), dayToNumberThreeLetter("sa"))) // 3
 
-// console.log(sameWeekCountDays(dayToNumberTwoLetter("mo"), dayToNumberTwoLetter("th"))) // 0
+// console.log(sameWeekCountDays(dayToNumberThreeLetter("mo"), dayToNumberThreeLetter("th"))) // 0
