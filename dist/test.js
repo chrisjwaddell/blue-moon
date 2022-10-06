@@ -1,6 +1,16 @@
 const DAY_MS = 86400000
 let today = new Date()
 
+// show the week day in a number : Sunday - Saturday => 0 - 6
+const daysNameList = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday'
+]
 
 
 const dateToDay = (dateobj) => {
@@ -251,6 +261,13 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
     }
     if (relativedateobject.month) {
         Mvt = valuetype(relativedateobject.month)
+
+        if (Mvt.type === "absolute") {
+            M = Number(Mvt.offset)
+        } else if (Mvt.type === "current") {
+            M = today.getMonth() + 1
+        }
+
     }
 
     if (relativedateobject.year) {
@@ -258,7 +275,7 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
     }
 
 
-    // debugger
+    debugger
 
     if (relativedateobject.day) {
         // let Dvt = valuetype(relativedateobject.day)
@@ -281,20 +298,6 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
                 return result
             }
 
-            // if (Mvt.type === "relative" || Yvt.type === "relative") {
-            //     result["error"] = "'day' is an absolute number. 'month' or 'year' is relative. You can optionally have settings for 'month' and 'year', they must be absolute ie a specific number."
-            //     return result
-            // }
-
-            // if (Yvt.type === "absolute") {
-            //     Y = Number(Yvt.offset)
-            // } else if (Yvt.type === "current") {
-            //     Y = today.getFullYear()
-            // } else if (Yvt.type === "relative") {
-            //     Y = today.getFullYear() + Number(Yvt.offset)
-            // } else {
-            //     Y = today.getFullYear()
-            // }
 
             debugger
             Y = yearoffset(Yvt)
@@ -304,12 +307,7 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
             }
 
 
-
-            if (Mvt.type === "absolute") {
-                M = Number(Mvt.offset)
-            } else if (Mvt.type === "current") {
-                M = today.getMonth() + 1
-            } else if (Mvt.type === "relative") {
+            if (Mvt.type === "relative") {
                 let obj = {
                     year: (Y) ? Y : today.getFullYear(),
                     month: today.getMonth() + 1,
@@ -337,21 +335,12 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
             } else {
                 return {
                     year: Y,
-                    month: today.getMonth() + 1,
+                    month: M,
                     // day: D
                     day: (Dvt.offset === "monthend") ? daysInMonth(today.getMonth() + 1, Y) : D
                 }
             }
 
-            if (Dvt.offset === "monthend") {
-                D = daysInMonth(M, Y)
-            }
-
-            return {
-                year: (Y) ? Y : today.getFullYear(),
-                month: (M) ? M : today.getMonth() + 1,
-                day: (D) ? D : today.getDate()
-            }
 
 
 
@@ -380,27 +369,13 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
             //     return result
             // }
 
-            // if (Yvt.type === "absolute") {
-            //     Y = Number(Yvt.offset)
-            // } else if (Yvt.type === "current") {
-            //     Y = today.getFullYear()
-            // } else if (Yvt.type === "relative") {
-            //     Y = today.getFullYear() + Number(Yvt.offset)
-            // } else {
-            //     Y = today.getFullYear()
-            // }
-
             Y = yearoffset(Yvt)
             if (!isNumber(Y)) {
                 result["error"] = errorstring(Y, result.error)
                 return result
             }
 
-            if (Mvt.type === "absolute") {
-                M = Number(Mvt.offset)
-            } else if (Mvt.type === "current") {
-                M = today.getMonth() + 1
-            } else if (Mvt.type === "relative") {
+            if (Mvt.type === "relative") {
                 let obj = {
                     year: (Y) ? Y : today.getFullYear(),
                     month: today.getMonth() + 1,
@@ -428,29 +403,14 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
             } else {
                 return {
                     year: Y,
-                    month: today.getMonth() + 1,
+                    month: M,
                     day: today.getDate()
                 }
             }
 
-            return {
-                year: Y,
-                month: M,
-                day: today.getDate()
-            }
 
 
         } else if (Dvt.type === "dayofweek") {
-
-            // if (Yvt.type === "absolute") {
-            //     Y = Number(Yvt.offset)
-            // } else if (Yvt.type === "current") {
-            //     Y = today.getFullYear()
-            // } else if (Yvt.type === "relative") {
-            //     Y = today.getFullYear() + Number(Yvt.offset)
-            // } else {
-            //     Y = today.getFullYear()
-            // }
 
             Y = yearoffset(Yvt)
             if (!isNumber(Y)) {
@@ -458,11 +418,7 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
                 return result
             }
 
-            if (Mvt.type === "absolute") {
-                M = Number(Mvt.offset)
-            } else if (Mvt.type === "current") {
-                M = today.getMonth() + 1
-            } else if (Mvt.type === "relative") {
+            if (Mvt.type === "relative") {
                 let obj = {
                     year: (Y) ? Y : today.getFullYear(),
                     month: today.getMonth() + 1,
@@ -476,8 +432,6 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
                 Y = yy
                 M = mm
                 D = dd
-            } else {
-                M = today.getMonth() + 1
             }
 
 
@@ -525,16 +479,6 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
                 return result
             }
 
-            // if (Yvt.type === "absolute") {
-            //     Y = Number(Yvt.offset)
-            // } else if (Yvt.type === "current") {
-            //     Y = today.getFullYear()
-            // } else if (Yvt.type === "relative") {
-            //     Y = today.getFullYear() + Number(Yvt.offset)
-            // } else {
-            //     Y = today.getFullYear()
-            // }
-
             Y = yearoffset(Yvt)
             if (!isNumber(Y)) {
                 result["error"] = errorstring(Y, result.error)
@@ -542,11 +486,7 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
             }
 
 
-            if (Mvt.type === "absolute") {
-                M = Number(Mvt.offset)
-            } else if (Mvt.type === "current") {
-                M = today.getMonth() + 1
-            } else if (Mvt.type === "relative") {
+            if (Mvt.type === "relative") {
                 let obj = {
                     year: (Y) ? Y : today.getFullYear(),
                     month: today.getMonth() + 1,
@@ -560,8 +500,6 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
                 Y = yy
                 M = mm
                 D = dd
-            } else {
-                M = today.getMonth() + 1
             }
 
             firstOfMonth = {
@@ -905,13 +843,13 @@ function isYearValid(year, minyear, maxyear) {
             return false;
         }
 
-        if (String(y).length != 4) {
-            return false;
-        }
+        if (String(y).length != 4) return false;
 
-        if ((y < minyear) || (y > maxyear)) {
-            console.log(`Year should be in range ${minyear} to ${maxyear}`);
-            return false;
+        if ((minyear) && (maxyear)) {
+            if ((y < minyear) || (y > maxyear)) {
+                console.log(`Year should be in range ${minyear} to ${maxyear}`);
+                return false;
+            }
         }
 
         return true;
@@ -978,16 +916,6 @@ function sameWeekCountDays(daynumberfrom, daynumberto, startofweek = 1) {
 }
 
 
-// show the week day in a number : Sunday - Saturday => 0 - 6
-const daysNameList = [
-    'Sunday',
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday'
-]
 
 
 // Returns offset from 1st of the month to the start of the week, how many days extra

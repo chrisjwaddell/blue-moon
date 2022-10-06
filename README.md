@@ -81,6 +81,8 @@ Tomorrow
 *Note *- You must use quotes for relative values.
 
 ### Relative day of the month
+There are some handy options if you are specific about full week or part week.
+
 ``
 { day: "Sunday 3" }
 ``
@@ -91,13 +93,25 @@ The third Sunday of each month.
 ``
 The second last Wednesday of the month.
 
+``
+{ day: "Wedesday *1" }
+``
+The first Wedesday of each month that falls on a full week inside of that month. If the first Wedesday starts on the 2nd or 3rd, Monday is inside the previous month and so this is not considered to be a full week so _Wednesday *1_ would be the week after.
+
 ## Week
-Week works in combination with *day* and can also work with *month*. Working with weeks it can be relative or the *current* week.
+Week works in combination with *day* and can also work with *month*. *week* can be absolute, relative or the *current* week.
+*week: 1* is considered to be a week where any day in that week is the first of that month.
 ``{ day: "Tuesday", week: "+2" }``
 Tuesday in two weeks from now.
 
 ``{ day: "Monday", week: "current" }``
 Monday of this week.
+
+``
+{ day: "su", week: 2}
+``
+Sunday on week 2 of this month.
+
 
 
 
@@ -114,6 +128,19 @@ This is the second Tuesday in June.
 ``{ day: 15, month: 6, year: 2023 }``
 The 15th of June, 2023.
 
+So we have four main options:
+<dayname> <occurrence number> - Picks the day from the month. It counts the first day occurrence regardless of whether or not the first week overlapped into the previous week.
+<dayname> -<occurrence number> - Picks the day that occurred in the month, the last being -1
+<dayname> *<occurrence number> - Picks the day from only full weeks
+<dayname> *-<occurrence number> - Full week, from the last week of the month
+
+*Note*
+There is also:
+<dayname> <week>
+The difference with this is that if you enter
+``{ day: "Monday", week: 1 }
+``
+Week 1 has the first of that month in it and the start of the week probably has days in it that are the previous week. In this case, Monday would be the date of the previous month.
 
 ## Year
 Year must be either a four digit specific year eg *2024*, a relative number *"+1" or *current*.
