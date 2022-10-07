@@ -56,14 +56,14 @@ means Monday in two weeks. It will always give the Monday two weeks ahead of the
 You can optionally set week as the week number of the year. You could do:
 { day: "Monday", week: 15 }, options: { weekasYear: true } }
 
-*Note *- You must use quotes for relative values.
+*Note* - You must use quotes for relative values.
 
 ``
 { day: "current" }
 ``
 Today is set like this.
 *"current"* can be put on *week*, *month* or *year*. *current* is a relative date type, it's like *"+1"* except that it really means *"+0"*.
-If that date is June 30, 2022 and you have `` { day: "current", month: 7 }`` This would return `` { year: 2022, month: 7, day: 30 }`` but when the date is 1st July, 2022, it would return `` { day: 1, month: 6, year: 2022 } ``
+If that date is June 30, 2022 and you have `` { day: "current", month: 7 }`` This would return `` { year: 2022, month: 7, day: 30 }`` but when the date is 1st July, 2022, it would return ``{ day: 1, month: 6, year: 2022 } ``
 
 
 ### Relative day
@@ -79,7 +79,7 @@ For relative days, you cannot have any *week*, *month* or *year* settings.
 ``
 Tomorrow. \
 
-*Note * - You must use quotes for relative values.
+*Note* - You must use quotes for relative values.
 
 ### Relative day of the month
 There are some handy options if you are specific about full week or part week.
