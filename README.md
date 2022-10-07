@@ -1,12 +1,12 @@
 # relative-date
 
-This library allows you to enter simple date settings to return one specific date that matches your criteria. It can be in the past or future.
+Relative-date allows you to enter simple date settings to return one specific date that matches your criteria. It can be in the past or future.
 
 ``
 relative-Date({ day: "Sunday -1" })
 ``
 
-This returns the last Sunday of each month. After that occurs, it would return the next one, the next months last Sunday of the month.
+This returns the last Sunday of each month. After that occurs, it would return the next months last Sunday of the month.
 
 ## Uses
 Relative-date can be useful for setting dates for reports or generally finding specific dates that can be tricky to code. Finding public holidays are another use. It can be hard finding the last Wednesday of the month or Mothers day the second Sunday of May each year.
@@ -129,11 +129,11 @@ This is the second Tuesday in June.
 ``{ day: 15, month: 6, year: 2023 }``
 The 15th of June, 2023.
 
-So we have four main options:
-<dayname> <occurrence number> - Picks the day from the month. It counts the first day occurrence regardless of whether or not the first week overlapped into the previous week.
-<dayname> -<occurrence number> - Picks the day that occurred in the month, the *last* being -1
-<dayname> *<occurrence number> - Picks the day from only **full weeks**.
-<dayname> *-<occurrence number> - **Full week**, from the *last* week of the month
+So we have four main options: \
+<dayname> <occurrence number> - Picks the day from the month. It counts the first day occurrence regardless of whether or not the first week overlapped into the previous week. \
+<dayname> -<occurrence number> - Picks the day that occurred in the month, the *last* being -1. \
+<dayname> *<occurrence number> - Picks the day from only **full weeks**. \
+<dayname> *-<occurrence number> - **Full week**, from the *last* week of the month. \
 
 *Note*
 There is also:
