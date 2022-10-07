@@ -61,7 +61,7 @@ You can optionally set week as the week number of the year. You could do:
 ``
 { day: "current" }
 ``
-Today is set like this.
+Today is set like this. \
 *"current"* can be put on *week*, *month* or *year*. *current* is a relative date type, it's like *"+1"* except that it really means *"+0"*.
 If that date is June 30, 2022 and you have `` { day: "current", month: 7 }`` This would return `` { year: 2022, month: 7, day: 30 }`` but when the date is 1st July, 2022, it would return ``{ day: 1, month: 6, year: 2022 } ``
 
@@ -77,7 +77,7 @@ For relative days, you cannot have any *week*, *month* or *year* settings.
 ``
 { day: "+1" }
 ``
-Tomorrow. \
+Tomorrow.
 
 *Note* - You must use quotes for relative values.
 
@@ -180,14 +180,14 @@ You could set the pivot date as:
 
 
 ## Occur
-Occur lets you look ahead of backwards.
+Occur lets you return a previous dates or dates in the future.
 ``
 { occur: "-1" }
 ``
 Means the last one that occurred.
 *"+1"* is the defualt.
 
-// Default is 'occur: "+1"'
+Default is 'occur: "+1"'
 let nextMothersDay = { day: "Sunday", month: 5 }
 let lastMothersDay = { day: "Sunday", month: 5, occur: "-1" }
 
