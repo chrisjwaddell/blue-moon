@@ -189,7 +189,7 @@ Means the last one that occurred.
 The default is ``occur: "+1"``
 
 ``
-let nextMothersDay = { day: "Sunday", month: 5 }<br />
+let nextMothersDay = { day: "Sunday", month: 5 }&nbsp;
 let lastMothersDay = { day: "Sunday", month: 5, occur: "-1" }
 ``
 
