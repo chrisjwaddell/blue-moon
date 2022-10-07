@@ -29,22 +29,33 @@ const dateToDay = (dateobj) => {
     }
 
     // JS months start at 0
-    return dayOfTheWeek(day, month - 1, year)
+    return dayOfTheWeek(Number(day), Number(month), Number(year))
 }
 
-function dayOfTheWeek(day, month, year) {
-    const DAY_1970_01_01 = 4
-    let days = day - 1
-    while (month >= 1) {
-        days += daysInMonth(month, year)
-        month -= 1
-    }
 
-    while (year - 1 >= 1970) {
-        days += daysInYear(year - 1)
-        year -= 1
+// Find dayname for a Date
+// Uses Zeller congruence
+// https://www.geeksforgeeks.org/zellers-congruence-find-day-date/
+function dayOfTheWeek(day, month, year) {
+    if (month == 1) {
+        month = 13;
+        year--;
     }
-    return (days + DAY_1970_01_01) % 7
+    if (month == 2) {
+        month = 14;
+        year--;
+    }
+    let q = day;
+    let m = month;
+    let k = year % 100;
+    let j = parseInt(year / 100, 10);
+    let h = q + parseInt(13 * (m + 1) / 5, 10) + k + parseInt(k / 4, 10) + parseInt(j / 4, 10) + 5 * j;
+    h = h % 7;
+
+    h -= 1
+    if (h === -1) h = 6
+
+    return h
 }
 
 
@@ -61,27 +72,6 @@ function yearoffset(valuetype) {
     }
 }
 
-
-
-// function dateToDay(dateobj) {
-//     if (typeof dateobj !== 'object') {
-//         return new TypeError('Argument is not an object.')
-//     }
-
-//     const {
-//         year,
-//         month,
-//         day
-//     } = dateobj
-
-//     if (day < 0 || day > 31 || month > 12 || month < 0) {
-//         return new TypeError('Date is not valid.')
-//     }
-
-//     let dt = new Date(Date.UTC(dateobj.year, dateobj.month - 1, dateobj.day, 12, 0, 0, 0))
-
-//     return dt.getDay()
-// }
 
 function dayToNumber(dayname) {
     return daysNameList.findIndex(day => day.toLowerCase() === dayname.toLowerCase());
@@ -214,7 +204,7 @@ function yearoffset(valuetype) {
     }
 }
 
-debugger
+// debugger
 // Y = yearoffset({
 //     type: "absolute",
 //     offset: "222"
@@ -250,10 +240,9 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
 
     function resultsShow() {
         if (resultWarning !== "")
-            console.log(`%c${resultWarning}`, 'color: blue; font-size: 18px');
-        // console.log('%cColor of text is blue plus big', 'color: blue; font-size: 35px');
+            console.log(`%c${resultWarning}`, 'color: blue; font-size: 16px');
         if (resultError !== "")
-            console.error(`%c${resultError}`, 'color: red; font-size: 18px');
+            console.error(`%c${resultError}`, 'color: red; font-size: 16px');
         return result
     }
 
@@ -261,6 +250,12 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
     // a quick parse
     if (relativedateobject.day) {
         Dvt = valuetype(relativedateobject.day)
+        if (Dvt.type === "absolute") {
+            if ((Number(Dvt.offset) < 1) || (Number(Dvt.offset) > 31)) {
+                resultError = errorstring("'day' is less than 1 or greater than 31. You can't have 'day' outside of this range.", resultError)
+                return resultsShow()
+            }
+        }
     } else {
         resultError = errorstring("'day' property is empty. It must have a value such as 1 (1st of the month), +4 (4 days ahead), 'Monday'.", resultError)
         return resultsShow()
@@ -268,12 +263,21 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
 
     if (relativedateobject.week) {
         Wvt = valuetype(relativedateobject.week)
+        if ((Number(Wvt.offset) < 1) || (Number(Wvt.offset) > 53)) {
+            resultError = errorstring("'week' is less than 1 or greater than 53. You can't have 'week' outside of this range.", resultError)
+            return resultsShow()
+        }
     }
     if (relativedateobject.month) {
         Mvt = valuetype(relativedateobject.month)
 
         if (Mvt.type === "absolute") {
+            if ((Number(Mvt.offset) < 1) || (Number(Mvt.offset) > 12)) {
+                resultError = errorstring("'month' is less than 1 or greater than 12. You can't have 'month' outside of this range.", resultError)
+                return resultsShow()
+            }
             M = Number(Mvt.offset)
+
         } else if (Mvt.type === "current") {
             M = today.getMonth() + 1
         }
@@ -283,10 +287,14 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
 
     if (relativedateobject.year) {
         Yvt = valuetype(relativedateobject.year)
+        if ((Number(Yvt.offset) < 1600) || (Number(Yvt.offset) > 2300)) {
+            resultError = errorstring("'year' is less than 1600 or greater than 2300. You can't have 'year' outside of this range.", resultError)
+            return resultsShow()
+        }
     }
 
 
-    debugger
+    // debugger
 
     if (relativedateobject.day) {
         // let Dvt = valuetype(relativedateobject.day)
@@ -607,17 +615,15 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
     function valuetype(str) {
         let val = String(str).trim()
 
-        if (isNumberSign(val)) {
-            if (isNumber(val)) {
-                return {
-                    type: "absolute",
-                    offset: val
-                }
-            } else {
-                return {
-                    type: "relative",
-                    offset: val
-                }
+        if (isNumber(val)) {
+            return {
+                type: "absolute",
+                offset: val
+            }
+        } else if (isNumberSigned(val)) {
+            return {
+                type: "relative",
+                offset: val
             }
         } else {
             if (val === "current") {
@@ -887,9 +893,13 @@ function isNumber(char) {
     return /^\d+$/.test(char);
 }
 
-// signed or unsigned number
+// It can be signed or unsigned number
 function isNumberSign(char) {
     return /^[+|-]?\d+$/.test(char);
+}
+
+function isNumberSigned(char) {
+    return /^[+|-]\d+$/.test(char);
 }
 
 // extract numbers out of a string

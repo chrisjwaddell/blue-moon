@@ -131,9 +131,9 @@ The 15th of June, 2023.
 
 So we have four main options:
 <dayname> <occurrence number> - Picks the day from the month. It counts the first day occurrence regardless of whether or not the first week overlapped into the previous week.
-<dayname> -<occurrence number> - Picks the day that occurred in the month, the last being -1
-<dayname> *<occurrence number> - Picks the day from only full weeks
-<dayname> *-<occurrence number> - Full week, from the last week of the month
+<dayname> -<occurrence number> - Picks the day that occurred in the month, the *last* being -1
+<dayname> *<occurrence number> - Picks the day from only **full weeks**.
+<dayname> *-<occurrence number> - **Full week**, from the *last* week of the month
 
 *Note*
 There is also:
