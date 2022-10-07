@@ -180,7 +180,7 @@ You could set the pivot date as:
 
 
 ## Occur
-Occur lets you return a previous dates or dates in the future.\
+Occur lets you return a previous dates or dates in the future. \
 ``
 { occur: "-1" }
 ``
