@@ -133,15 +133,15 @@ So we have four main options: \
 \<dayname\> \<occurrence number\> - Picks the day from the month. It counts the first day occurrence regardless of whether or not the first week overlapped into the previous week. \
 \<dayname\> -\<occurrence number\> - Picks the day that occurred in the month, the **last** being -1. \
 \<dayname\> *\<occurrence number\> - Picks the day from only **full weeks**. \
-\<dayname\> *-\<occurrence number\> - **Full week**, from the **last** week of the month. \
+\<dayname\> *-\<occurrence number\> - **Full week**, from the **last** week of the month.
 
 *Note*
-There is also:
+There is also: \
 \<dayname\> \<week\>
 The difference with this is that if you enter
 ``{ day: "Monday", week: 1 }
 ``
-Week 1 has the first of that month in it and the start of the week probably has days in it that are the previous week. In this case, Monday would be the date of the previous month.
+Week 1 is the first of that month, and the start of the week probably is in the previous month. In this case, Monday would be the date of the previous month, something like 29th of the previous month. Using the *month* setting, you only get days in that month.
 
 ## Year
 Year must be either a four digit specific year eg *2024*, a relative number *"+1" or *current*.
