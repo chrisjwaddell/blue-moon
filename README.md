@@ -156,7 +156,7 @@ Year must be either a four digit specific year eg *2024*, a relative number *"+1
 { day: 1, year: "+1" }
 ``
 
-*Note *- You must use quotes for relative values.
+*Note* - You must use quotes for relative values.
 
 ### Current
 ``
@@ -180,14 +180,13 @@ You could set the pivot date as:
 
 
 ## Occur
-Occur lets you return a previous dates or dates in the future.
+Occur lets you return a previous dates or dates in the future.\
 ``
 { occur: "-1" }
 ``
 Means the last one that occurred.
-*"+1"* is the defualt.
+The default is 'occur: "+1"'
 
-Default is 'occur: "+1"'
 let nextMothersDay = { day: "Sunday", month: 5 }
 let lastMothersDay = { day: "Sunday", month: 5, occur: "-1" }
 
