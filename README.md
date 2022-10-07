@@ -189,8 +189,8 @@ Means the last one that occurred.
 The default is ``occur: "+1"``
 
 ``
-let nextMothersDay = { day: "Sunday", month: 5 }    \n
-let lastMothersDay = { day: "Sunday", month: 5, occur: "-1" }
+let nextMothersDay = { day: "Sunday", month: 5 }
+    let lastMothersDay = { day: "Sunday", month: 5, occur: "-1" }
 ``
 
 
