@@ -194,11 +194,5 @@ let lastMothersDay = { day: "Sunday", month: 5, occur: "-1" }
 ```
 
 
-``
-let nextMothersDay = { day: "Sunday", month: 5 }
-``
-``
-let lastMothersDay = { day: "Sunday", month: 5, occur: "-1" }
-``
-
-
+<pre><code>let nextMothersDay = { day: "Sunday", month: 5 }<br>
+let lastMothersDay = { day: "Sunday", month: 5, occur: "-1" }</code></pre>
