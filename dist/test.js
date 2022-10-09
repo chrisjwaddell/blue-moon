@@ -59,20 +59,6 @@ function dayOfTheWeek(day, month, year) {
 }
 
 
-
-function yearoffset(valuetype) {
-    if (Yvt.type === "absolute") {
-        Y = Number(Yvt.offset)
-    } else if (Yvt.type === "current") {
-        Y = today.getFullYear()
-    } else if (Yvt.type === "relative") {
-        Y = today.getFullYear() + Number(Yvt.offset)
-    } else {
-        Y = today.getFullYear()
-    }
-}
-
-
 function dayToNumber(dayname) {
     return daysNameList.findIndex(day => day.toLowerCase() === dayname.toLowerCase());
 }
@@ -85,153 +71,237 @@ function dayToNumberThreeLetter(daynamethreeletter) {
 function testfn() {
     console.log("TESTING AREA ***********************")
 
-
-
-    console.log(typeof relativeDate({
-        day: 1,
-        month: 1,
-        year: 1
-    }))
-
-    // relativeDate("D4M4", new Date(2023, 6, 6, 0, 0, 0, 0))
-
-    // relativeDate("D1M+5Y+1")
-    // debugger
-
-    // relativeDate("D1M+5Y+1", {
-    //     y: 2019,
-    //     m: 1,
-    //     d: 17
-    // })
-
-
-    // let newDate = relativeDate({}, {
-    //     y: 2019,
-    //     m: 1,
-    //     d: 17
-    // })
-
-
-    // console.log("HERE ***********************   date4 <---- Works ")
-    // let date4 = relativeDate({
-    //     day: " 4"
-    // }, {
-    //     year: 2022,
-    //     month: 10,
-    //     day: 1
-    // })
-
-    // console.log(date4)
-    // if (date4.error) console.log("ERROR - " + date4.error)
-
-
-    console.log("HERE ***********************   date0126")
-
-    // let date0126 = relativeDate({
-    //     day: " 6",
-    //     month: " + 12"
-    // }, {
-    //     year: 2023,
-    //     month: 1,
-    //     day: 1
-    // })
-
-    // console.log(date0126)
-
-    // debugger
-    // let date16p2 = relativeDate({
-    //     day: "16",
-    //     year: " + 2"
-    // }, {
-    //     year: 2023,
-    //     month: 1,
-    //     day: 1
-    // })
-
-    // console.log(date16p2)
-
-
-    // relativeDate("D1M+5Y+1", {
-    //     y: 2022,
-    //     d: 29
-    // })
-
-
-
-    // let test1 = changeDay({
-    //     year: 2022,
-    //     month: 10,
-    //     day: 1
-    // }, 29 * 86400000)
-    // console.log(test1)
-    // console.log(new Date(test1.year, test1.month, test1.day, 0, 0, 0, 0))
-
-    // let test2 = changeDay({
-    //     year: 2022,
-    //     month: 10,
-    //     day: 1
-    // }, 30 * 86400000)
-    // console.log(new Date(test2.year, test2.month, test2.day, 0, 0, 0, 0))
-
-
-    console.log("HERE ***********************")
 }
+// testfn()
 
-
-testfn()
-
-// console.log(nextDayName({
-//     year: 2022,
-//     month: 9,
-//     day: 30
-// }, "Sunday"))
 
 console.log("*************************************************")
 
-function yearoffset(valuetype) {
-    if (valuetype.type === "absolute") {
-        if (!isYearValid(valuetype.offset, 1600, 2300)) {
-            return `Year ${valuetype.offset} is invalid`
-        } else {
-            return Number(valuetype.offset)
-        }
-    } else if (valuetype.type === "current") {
-        return today.getFullYear()
-    } else if (valuetype.type === "relative") {
-        return today.getFullYear() + Number(valuetype.offset)
-    } else {
-        return today.getFullYear()
-    }
-}
-
-// debugger
-// Y = yearoffset({
-//     type: "absolute",
-//     offset: "222"
-// })
-
-// if (!isNumber(Y)) {
-//     resultError = errorstring(Y, resultError)
-//     // return result
-// }
-
-
-console.log("*************************************************")
 
 function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
-    let pd = {
-        pdy: 2022,
-        pdm: 10,
-        pdd: 1
-    }
 
-    console.log(relativedateobject)
+    // INITIALIZE
+    const propertyList = ["day", "week", "month", "year", "occur"]
+    const pivotList = ["day", "month", "year"]
 
-    // debugger
-
-    let result = {}
+    let result = pdresult = {}
     resultWarning = ""
     resultError = ""
+
+
+    // CALCULATE PIVOT DATE (PD)
+    // if it's blank, the default is today
+    let PDYvt = PDMvt = PDDvt = {}
+    let pdy, pdm, pdd;
+    if (pivotdate) {
+        ({
+            year: pdy,
+            month: pdm,
+            day: pdd
+        } = pivotdate);
+
+        let pdError = false;
+
+        if (pdy) {
+            PDYvt = valuetype(pdy, "pd-y")
+            if (PDYvt.type === "absolute") {
+                pdy = PDYvt.offset
+            } else if (PDYvt.type === "relative") {
+                pdy = PDYvt.offset
+            } else if (PDYvt.type === "current") {
+                pdy = today.getFullYear()
+            } else {
+                pdError = true
+                resultWarning = errorWarningString("Pivot date 'year' is invalid. Pivot date will be set to today (the default).", resultWarning)
+                pdy = today.getFullYear()
+            }
+        }
+
+        if (pdm) {
+            PDMvt = valuetype(pdm, "pd-m")
+            if (PDMvt.type === "absolute") {
+                pdm = PDMvt.offset
+            } else if (PDMvt.type === "relative") {
+                pdm = PDMvt.offset
+            } else if (PDMvt.type === "current") {
+                pdm = today.getMonth() + 1
+            } else {
+                pdError = true
+                resultWarning = errorWarningString("Pivot date 'month' is invalid. Pivot date will be set to today (the default).", resultWarning)
+                pdm = today.getMonth() + 1
+            }
+        }
+
+        if (pdd) {
+            PDDvt = valuetype(pdd, "pd-d")
+            if (PDDvt.type === "absolute") {
+                pdd = PDDvt.offset
+            } else if (PDDvt.type === "relative") {
+                pdd = PDDvt.offset
+            } else if (PDDvt.type === "current") {
+                pdd = today.getDate()
+            } else {
+                pdError = true
+                resultWarning = errorWarningString("Pivot date 'day' is invalid. Pivot date will be set to today (the default).", resultWarning)
+                pdd = today.getDate()
+            }
+        }
+
+
+        // General checks for pivot date
+        for (let prop of Object.keys(pivotdate)) {
+            if (!pivotList.includes(prop)) {
+                pdError = true
+                resultWarning = errorWarningString(`${prop} is a property that must be one of these property names - ${pivotList.toString()}. Pivot date will be set to today (the default).`, resultWarning)
+            }
+        }
+
+
+        if (PDDvt.type === "relative") {
+            if ((!isObjectEmpty(PDYvt)) || (!isObjectEmpty(PDMvt))) {
+                pdError = true
+                resultWarning = errorWarningString("Pivot date 'day' is relative. You can't have 'month' or 'year' in when 'day' is relative. Pivot date will be set to today (the default).", resultWarning)
+            } else {
+                pdresult = changeDay({
+                    day: today.getDate(),
+                    month: today.getMonth() + 1,
+                    year: today.getFullYear()
+                }, DAY_MS * Number(PDDvt.offset))
+            }
+
+        } else {
+
+            pdy = yearoffset(PDYvt, today.getFullYear())
+
+            if ((PDYvt.type === "absolute") || (PDYvt.type === "current")) {
+                if (!isYearValid(pdy, 1600, 2300)) {
+                    resultWarning = errorWarningString(`'year' is invalid. 'year' is less than 1600 or greater than 2300. You can't have 'year' outside of this range.`, resultWarning)
+                }
+
+                if ((PDMvt.type === "relative") || (PDMvt.type === "current")) {
+                    let obj = {
+                        year: pdy,
+                        month: today.getMonth() + 1,
+                        day: (PDDvt.offset === "monthend") ? 1 : pdd
+                    }
+                    let {
+                        year: yy,
+                        month: mm,
+                        day: dd
+                    } = changeMonth(obj, (PDMvt.type === "current") ? 0 : Number(PDMvt.offset))
+                    pdy = yy
+                    pdm = mm
+                    pdd = (pdd === "monthend") ? daysInMonth(pdm, pdy) : pdd
+
+                    pdresult = {
+                        year: pdy,
+                        month: pdm,
+                        day: (PDDvt.offset === "monthend") ? daysInMonth(pdm, pdy) : pdd
+                    }
+                    // return resultsShow()
+
+                } else if (PDMvt.type === "absolute") {
+                    pdresult = {
+                        year: pdy,
+                        month: pdm,
+                        day: (PDDvt.offset === "monthend") ? daysInMonth(pdm, pdy) : pdd
+                    }
+                    // return resultsShow()
+
+                } else {
+                    pdError = true
+                    resultWarning = errorWarningString(`Pivot date has 'day' as an absolute value. It must have 'month' and 'year' in. For relative 'day' such as 'day: "+1", it must not have 'month' or 'year' in. Even if you set 'month: "current"', that's sufficient. Pivot date will be set to today (the default).`, resultWarning)
+                }
+
+            } else if (PDYvt.type === "relative") {
+                if (isNumberSigned(PDYvt.offset)) {
+                    if (Number(PDYvt.offset) > 500) {
+                        resultWarning = errorwarningstring(`'year' is a high number - ${PDYvt.offset}. Are you sure this is correct?.`, resultWarning)
+                    }
+                }
+
+                if (PDMvt.type === "relative") {
+                    let obj = {
+                        year: pdy,
+                        month: today.getMonth() + 1,
+                        day: 1
+                    }
+                    let {
+                        year: yy,
+                        month: mm,
+                        day: dd
+                    } = changeMonth(obj, Number(PDMvt.offset))
+                    pdy = yy
+                    pdm = mm
+                    pdd = (pdd === "monthend") ? daysInMonth(pdm, pdy) : pdd
+
+                    pdresult = {
+                        year: pdy,
+                        month: pdm,
+                        day: pdd
+                    }
+                    // return resultsShow()
+
+                } else if (PDMvt.type === "absolute") {
+                    pdresult = {
+                        year: pdy,
+                        month: pdm,
+                        day: (PDDvt.offset === "monthend") ? daysInMonth(pdm, pdy) : pdd
+                    }
+
+                } else {
+                    pdError = true
+                    resultWarning = errorWarningString(`Pivot date has 'day' as an absolute value. It must have 'month' and 'year' in. For relative 'day' such as 'day: "+1", it must not have 'month' or 'year' in. Even if you set 'month: "current"', that's sufficient. Pivot date will be set to today (the default).`, resultWarning)
+
+                    // return resultsShow()
+                }
+            } else {
+                pdError = true
+                resultWarning = errorWarningString(`Pivot date has 'day' as an absolute value. It must have 'month' and 'year' in. For relative 'day' such as 'day: "+1", it must not have 'month' or 'year' in. Even if you set 'month: "current"', that's sufficient. Pivot date will be set to today (the default).`, resultWarning)
+            }
+
+        }
+
+
+        if (pdError) {
+            pdresult = {
+                year: today.getFullYear(),
+                month: today.getMonth() + 1,
+                day: today.getDate()
+            }
+
+            pdy = today.getFullYear()
+            pdm = today.getMonth() + 1
+            pdd = today.getDate()
+        }
+
+
+    } else {
+        pdresult = {
+            year: today.getFullYear(),
+            month: today.getMonth() + 1,
+            day: today.getDate()
+        }
+    }
+
+
+    console.log(pdresult)
+    // console.log(resultWarning)
+
+
+
+    if (isObjectEmpty(pdresult)) alert("pdresult empty")
+
+    // console.log(pdy, pdm, pdd)
+
+    debugger
+
+
+
+    // RELATIVE DATE SETTINGS
+
+    // console.log(relativedateobject)
+
     let Dvt = Wvt = Mvt = Yvt = Ovt = {}
     let D, W, M, Y, O
 
@@ -239,97 +309,143 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
 
 
     function resultsShow() {
+        let maxDays = daysInMonth(Number(result.month), Number(result.year))
+
+        if (maxDays < result.day) {
+            resultError = errorWarningString(`The result has the month greater than the number of days in the month. ${JSON.stringify(result, null, 1)} has month ${JSON.stringify(result.month, null, 2)} which has ${maxDays} days in it. You can use 'monthend' as the 'day' value.`, resultError)
+            result = {}
+        }
+
+        if ((resultWarning !== "") && ((!result.day) || (!result.month) || (!result.year))) {
+            resultError = errorWarningString(`The result has the month greater than the number of days in the month.`, resultError)
+            result = {}
+        }
+        // console.log(result)
+
+
         if (resultWarning !== "")
-            console.log(`%c${resultWarning}`, 'color: blue; font-size: 16px');
+            console.log(`%cWARNING - ${resultWarning}`, 'color: blue; font-size: 16px');
         if (resultError !== "")
-            console.error(`%c${resultError}`, 'color: red; font-size: 16px');
+            console.error(`%cERROR - ${resultError}`, 'color: red; font-size: 16px');
         return result
+    }
+
+
+    // General checks
+    for (let prop of Object.keys(relativedateobject)) {
+        if (!propertyList.includes(prop)) {
+            resultError = errorWarningString(`${prop} is a property that must be one of these property names - ${propertyList.toString()}`, resultError)
+            return resultsShow()
+        }
     }
 
 
     // a quick parse
     if (relativedateobject.day) {
-        Dvt = valuetype(relativedateobject.day)
-        if (Dvt.type === "absolute") {
+        Dvt = valuetype(relativedateobject.day, "d")
+        if (Dvt.type === "error") {
+            resultError = errorWarningString(`'day' is invalid.`, resultError)
+            return resultsShow()
+        } else if (Dvt.type === "absolute") {
             if ((Number(Dvt.offset) < 1) || (Number(Dvt.offset) > 31)) {
-                resultError = errorstring("'day' is less than 1 or greater than 31. You can't have 'day' outside of this range.", resultError)
+                resultError = errorWarningString("'day' is outside the range of less than 1 or greater than 31. You can't have 'day' outside of this range. It shouldn't be higher than 28. Use 'monthend' to get the end of the month whether it's 30th or 31st, it will be the end of the month.", resultError)
                 return resultsShow()
+            } else if (Dvt.offset > 28) {
+                // check D is not too high eg 29, use "end"
+                resultWarning = "'day' is higher than 28. It shouldn't be higher than 28. Use 'monthend' to get the end of the month whether it's 30th or 31st, it will be the end of the month."
+            }
+        } else if (Dvt.type === "relative") {
+            if (isNumberSigned(Dvt.offset)) {
+                if (Number(Dvt.offset) > 365) {
+                    resultWarning = errorWarningString("'day' is a high number. Why don't you use years and/or months instead.", resultWarning)
+                }
             }
         }
     } else {
-        resultError = errorstring("'day' property is empty. It must have a value such as 1 (1st of the month), +4 (4 days ahead), 'Monday'.", resultError)
+        resultError = errorWarningString("'day' property is empty. It must have a value such as 1 (1st of the month), +4 (4 days ahead), 'Monday'.", resultError)
         return resultsShow()
     }
 
+
     if (relativedateobject.week) {
-        Wvt = valuetype(relativedateobject.week)
-        if ((Number(Wvt.offset) < 1) || (Number(Wvt.offset) > 53)) {
-            resultError = errorstring("'week' is less than 1 or greater than 53. You can't have 'week' outside of this range.", resultError)
+        Wvt = valuetype(relativedateobject.week, "w")
+        if (Wvt.type === "error") {
+            resultError = errorWarningString(`'week' is invalid.`, resultError)
             return resultsShow()
+        } else if (Wvt.type === "absolute") {
+            if ((Number(Wvt.offset) < 1) || (Number(Wvt.offset) > 53)) {
+                resultError = errorWarningString("'week' is less than 1 or greater than 53. You can't have 'week' outside of this range.", resultError)
+                return resultsShow()
+            }
+        } else if (Wvt.type === "relative") {
+            if (isNumberSigned(Wvt.offset)) {
+                if (Number(Wvt.offset) > 53) {
+                    resultWarning = errorwarningstring("'week' is a high number. Why don't you use years and/or months instead.", resultWarning)
+                }
+            }
         }
     }
-    if (relativedateobject.month) {
-        Mvt = valuetype(relativedateobject.month)
 
-        if (Mvt.type === "absolute") {
+    if (relativedateobject.month) {
+        Mvt = valuetype(relativedateobject.month, "m")
+        if (Mvt.type === "error") {
+            resultError = errorWarningString(`'month' is invalid.`, resultError)
+            return resultsShow()
+        } else if (Mvt.type === "absolute") {
             if ((Number(Mvt.offset) < 1) || (Number(Mvt.offset) > 12)) {
-                resultError = errorstring("'month' is less than 1 or greater than 12. You can't have 'month' outside of this range.", resultError)
+                resultError = errorWarningString("'month' is less than 1 or greater than 12. You can't have 'month' outside of this range.", resultError)
                 return resultsShow()
             }
             M = Number(Mvt.offset)
-
         } else if (Mvt.type === "current") {
-            M = today.getMonth() + 1
+            M = pdresult.month
+        } else if (Mvt.type === "relative") {
+            if (isNumberSigned(Mvt.offset)) {
+                if (Number(Mvt.offset) > 48) {
+                    resultWarning = errorwarningstring("'month' is a high number. Why don't you use years and/or months instead.", resultWarning)
+                }
+            }
         }
+
     } else {
-        M = today.getMonth() + 1
+        M = pdresult.month
     }
 
     if (relativedateobject.year) {
-        Yvt = valuetype(relativedateobject.year)
-        if ((Number(Yvt.offset) < 1600) || (Number(Yvt.offset) > 2300)) {
-            resultError = errorstring("'year' is less than 1600 or greater than 2300. You can't have 'year' outside of this range.", resultError)
+        Yvt = valuetype(relativedateobject.year, "y")
+        if (Yvt.type === "error") {
+            resultError = errorWarningString(`'year' is invalid. 'year' isn't a number.`, resultError)
             return resultsShow()
+        } else if (Yvt.type === "absolute") {
+            if (!isYearValid(Yvt.offset, 1600, 2300)) {
+                resultError = errorWarningString(`'year' is invalid. 'year' is less than 1600 or greater than 2300. You can't have 'year' outside of this range.`, resultError)
+                return resultsShow()
+            }
+        } else if (Yvt.type === "relative") {
+            if (isNumberSigned(Yvt.offset)) {
+                if (Number(Yvt.offset) > 500) {
+                    resultWarning = errorwarningstring(`'year' is a high number - ${Yvt.offset}. Are you sure this is correct?.`, resultWarning)
+                }
+            }
         }
     }
 
 
-    // debugger
-
     if (relativedateobject.day) {
-        // let Dvt = valuetype(relativedateobject.day)
-
         D = Number(Dvt.offset)
 
         if (Dvt.type === "absolute") {
-            // check D is not too high eg 29, use "end"
-            if (D > 28) {
-                resultWarning = "'day' is higher than 28. It shouldn't be higher than 28. Use 'monthend' to get the end of the month whether it's 30th or 31st, it will be the end of the month."
-                if (D > 31) {
-                    resultError = "'day' is higher than 31. It shouldn't be higher than 28. Use 'monthend' to get the end of the month whether it's 30th or 31st, it will be the end of the month."
-                    return resultsShow()
-                }
-            }
-
-
             if (relativedateobject.week) {
-                resultError = "'day' is an absolute number. You can't have any setting for 'week'. You can optionally have settings for 'month' and 'year', they must be absolute ie a specific number, but not for 'week'."
+                resultError = errorWarningString("'day' is set as an absolute number. You can't have any setting for 'week'. You can optionally have settings for 'month' and 'year', they must be absolute ie a specific number, but not for 'week'.", resultError)
                 return resultsShow()
             }
 
-
-            debugger
-            Y = yearoffset(Yvt)
-            if (!isNumber(Y)) {
-                resultError = errorstring(Y, resultError)
-                return resultsShow()
-            }
-
+            Y = yearoffset(Yvt, pdresult.year)
 
             if (Mvt.type === "relative") {
                 let obj = {
-                    year: (Y) ? Y : today.getFullYear(),
-                    month: today.getMonth() + 1,
+                    year: (Y) ? Y : pdresult.year,
+                    month: pdresult.month,
                     day: (Dvt.offset === "monthend") ? 1 : D
                 }
                 let {
@@ -339,12 +455,7 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
                 } = changeMonth(obj, Number(Mvt.offset))
                 Y = yy
                 M = mm
-                D = (D === "monthend") ? daysInMonth(M, Y) : D
-
-                if (!Y) {
-                    resultError = errorstring("You can't change the month to this month, probably because the number is something like 31 when you are changing to a month that has 30 days in it. You can use days: 'monthend'.", resultError)
-                    return resultsShow()
-                }
+                D = (Dvt.offset === "monthend") ? daysInMonth(M, Y) : D
 
                 result = {
                     year: Y,
@@ -356,28 +467,22 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
                 result = {
                     year: Y,
                     month: M,
-                    day: (Dvt.offset === "monthend") ? daysInMonth(today.getMonth() + 1, Y) : D
+                    day: (Dvt.offset === "monthend") ? daysInMonth(M, Y) : D
                 }
                 return resultsShow()
             }
 
 
-
-
         } else if (Dvt.type === "relative") {
-            // D = (Dvt.offset === "current") ? today.getDate() : Number(Dvt.offset)
-
-            // if (Wvt.type === "relative" || Mvt.type === "relative" || Yvt.type === "relative") {
             if (!isObjectEmpty(Wvt) || !isObjectEmpty(Mvt) || !isObjectEmpty(Yvt)) {
-                resultError = errorstring("'day' is relative. You can't have 'week', 'month' or 'year' settings. Eg if it's tomorrow (day: -1), you can't set week, month or year.", resultError)
+                resultError = errorWarningString("'day' is relative. You can't have 'week', 'month' or 'year' settings. Eg if it's tomorrow (day: -1), you can't set week, month or year.", resultError)
                 return resultsShow()
             }
 
-
             result = changeDay({
-                year: today.getFullYear(),
-                month: today.getMonth() + 1,
-                day: today.getDate()
+                year: pdresult.year,
+                month: pdresult.month,
+                day: pdresult.day
             }, DAY_MS * Number(Dvt.offset))
             return resultsShow()
 
@@ -389,17 +494,15 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
             //     return result
             // }
 
-            Y = yearoffset(Yvt)
-            if (!isNumber(Y)) {
-                resultError = errorstring(Y, resultError)
-                return resultsShow()
-            }
+            resultWarning = errorWarningString(`'day' is set to 'current'. If you run this frequently, and if the day is 29, 30 or 31 and you are adding 1 month, some months may not have 31 or 30 days in them so you will get an error with a blank result. You can use 'day: "+30" or 'week: "+4"'.`, resultWarning)
+
+            Y = yearoffset(Yvt, pdresult.year)
 
             if (Mvt.type === "relative") {
                 let obj = {
-                    year: (Y) ? Y : today.getFullYear(),
-                    month: today.getMonth() + 1,
-                    day: today.getDate()
+                    year: (Y) ? Y : pdresult.year,
+                    month: pdresult.month,
+                    day: pdresult.day
                 }
                 let {
                     year: yy,
@@ -409,11 +512,6 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
                 Y = yy
                 M = mm
                 D = dd
-
-                if (!Y) {
-                    resultError = errorstring("You can't change the month to this month, probably because the number is something like 31 when you are changing to a month that has 30 days in it. You can use days: 'monthend'.", resultError)
-                    return resultsShow()
-                }
 
                 result = {
                     year: Y,
@@ -426,7 +524,7 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
                 result = {
                     year: Y,
                     month: M,
-                    day: today.getDate()
+                    day: pdresult.day
                 }
                 return resultsShow()
             }
@@ -434,18 +532,13 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
 
 
         } else if (Dvt.type === "dayofweek") {
-
-            Y = yearoffset(Yvt)
-            if (!isNumber(Y)) {
-                resultError = errorstring(Y, resultError)
-                return resultsShow()
-            }
+            Y = yearoffset(Yvt, pdresult.year)
 
             if (Mvt.type === "relative") {
                 let obj = {
-                    year: (Y) ? Y : today.getFullYear(),
-                    month: today.getMonth() + 1,
-                    day: today.getDate()
+                    year: (Y) ? Y : pdresult.year,
+                    month: pdresult.month,
+                    day: pdresult.day
                 }
                 let {
                     year: yy,
@@ -467,7 +560,7 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
             let monthcurrent = {
                 year: Y,
                 month: M,
-                day: today.getDate()
+                day: pdresult.day
             }
 
 
@@ -499,25 +592,20 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
 
 
         } else if (Dvt.type === "dayofweek weeknum") {
-
             if (!isObjectEmpty(Wvt)) {
-                resultError = errorstring("'day' is a dayname with a number eg 'Sunday 2', but it means 2nd Sunday of each month, it can't have a 'week' setting.", result.error)
+                resultError = errorWarningString("'day' is a dayname with a number eg 'Sunday 2', but it means 2nd Sunday of each month, it can't have a 'week' setting.", resultError)
                 return resultsShow()
             }
 
-            Y = yearoffset(Yvt)
-            if (!isNumber(Y)) {
-                resultError = errorstring(Y, resultError)
-                return resultsShow()
-            }
-
+            Y = yearoffset(Yvt, pdresult.year)
 
             if (Mvt.type === "relative") {
                 let obj = {
-                    year: (Y) ? Y : today.getFullYear(),
-                    month: today.getMonth() + 1,
-                    day: today.getDate()
+                    year: (Y) ? Y : pdresult.year,
+                    month: pdresult.month,
+                    day: pdresult.day
                 }
+
                 let {
                     year: yy,
                     month: mm,
@@ -539,7 +627,15 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
                 day: daysInMonth(M, Y)
             }
 
+            if (!/^\*?-?\d{1,1}$/.test(Dvt.offset[1])) {
+                resultError = errorWarningString(`'day' is in an incorrect format. It must be something like 'day: "Monday 2"' (2nd Monday of the month), 'day: "tue -1"' (Last Tuesday of the month), 'day: "Friday *2"' (2nd Friday of the month only counting full weeks) or 'day: "Monday *-2"' (2nd last Monday of the month only counting full weeks). The number must be less than 5.`, resultError)
+                return resultsShow()
+            }
+
             if (Dvt.offset[1][0] === "*") {
+                if (Math.abs(Number(Dvt.offset[1].slice(1))) >= 4) {
+                    resultWarning = errorWarningString(`There are maximum 4 full weeks in a month. Weekdays in the later part of the week for full weeks as you specified don't always occur so you may get a blank result. Instead of opting for the 4th occurrence of a day, you can opt for the last eg 'day: "Friday -1"' or 'day: "Sunday *-1"'`, resultWarning)
+                }
                 if (Number(Dvt.offset[1].slice(1)) > 0) {
                     result = weekFullFirst(firstOfMonth, Number(Dvt.offset[0]), Number(Dvt.offset[1].slice(1)), startofweek)
                     return resultsShow()
@@ -561,36 +657,14 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
         } else {
             // nothing entered, return current day
             result = {
-                year: today.getFullYear(),
-                month: today.getMonth() + 1,
-                day: today.getDate()
+                year: pdresult.year,
+                month: pdresult.month,
+                day: pdresult.day
             }
-            resultError = errorstring("'day' property has no value. It must have a value such as 1 (1st of the month), +4 (4 days ahead), 'Monday'.", resultError)
-            return result
+            resultError = errorWarningString("'day' property has no value. It must have a value such as 1 (1st of the month), +4 (4 days ahead), 'Monday'.", resultError)
+            return resultsShow()
         }
     }
-
-
-    // --------------------------------------
-
-    // Basic stuff is done
-
-    // Errors
-
-    if (Dvt.type === "absolute") {
-        // if (Wvt.type === "absolute" || Wvt.type === "relative") {
-        if (relativedateobject.week) {
-            resultError = errorstring("'week' property is in when you have 'day' in. You can't specify a specific day of the month and then specify a week.", resultError)
-        }
-    }
-
-
-    if (Dvt.type === "relative") {
-        if ((!relativedateobject.week) || (!relativedateobject.month) || (!relativedateobject.year)) {
-            // resultError = errorstring("'day' property is relative. You can't specify a week, month or year when you are specifying a relative day eg yesterday ('day: -1') or 90 day from now ('day: +90')", resultError)
-        }
-    }
-
 
 
     // --------------------------------------
@@ -604,21 +678,26 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
     }
 
 
-
-    // --------------------------------------
-
-    if (resultError) {
-        console.error(resultError)
+    function yearoffset(valuetype, yearbase) {
+        if (valuetype.type === "absolute") {
+            return Number(valuetype.offset)
+        } else if (valuetype.type === "current") {
+            return yearbase
+        } else if (valuetype.type === "relative") {
+            return yearbase + Number(valuetype.offset)
+        } else {
+            return yearbase
+        }
     }
 
 
-    function valuetype(str) {
+    function valuetype(str, datetype) {
         let val = String(str).trim()
 
         if (isNumber(val)) {
             return {
                 type: "absolute",
-                offset: val
+                offset: Number(val)
             }
         } else if (isNumberSigned(val)) {
             return {
@@ -631,13 +710,12 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
                     type: "current",
                     offset: val
                 }
-            } else if (val === "monthend") {
+            } else if ((val === "monthend") && ((datetype === "d") || (datetype === "pd-d"))) {
                 return {
                     type: "absolute",
                     offset: val
                 }
-            } else {
-
+            } else if (datetype === "d") {
                 let part1 = ""
                 let part2 = ""
                 let seperator = val.indexOf(" ")
@@ -665,13 +743,19 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
                                     1: part2
                                 }
                             }
+                        }
 
+                    } else {
+                        return {
+                            type: "error",
+                            offset: part1
                         }
                     }
+
+
                 } else {
                     let daynumber = dayToNumber(part1)
                     if (daynumber !== -1) {
-
                         if (seperator === -1) {
                             return {
                                 type: "dayofweek",
@@ -694,22 +778,24 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
                         }
                     }
                 }
-
+            } else {
+                return {
+                    type: "error",
+                    offset: "error"
+                }
             }
+
         }
     }
 
-    function errorstring(msg, errorstring) {
-        return (errorstring) ? errorstring + "\n" + msg : msg
+
+    function errorWarningString(msg, str) {
+        return (str) ? str + "\n" + msg : msg
     }
 
-    function warningstring(msg, warningstring) {
-        return (warningstring) ? warningstring + "\n" + msg : msg
-    }
-
-
-    // Is this date past?
-
+    // function warningstring(msg, warningstring) {
+    //     return (warningstring) ? warningstring + "\n" + msg : msg
+    // }
 
 }
 
@@ -747,17 +833,17 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
 //     week: "current"
 // }))
 
-console.log(reldatetest({
-    day: "-4",
-}))
+// console.log(reldatetest({
+//     day: "-4",
+// }))
 
 // console.log(reldatetest({
 //     day: +4,
 // }))
 
-console.log(reldatetest({
-    day: "-3",
-}))
+// console.log(reldatetest({
+//     day: "-3",
+// }))
 console.log("*************************************************")
 
 
@@ -775,19 +861,6 @@ function changeDay(dateobj, ms) {
         day: dt2.getUTCDate()
     }
 }
-
-
-// debugger
-console.log(changeDay({
-    year: 2022,
-    month: 10,
-    day: 5
-}, DAY_MS * -3))
-console.log(changeDay({
-    year: 2022,
-    month: 10,
-    day: 2
-}, DAY_MS * -3))
 
 
 
@@ -840,7 +913,7 @@ function changeMonth(dateobj, months) {
             m = Number(dateobj.month) - remainder
         } else {
             y += 1
-            m = 12 - (Number(dateobj.month) - remainder)
+            m = 12 - remainder + 1
         }
 
 
@@ -851,7 +924,7 @@ function changeMonth(dateobj, months) {
         }
     }
 
-    let maxDays = daysInMonth(Number(result.month) - 1, Number(result.year))
+    let maxDays = daysInMonth(Number(result.month), Number(result.year))
 
     if (Number(dateobj.day) <= maxDays) {
         return result

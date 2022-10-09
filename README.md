@@ -130,10 +130,10 @@ This is the second Tuesday in June.
 The 15th of June, 2023.
 
 So we have four main options: \
-\<dayname\> \<occurrence number\> - Picks the day from the month. It counts the first day occurrence regardless of whether or not the first week overlapped into the previous week. \
-\<dayname\> -\<occurrence number\> - Picks the day that occurred in the month, the **last** being -1. \
-\<dayname\> *\<occurrence number\> - Picks the day from only **full weeks**. \
-\<dayname\> *-\<occurrence number\> - **Full week**, from the **last** week of the month.
+\<dayname\> \<occurrence number\> - Picks the day from the month. It counts the first day occurrence regardless of whether or not the first week overlapped into the previous week. eg ``{day: "Fri 2"`` \
+\<dayname\> -\<occurrence number\> - Picks the day that occurred in the month, the **last** being -1.  eg ``{day: "Sat -1"``\
+\<dayname\> *\<occurrence number\> - Picks the day from only **full weeks**. eg ``{day: "Fri *2"`` \
+\<dayname\> *-\<occurrence number\> - **Full week**, from the **last** week of the month. eg ``{day: "Sun *-2"``
 
 *Note*
 There is also: \
@@ -193,6 +193,3 @@ let nextMothersDay = { day: "Sunday", month: 5 }
 let lastMothersDay = { day: "Sunday", month: 5, occur: "-1" }
 ```
 
-
-<pre><code>let nextMothersDay = { day: "Sunday", month: 5 }<br>
-let lastMothersDay = { day: "Sunday", month: 5, occur: "-1" }</code></pre>
