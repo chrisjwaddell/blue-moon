@@ -6,7 +6,7 @@ Relative-date allows you to enter simple date settings to return one specific da
 relative-Date({ day: "Sunday -1" })
 ``
 
-This returns the last Sunday of each month. After that occurs, it would return the next months last Sunday of the month.
+This returns the last Sunday of each month.
 
 ## Uses
 Relative-date can be useful for setting dates for reports or generally finding specific dates that can be tricky to code. Finding public holidays are another use. It can be hard finding the last Wednesday of the month or Mothers day the second Sunday of May each year.
@@ -20,7 +20,8 @@ There are four main date settings: *day*, *week*, *month* and *year*.
 Each setting can be specific, relative or *current*.
 
 ## Day
-There are two main modes to *day*. It can be a specific day of the month such as the 3rd, or it can be a day such as Wednesday.
+Day can be a number such as "15", meaning the 15th of the month, it can be "+5", meaning 5 days in the future, it can be a specific day name such as "Wednesday" or a day and week. It can be a specific day of the month such as "Monday 2" meaning the second Monday of each month.
+
 The *day* property is mandatory.
 
 ### Day of the month
@@ -36,7 +37,6 @@ Means 25th of March every year.
 { day: "monthend", month: 2 }
 ``
 This calculates the end of month, whether it's 29th of February or 28th in this case, or 30th or 31st for other months.
-
 
 
 
@@ -148,24 +148,32 @@ Year must be either a four digit specific year eg *2024*, a relative number *"+1
 
 ### Specific year
 ``
-{ day: 1, year: 2023 }
+{ day: 1, year: "2023" }
 ``
+This returns the first of the current month in 2023 every time it's run.
 
 ### Relative year
 ``
 { day: 1, year: "+1" }
 ``
-
+This returns the first of the current month of next year every time it's run.
 *Note* - You must use quotes for relative values.
 
 ### Current
 ``
-{ day: 1, year: 2023 }
+{ day: 1, year: "current" }
 ``
 *current* is like a relative year, like *+0*.
 
 
 *day*, *week*, *month* or *year* can be set as *current*.
+
+If you leave out *month* or *year*, it defaults to *current*.
+
+``
+{ day: "Monday" }
+``
+This returns Monday of the current week. Day of the week is used in conjuction with *week*, if *week* is missing, it assumes ``week: current``
 
 
 
