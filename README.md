@@ -1,17 +1,17 @@
-# relative-date
+# Blue Moon
 
-Relative-date allows you to enter simple date settings to return one specific date that matches your criteria. It can be in the past or future.
+Blue Moon allows you to enter simple date settings to return one specific date that matches your criteria. It can be in the past or future.
 
 ``
-relative-Date({ day: "Sunday -1" })
+blueMoon({ day: "Sunday -1" })
 ``
 
 This returns the last Sunday of each month.
 
 ## Uses
-Relative-date can be useful for setting dates for reports or generally finding specific dates that can be tricky to code. Finding public holidays are another use. It can be hard finding the last Wednesday of the month or Mothers day the second Sunday of May each year.
+Blue Moon can be useful for setting dates for reports or generally finding specific dates that can be tricky to code. Finding public holidays are another use. It can be hard finding the last Wednesday of the month or Mothers day the second Sunday of May each year.
 
-relative-date is very verbose for getting specific dates for things like reports.
+blueMoon is very verbose for getting specific dates for things like reports.
 
 It can be relative to the current or pivot date or an absolute date.
 
