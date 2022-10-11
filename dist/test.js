@@ -146,7 +146,7 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
             } else if (PDMvt.type === "relative") {
                 pdm = PDMvt.offset
 
-                if (isNumberSigned(Mvt.offset)) {
+                if (isNumberSigned(PDMvt.offset)) {
                     if (Number(PDMvt.offset) > 48) {
                         resultWarning = errorwarningstring("Pivot date 'month' is a high number. Why don't you use years and/or months instead.", resultWarning)
                     }
@@ -177,7 +177,7 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
             } else if (PDDvt.type === "relative") {
                 pdd = PDDvt.offset
 
-                if (isNumberSigned(Dvt.offset)) {
+                if (isNumberSigned(PDDvt.offset)) {
                     if (Number(PDDvt.offset) > 365) {
                         resultWarning = errorWarningString("Pivot date 'day' is a high number. Why don't you use years and/or months instead.", resultWarning)
                     }
@@ -395,12 +395,16 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
         }
 
 
+
         if (resultWarning !== "")
             console.log(`%cWARNING - ${resultWarning}`, 'color: blue; font-size: 16px');
         if (resultError !== "")
             console.error(`%cERROR - ${resultError}`, 'color: red; font-size: 16px');
         return result
     }
+
+
+
 
 
     // General checks
@@ -764,103 +768,6 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
     }
 
 
-    function valuetype(str, datetype) {
-        let val = String(str).trim()
-
-        if (isNumber(val)) {
-            return {
-                type: "absolute",
-                offset: Number(val)
-            }
-        } else if (isNumberSigned(val)) {
-            return {
-                type: "relative",
-                offset: val
-            }
-        } else {
-            if (val === "current") {
-                return {
-                    type: "current",
-                    offset: val
-                }
-            } else if ((val === "monthend") && ((datetype === "d") || (datetype === "pd-d"))) {
-                return {
-                    type: "absolute",
-                    offset: val
-                }
-            } else if (datetype === "d") {
-                let part1 = ""
-                let part2 = ""
-                let seperator = val.indexOf(" ")
-
-                if (seperator === -1) {
-                    part1 = val
-                } else {
-                    part1 = val.slice(0, seperator)
-                    part2 = val.slice(seperator + 1)
-                }
-
-                if (part1.length === 3) {
-                    let daynumber = dayToNumberThreeLetter(part1)
-                    if (daynumber !== -1) {
-                        if (seperator === -1) {
-                            return {
-                                type: "dayofweek",
-                                offset: daynumber
-                            }
-                        } else {
-                            return {
-                                type: "dayofweek weeknum",
-                                offset: {
-                                    0: daynumber,
-                                    1: part2
-                                }
-                            }
-                        }
-
-                    } else {
-                        return {
-                            type: "error",
-                            offset: part1
-                        }
-                    }
-
-
-                } else {
-                    let daynumber = dayToNumber(part1)
-                    if (daynumber !== -1) {
-                        if (seperator === -1) {
-                            return {
-                                type: "dayofweek",
-                                offset: daynumber
-                            }
-                        } else {
-                            return {
-                                type: "dayofweek weeknum",
-                                offset: {
-                                    0: daynumber,
-                                    1: part2
-                                }
-                            }
-                        }
-
-                    } else {
-                        return {
-                            type: "error",
-                            offset: part1
-                        }
-                    }
-                }
-            } else {
-                return {
-                    type: "error",
-                    offset: "error"
-                }
-            }
-
-        }
-    }
-
 
     function errorWarningString(msg, str) {
         return (str) ? str + "\n" + msg : msg
@@ -873,50 +780,228 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
 }
 
 
-// console.log(reldatetest({
-//     day: '+11',
-//     month: "+1"
-// }))
 
-// console.log(reldatetest({
-//     day: '11',
-//     month: "5"
-// }))
+function valuetype(str, datetype) {
+    let val = String(str).trim()
 
-// console.log(reldatetest({
-//     day: '-1'
-// }))
+    if (isNumber(val)) {
+        return {
+            type: "absolute",
+            offset: Number(val)
+        }
+    } else if (isNumberSigned(val)) {
+        return {
+            type: "relative",
+            offset: val
+        }
+    } else {
+        if (val === "current") {
+            return {
+                type: "current",
+                offset: val
+            }
+        } else if ((val === "monthend") && ((datetype === "d") || (datetype === "pd-d"))) {
+            return {
+                type: "absolute",
+                offset: val
+            }
+        } else if (datetype === "d") {
+            let part1 = ""
+            let part2 = ""
+            let seperator = val.indexOf(" ")
+
+            if (seperator === -1) {
+                part1 = val
+            } else {
+                part1 = val.slice(0, seperator)
+                part2 = val.slice(seperator + 1)
+            }
+
+            if (part1.length === 3) {
+                let daynumber = dayToNumberThreeLetter(part1)
+                if (daynumber !== -1) {
+                    if (seperator === -1) {
+                        return {
+                            type: "dayofweek",
+                            offset: daynumber
+                        }
+                    } else {
+                        return {
+                            type: "dayofweek weeknum",
+                            offset: {
+                                0: daynumber,
+                                1: part2
+                            }
+                        }
+                    }
+
+                } else {
+                    return {
+                        type: "error",
+                        offset: part1
+                    }
+                }
 
 
-// console.log(reldatetest({
-//     day: 'current',
-//     month: "+7"
-// }))
+            } else {
+                let daynumber = dayToNumber(part1)
+                if (daynumber !== -1) {
+                    if (seperator === -1) {
+                        return {
+                            type: "dayofweek",
+                            offset: daynumber
+                        }
+                    } else {
+                        return {
+                            type: "dayofweek weeknum",
+                            offset: {
+                                0: daynumber,
+                                1: part2
+                            }
+                        }
+                    }
 
-// console.log(reldatetest({
-//     day: 'we',
-//     month: "+7"
-// }))
+                } else {
+                    return {
+                        type: "error",
+                        offset: part1
+                    }
+                }
+            }
+        } else {
+            return {
+                type: "error",
+                offset: "error"
+            }
+        }
+
+    }
+}
 
 
-// debugger
+function loop(relativedateobject, pivotdate, datesbefore, datesafter, startofweek) {
+    let arr = [];
+    let arrnew = [];
 
-// console.log(reldatetest({
-//     day: "fr",
-//     week: "current"
-// }))
+    let iteration = reldatetest(relativedateobject, pivotdate, startofweek)
 
-// console.log(reldatetest({
-//     day: "-4",
-// }))
+    if (isObjectEmpty(iteration)) {
+        return []
+    }
 
-// console.log(reldatetest({
-//     day: +4,
-// }))
+    let Dvt = {},
+        Mvt = {},
+        Yvt = {}
 
-// console.log(reldatetest({
-//     day: "-3",
-// }))
+    Dvt = valuetype(relativedateobject.day, "d")
+    Mvt = valuetype(relativedateobject.month, "m")
+    Yvt = valuetype(relativedateobject.year, "y")
+
+
+    let zeroiterator = reldatetest(relativedateobject, pivotdate, startofweek)
+
+    console.log("result", iteration);
+    let startbase = iteration
+
+    for (let i = 0; i < datesbefore; i++) {
+        iteration = occurrences(relativedateobject, iteration, -1, Dvt, Mvt, Yvt, startofweek)
+        arr.push(iteration)
+        console.log(iteration)
+        // reldatetest(relativedateobject, pivotdate, startofweek = 1)
+    }
+
+    arrnew = arr.reverse()
+
+    arrnew.push(zeroiterator)
+
+    iteration = startbase
+    for (let i = 0; i < datesafter; i++) {
+        iteration = occurrences(relativedateobject, iteration, 1, Dvt, Mvt, Yvt, startofweek)
+        arrnew.push(iteration)
+        // console.log(iteration)
+        // reldatetest(relativedateobject, pivotdate, startofweek = 1)
+    }
+
+    console.log(arrnew)
+    return arrnew
+}
+
+
+function occurrences(relativedateobject, pivotdate, forwardbackwards, Dvt, Mvt, Yvt, startofweek) {
+    //forwardbackwards - 1 = forwards
+    // day must be in
+
+    // relativedateobject, pivotdate, startofweek = 1
+    let newdate = {}
+
+    // let dateGreaterThanPivot = compareDateObjs(dateobj, pdresult)
+    // console.log(dateGreaterThanPivot)
+
+    if ((Dvt.type === "relative") || (Dvt.type === "current")) {
+        return changeDay(pivotdate, DAY_MS * forwardbackwards)
+
+    } else if (Dvt.type === "dayofweek") {
+        return changeMonth(pivotdate, 7 * forwardbackwards)
+
+    } else if (Dvt.type === "dayofweek weeknum") {
+        let next = changeMonth(pivotdate, 1 * forwardbackwards)
+
+        return reldatetest(relativedateobject, {
+            year: next.year,
+            month: next.month,
+            day: 1
+        }, startofweek)
+
+    } else if ((Mvt.type === "relative") || (Mvt.type === "current")) {
+        return changeMonth(pivotdate, forwardbackwards)
+
+    } else if ((Yvt.type === "relative") || (Yvt.type === "current")) {
+        if (relativedateobject.month) {
+            if (Mvt.type === "absolute") {
+                // month is absolute
+                return {
+                    year: pivotdate.year + (1 * forwardbackwards),
+                    month: pivotdate.month,
+                    day: pivotdate.day
+                }
+            } else {
+                return changeMonth(pivotdate, forwardbackwards)
+            }
+        } else {
+            return changeMonth(pivotdate, forwardbackwards)
+        }
+
+    } else {
+        if (relativedateobject.month) {
+            if (Mvt.type === "absolute") {
+                if (!relativedateobject.year) {
+                    // month absolute, year empty -> year increment
+                    return {
+                        year: pivotdate.year + (1 * forwardbackwards),
+                        month: pivotdate.month,
+                        day: pivotdate.day
+                    }
+
+                } else {
+                    // day, month and year are absolute
+                    return pivotdate
+                }
+            }
+
+        } else {
+            if (!relativedateobject.year) {
+                // day in but not month or year  => month increment
+                return changeMonth(pivotdate, forwardbackwards)
+
+            } else {
+                // day, year
+                return changeMonth(pivotdate, forwardbackwards)
+            }
+
+        }
+    }
+}
+
 console.log("*************************************************")
 
 
@@ -1277,59 +1362,6 @@ function testcheckResult() {
 
     // let c = changeDay(r, 10)
 
-}
-
-
-
-function occurrences(dateobj, pdresult, Yvt, Mvt, Dvt) {
-    let newdate = {}
-
-    // let dateGreaterThanPivot = compareDateObjs(dateobj, pdresult)
-    // console.log(dateGreaterThanPivot)
-
-    if ((Dvt.type === "relative") || (Dvt.type === "current")) {
-        return changeDay(dateobj, DAY_MS)
-        // return "day"
-
-    } else if (Dvt.type === "dayofweek") {
-        return changeMonth(dateobj, 7)
-
-    } else if (Dvt.type === "dayofweek weeknum") {
-        let next = changeMonth(dateobj, 1)
-        return {
-            day: 1,
-            month: next.month,
-            year: next.year
-        }
-        // return "dayofweek weeknum"
-
-    } else if ((Mvt.type === "relative") || (Mvt.type === "current")) {
-        return changeMonth(dateobj, 1)
-        // return "month"
-
-    } else if ((Yvt.type === "relative") || (Yvt.type === "current")) {
-        return {
-            day: dateobj.day,
-            month: dateobj.month,
-            year: dateobj.year + 1
-        }
-        // return "year"
-
-    } else {
-        if (isObjectEmpty(Mvt)) {
-            return changeMonth(dateobj, 1)
-            // return "month"
-        } else if (isObjectEmpty(Yvt)) {
-            return {
-                day: dateobj.day,
-                month: dateobj.month,
-                year: dateobj.year + 1
-            }
-            // return "year"
-        } else {
-            return dateobj
-        }
-    }
 }
 
 

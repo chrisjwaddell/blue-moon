@@ -39,7 +39,6 @@ Means 25th of March every year.
 This calculates the end of month, whether it's 29th of February or 28th in this case, or 30th or 31st for other months.
 
 
-
 ### Day of week
 Day of week with Week number combines with Month, even if Month isn't specified.
 ``
@@ -87,17 +86,17 @@ There are some handy options if you are specific about full week or part week.
 ``
 { day: "Sunday 3" }
 ``
-The third Sunday of each month.
+The third Sunday of the current month.
 
 ``
 { day: "Wednesday -2", month: 10 }
 ``
-The second last Wednesday of the month.
+The second last Wednesday of October each year.
 
 ``
 { day: "Wedesday *1" }
 ``
-The first Wedesday of each month that falls on a full week inside of that month. If the first Wedesday starts on the 2nd or 3rd, Monday is inside the previous month and so this is not considered to be a full week so _Wednesday *1_ would be the week after.
+The first Wedesday of each month that falls on a full week inside of that month. If the first Wedesday starts on the 1st or 2nd, Monday is in the previous month and so this is not considered to be a full week so _Wednesday *1_ would be the week after.
 
 ## Week
 Week works in combination with *day* and can also work with *month*. *week* can be absolute, relative or the *current* week.
@@ -112,7 +111,6 @@ Monday of this week.
 { day: "sun", week: 2}
 ``
 Sunday on week 2 of this month.
-
 
 
 
@@ -160,15 +158,17 @@ This returns the first of the current month of next year every time it's run.
 *Note* - You must use quotes for relative values.
 
 ### Current
-``
-{ day: 1, year: "current" }
-``
-*current* is like a relative year, like *+0*.
-
-
-*day*, *week*, *month* or *year* can be set as *current*.
+*current* is like a relative year, like *+0*. *day*, *week*, *month* or *year* can be set as *current*.
 
 If you leave out *month* or *year*, it defaults to *current*.
+``
+{ day: 1 }
+``
+is the same as
+``
+{ day: 1, month: "current", year: "current" }
+``
+This returns the first of the current month you are in, every time you run it, it will return the first of that month of the current year you are in.
 
 ``
 { day: "Monday" }
@@ -176,14 +176,27 @@ If you leave out *month* or *year*, it defaults to *current*.
 This returns Monday of the current week. Day of the week is used in conjuction with *week*, if *week* is missing, it assumes ``week: current``
 
 
+For *day*, if you set it as relative eg
+``
+{ day: "+14" }
+``
+You cannot have any *week*, *month* or *year* settings. This wouldn't make sense. Relative day is a particular number of days ahead or behind today.
+You can however set *day* as *current*.
+
+You can mix and match if day is not relative, such as
+``
+{ day: "current", month: "+1", year: "current"}
+{ day: "Monday", week: 2, month: 6, year: "current"}
+{ day: 15, month: "+1", year: "current"}
+``
+
 
 ## Pivot date
-This is the date you want to start from. You could find the first Sunday in March starting from 2000.
+This is the date you want to start from. Like a reference point. You could find the first Sunday in March starting from 2000.
 You could set the pivot date as:
 ``
 { day: "Sunday 1", month: 3, pivotdate: { day: 1, month: 1, year: 2000 } }
 ``
-
 
 
 
