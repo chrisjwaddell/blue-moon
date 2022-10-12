@@ -153,7 +153,7 @@ Year must be either a four digit specific year eg *2024*, a relative number *"+1
 ### Specific year
 ``
 { day: 1, year: "2023" }
-``
+`` \
 This returns the first of the current month in 2023 every time it's run.
 
 ### Relative year
@@ -207,21 +207,17 @@ You could set the pivot date as:
 
 
 
-
-# Get the next or previous dates
+## Get the next or previous dates
 Blue Moon move backwards and forwards and get previous or past dates.
 
 ``
 BlueMoon({ day: "Mon 1"}, {day: 1, month: 1, year: 2021}, {datesAfter: 12})
-``
-
+`` \
 The first Monday of each month in 2021.
 
 
 ``
-let next5MothersDays = BlueMoon({ day: "Sunday 2", month: 5}, {}, {datesAfter: 5})
-``
-
+let next5MothersDays = BlueMoon({ day: "Sunday 2", month: 5}, {}, {datesAfter: 5}) ``
 Dates of Mothers days for the next five years.
 
 
