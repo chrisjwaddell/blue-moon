@@ -1,98 +1,92 @@
-const DAY_MS = 86400000
+import {
+    isObjectEmpty
+} from './utils/01-objects';
+
+
+import {
+    daysNameList,
+    dayToNumber,
+    dayToNumberThreeLetter
+} from './utils/01-date-days';
+
+
+import {
+    DAY_MS,
+    isYearValid,
+    isLeapYear,
+    daysInMonth,
+    changeDay,
+    changeMonth,
+    nextDayName,
+    sameWeekCountDays
+} from './utils/01-date-manipulation.js';
+
+
+
+
+import {
+    isNumber,
+    isNumberSign,
+    isNumberSigned,
+    getNumbers
+} from './utils/01-numbers';
+
+
+import {
+    dateToDay,
+    dayOfTheWeek
+} from './utils/01-date-daysName';
+
+
+import {
+    errorWarningString
+} from './utils/05-debugging';
+
+
+
 let today = new Date()
 
-// show the week day in a number : Sunday - Saturday => 0 - 6
-const daysNameList = [
-    'Sunday',
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday'
-]
-
-
-const dateToDay = (dateobj) => {
-    if (typeof dateobj !== 'object') {
-        return new TypeError('Argument is not an object.')
-    }
-
-    const {
-        year,
-        month,
-        day
-    } = dateobj
-
-    if (day < 0 || day > 31 || month > 12 || month < 0) {
-        return new TypeError('Date is not valid.')
-    }
-
-    // JS months start at 0
-    return dayOfTheWeek(Number(day), Number(month), Number(year))
-}
-
-
-// Find dayname for a Date
-// Uses Zeller congruence
-// https://www.geeksforgeeks.org/zellers-congruence-find-day-date/
-function dayOfTheWeek(day, month, year) {
-    if (month == 1) {
-        month = 13;
-        year--;
-    }
-    if (month == 2) {
-        month = 14;
-        year--;
-    }
-    let q = day;
-    let m = month;
-    let k = year % 100;
-    let j = parseInt(year / 100, 10);
-    let h = q + parseInt(13 * (m + 1) / 5, 10) + k + parseInt(k / 4, 10) + parseInt(j / 4, 10) + 5 * j;
-    h = h % 7;
-
-    h -= 1
-    if (h === -1) h = 6
-
-    return h
-}
-
-
-function dayToNumber(dayname) {
-    return daysNameList.findIndex(day => day.toLowerCase() === dayname.toLowerCase());
-}
-
-function dayToNumberThreeLetter(daynamethreeletter) {
-    return daysNameList.findIndex(day => day.slice(0, 3).toLowerCase() === daynamethreeletter.toLowerCase());
-}
-
-
-function testfn() {
-    console.log("TESTING AREA ***********************")
-
-}
-// testfn()
-
-
-console.log("*************************************************")
-
-
 function BlueMoon(datesettings, pivotdate, opts) {
+    // ^INITIALIZE
+    const propertyList = ["day", "week", "month", "year", "occur"]
+    const pivotList = ["day", "month", "year"]
 
-    // INITIALIZE
+    opts = opts || {};
+    let startOfWeek = opts.startOfWeek || 1;
+    let datesBefore = opts.datesBefore
+    let datesAfter = opts.datesAfter
+
+
+    // if datesBefore or datesAfter are in, BlueMoon returns an array
+    // of dates
+    if (datesBefore || datesAfter) {
+        return loop(datesettings, pivotdate, opts)
+
+    } else {
+        let firstIteration = iteration(datesettings, pivotdate, opts)
+
+        return firstIteration
+    }
+
+}
+
+
+function iteration(datesettings, pivotdate, opts) {
+
+    // ^INITIALIZE
     const propertyList = ["day", "week", "month", "year", "occur"]
     const pivotList = ["day", "month", "year"]
 
     opts = opts || {};
     let startOfWeek = opts.startofweek || 1;
 
-    let result = pdresult = {}
-    resultWarning = ""
-    resultError = ""
+    let result = {}
+    let pdresult = {}
+    let resultWarning = ""
+    let resultError = ""
 
 
-    // CALCULATE PIVOT DATE (PD)
+    // ^CALCULATE PIVOT DATE (PD)
     // if it's blank, the default is today
     let PDYvt = {},
         PDMvt = {},
@@ -100,229 +94,237 @@ function BlueMoon(datesettings, pivotdate, opts) {
     let pdy, pdm, pdd;
 
     if (pivotdate) {
-        ({
-            year: pdy,
-            month: pdm,
-            day: pdd
-        } = pivotdate);
+        if (!isObjectEmpty(pivotdate)) {
+            ({
+                year: pdy,
+                month: pdm,
+                day: pdd
+            } = pivotdate);
 
-        let pdError = false;
+            let pdError = false;
 
-        if (pdy) {
-            PDYvt = valuetype(pdy, "pd-y")
+            if (pdy) {
+                PDYvt = valuetype(pdy, "pd-y")
 
-            if (PDYvt.type === "absolute") {
-                pdy = PDYvt.offset
+                if (PDYvt.type === "absolute") {
+                    pdy = PDYvt.offset
 
-                if (!isYearValid(PDYvt.offset, 1600, 2300)) {
-                    resultError = errorWarningString(`Pivot date 'year' is invalid. 'year' is less than 1600 or greater than 2300. You can't have 'year' outside of this range.`, resultError)
-                    return resultsShow()
-                }
-            } else if (PDYvt.type === "relative") {
-                pdy = PDYvt.offset
-
-                if (isNumberSigned(PDYvt.offset)) {
-                    if (Number(PDYvt.offset) > 500) {
-                        resultWarning = errorwarningstring(`Pivot date 'year' is a high number - ${PDYvt.offset}. Are you sure this is correct?.`, resultWarning)
+                    if (!isYearValid(PDYvt.offset, 1600, 2300)) {
+                        resultError = errorWarningString(`Pivot date 'year' is invalid. 'year' is less than 1600 or greater than 2300. You can't have 'year' outside of this range.`, resultError)
+                        return resultsShow()
                     }
-                }
+                } else if (PDYvt.type === "relative") {
+                    pdy = PDYvt.offset
 
-
-            } else if (PDYvt.type === "current") {
-                pdy = today.getFullYear()
-            } else {
-                pdError = true
-                resultWarning = errorWarningString("Pivot date 'year' is invalid. Pivot date will be set to today (the default).", resultWarning)
-                pdy = today.getFullYear()
-            }
-        }
-
-        if (pdm) {
-            PDMvt = valuetype(pdm, "pd-m")
-            if (PDMvt.type === "absolute") {
-                pdm = PDMvt.offset
-                if ((Number(PDMvt.offset) < 1) || (Number(PDMvt.offset) > 12)) {
-                    resultError = errorWarningString("Pivot date 'month' is less than 1 or greater than 12. You can't have 'month' outside of this range.", resultError)
-                    return resultsShow()
-                }
-
-            } else if (PDMvt.type === "relative") {
-                pdm = PDMvt.offset
-
-                if (isNumberSigned(PDMvt.offset)) {
-                    if (Number(PDMvt.offset) > 48) {
-                        resultWarning = errorwarningstring("Pivot date 'month' is a high number. Why don't you use years and/or months instead.", resultWarning)
+                    if (isNumberSigned(PDYvt.offset)) {
+                        if (Number(PDYvt.offset) > 500) {
+                            resultWarning = errorwarningstring(`Pivot date 'year' is a high number - ${PDYvt.offset}. Are you sure this is correct?.`, resultWarning)
+                        }
                     }
-                }
 
-            } else if (PDMvt.type === "current") {
-                pdm = today.getMonth() + 1
-            } else {
-                pdError = true
-                resultWarning = errorWarningString("Pivot date 'month' is invalid. Pivot date will be set to today (the default).", resultWarning)
-                pdm = today.getMonth() + 1
+
+                } else if (PDYvt.type === "current") {
+                    pdy = today.getFullYear()
+                } else {
+                    pdError = true
+                    resultWarning = errorWarningString("Pivot date 'year' is invalid. Pivot date will be set to today (the default).", resultWarning)
+                    pdy = today.getFullYear()
+                }
             }
-        }
 
-        if (pdd) {
-            PDDvt = valuetype(pdd, "pd-d")
-            if (PDDvt.type === "absolute") {
-                pdd = PDDvt.offset
-
-                if ((Number(PDDvt.offset) < 1) || (Number(PDDvt.offset) > 31)) {
-                    resultError = errorWarningString("Pivot date 'day' is outside the range of less than 1 or greater than 31. You can't have 'day' outside of this range. It shouldn't be higher than 28. Use 'monthend' to get the end of the month whether it's 30th or 31st, it will be the end of the month.", resultError)
-                    return resultsShow()
-                } else if (PDDvt.offset > 28) {
-                    // check D is not too high eg 29, use "end"
-                    resultWarning = "Pivot date 'day' is higher than 28. It shouldn't be higher than 28. Use 'monthend' to get the end of the month whether it's 30th or 31st, it will be the end of the month."
-                }
-
-            } else if (PDDvt.type === "relative") {
-                pdd = PDDvt.offset
-
-                if (isNumberSigned(PDDvt.offset)) {
-                    if (Number(PDDvt.offset) > 365) {
-                        resultWarning = errorWarningString("Pivot date 'day' is a high number. Why don't you use years and/or months instead.", resultWarning)
+            if (pdm) {
+                PDMvt = valuetype(pdm, "pd-m")
+                if (PDMvt.type === "absolute") {
+                    pdm = PDMvt.offset
+                    if ((Number(PDMvt.offset) < 1) || (Number(PDMvt.offset) > 12)) {
+                        resultError = errorWarningString("Pivot date 'month' is less than 1 or greater than 12. You can't have 'month' outside of this range.", resultError)
+                        return resultsShow()
                     }
+
+                } else if (PDMvt.type === "relative") {
+                    pdm = PDMvt.offset
+
+                    if (isNumberSigned(PDMvt.offset)) {
+                        if (Number(PDMvt.offset) > 48) {
+                            resultWarning = errorwarningstring("Pivot date 'month' is a high number. Why don't you use years and/or months instead.", resultWarning)
+                        }
+                    }
+
+                } else if (PDMvt.type === "current") {
+                    pdm = today.getMonth() + 1
+                } else {
+                    pdError = true
+                    resultWarning = errorWarningString("Pivot date 'month' is invalid. Pivot date will be set to today (the default).", resultWarning)
+                    pdm = today.getMonth() + 1
+                }
+            }
+
+            if (pdd) {
+                PDDvt = valuetype(pdd, "pd-d")
+                if (PDDvt.type === "absolute") {
+                    pdd = PDDvt.offset
+
+                    if ((Number(PDDvt.offset) < 1) || (Number(PDDvt.offset) > 31)) {
+                        resultError = errorWarningString("Pivot date 'day' is outside the range of less than 1 or greater than 31. You can't have 'day' outside of this range. It shouldn't be higher than 28. Use 'monthend' to get the end of the month whether it's 30th or 31st, it will be the end of the month.", resultError)
+                        return resultsShow()
+                    } else if (PDDvt.offset > 28) {
+                        // check D is not too high eg 29, use "end"
+                        resultWarning = "Pivot date 'day' is higher than 28. It shouldn't be higher than 28. Use 'monthend' to get the end of the month whether it's 30th or 31st, it will be the end of the month."
+                    }
+
+                } else if (PDDvt.type === "relative") {
+                    pdd = PDDvt.offset
+
+                    if (isNumberSigned(PDDvt.offset)) {
+                        if (Number(PDDvt.offset) > 365) {
+                            resultWarning = errorWarningString("Pivot date 'day' is a high number. Why don't you use years and/or months instead.", resultWarning)
+                        }
+                    }
+
+                } else if (PDDvt.type === "current") {
+                    pdd = today.getDate()
+                } else {
+                    pdError = true
+                    resultWarning = errorWarningString("Pivot date 'day' is invalid. Pivot date will be set to today (the default).", resultWarning)
+                    pdd = today.getDate()
+                }
+            }
+
+
+            // General checks for pivot date
+            for (let prop of Object.keys(pivotdate)) {
+                if (!pivotList.includes(prop)) {
+                    pdError = true
+                    resultWarning = errorWarningString(`${prop} is a property that must be one of these property names - ${pivotList.toString()}. Pivot date will be set to today (the default).`, resultWarning)
+                }
+            }
+
+
+            if (PDDvt.type === "relative") {
+                if ((!isObjectEmpty(PDYvt)) || (!isObjectEmpty(PDMvt))) {
+                    pdError = true
+                    resultWarning = errorWarningString("Pivot date 'day' is relative. You can't have 'month' or 'year' in when 'day' is relative. Pivot date will be set to today (the default).", resultWarning)
+                } else {
+                    pdresult = changeDay({
+                        day: today.getDate(),
+                        month: today.getMonth() + 1,
+                        year: today.getFullYear()
+                    }, DAY_MS * Number(PDDvt.offset))
                 }
 
-            } else if (PDDvt.type === "current") {
-                pdd = today.getDate()
             } else {
-                pdError = true
-                resultWarning = errorWarningString("Pivot date 'day' is invalid. Pivot date will be set to today (the default).", resultWarning)
-                pdd = today.getDate()
+
+                pdy = yearoffset(PDYvt, today.getFullYear())
+
+                if ((PDYvt.type === "absolute") || (PDYvt.type === "current")) {
+                    if (!isYearValid(pdy, 1600, 2300)) {
+                        resultWarning = errorWarningString(`'year' is invalid. 'year' is less than 1600 or greater than 2300. You can't have 'year' outside of this range.`, resultWarning)
+                    }
+
+                    if ((PDMvt.type === "relative") || (PDMvt.type === "current")) {
+                        let obj = {
+                            year: pdy,
+                            month: today.getMonth() + 1,
+                            day: (PDDvt.offset === "monthend") ? 1 : pdd
+                        }
+                        let {
+                            year: yy,
+                            month: mm,
+                            day: dd
+                        } = changeMonth(obj, (PDMvt.type === "current") ? 0 : Number(PDMvt.offset))
+                        pdy = yy
+                        pdm = mm
+                        pdd = (pdd === "monthend") ? daysInMonth(pdm, pdy) : pdd
+
+                        pdresult = {
+                            year: pdy,
+                            month: pdm,
+                            day: (PDDvt.offset === "monthend") ? daysInMonth(pdm, pdy) : pdd
+                        }
+                        // return resultsShow()
+
+                    } else if (PDMvt.type === "absolute") {
+                        pdresult = {
+                            year: pdy,
+                            month: pdm,
+                            day: (PDDvt.offset === "monthend") ? daysInMonth(pdm, pdy) : pdd
+                        }
+                        // return resultsShow()
+
+                    } else {
+                        pdError = true
+                        resultWarning = errorWarningString(`Pivot date has 'day' as an absolute value. It must have 'month' and 'year' in. For relative 'day' such as 'day: "+1", it must not have 'month' or 'year' in. Even if you set 'month: "current"', that's sufficient. Pivot date will be set to today (the default).`, resultWarning)
+                    }
+
+                } else if (PDYvt.type === "relative") {
+                    if (isNumberSigned(PDYvt.offset)) {
+                        if (Number(PDYvt.offset) > 500) {
+                            resultWarning = errorwarningstring(`'year' is a high number - ${PDYvt.offset}. Are you sure this is correct?.`, resultWarning)
+                        }
+                    }
+
+                    if (PDMvt.type === "relative") {
+                        let obj = {
+                            year: pdy,
+                            month: today.getMonth() + 1,
+                            day: 1
+                        }
+                        let {
+                            year: yy,
+                            month: mm,
+                            day: dd
+                        } = changeMonth(obj, Number(PDMvt.offset))
+                        pdy = yy
+                        pdm = mm
+                        pdd = (pdd === "monthend") ? daysInMonth(pdm, pdy) : pdd
+
+                        pdresult = {
+                            year: pdy,
+                            month: pdm,
+                            day: pdd
+                        }
+                        // return resultsShow()
+
+                    } else if (PDMvt.type === "absolute") {
+                        pdresult = {
+                            year: pdy,
+                            month: pdm,
+                            day: (PDDvt.offset === "monthend") ? daysInMonth(pdm, pdy) : pdd
+                        }
+
+                    } else {
+                        pdError = true
+                        resultWarning = errorWarningString(`Pivot date has 'day' as an absolute value. It must have 'month' and 'year' in. For relative 'day' such as 'day: "+1", it must not have 'month' or 'year' in. Even if you set 'month: "current"', that's sufficient. Pivot date will be set to today (the default).`, resultWarning)
+
+                        // return resultsShow()
+                    }
+                } else {
+                    pdError = true
+                    resultWarning = errorWarningString(`Pivot date has 'day' as an absolute value. It must have 'month' and 'year' in. For relative 'day' such as 'day: "+1", it must not have 'month' or 'year' in. Even if you set 'month: "current"', that's sufficient. Pivot date will be set to today (the default).`, resultWarning)
+                }
+
             }
-        }
 
 
-        // General checks for pivot date
-        for (let prop of Object.keys(pivotdate)) {
-            if (!pivotList.includes(prop)) {
-                pdError = true
-                resultWarning = errorWarningString(`${prop} is a property that must be one of these property names - ${pivotList.toString()}. Pivot date will be set to today (the default).`, resultWarning)
-            }
-        }
-
-
-        if (PDDvt.type === "relative") {
-            if ((!isObjectEmpty(PDYvt)) || (!isObjectEmpty(PDMvt))) {
-                pdError = true
-                resultWarning = errorWarningString("Pivot date 'day' is relative. You can't have 'month' or 'year' in when 'day' is relative. Pivot date will be set to today (the default).", resultWarning)
-            } else {
-                pdresult = changeDay({
-                    day: today.getDate(),
+            if (pdError) {
+                pdresult = {
+                    year: today.getFullYear(),
                     month: today.getMonth() + 1,
-                    year: today.getFullYear()
-                }, DAY_MS * Number(PDDvt.offset))
+                    day: today.getDate()
+                }
+
+                pdy = today.getFullYear()
+                pdm = today.getMonth() + 1
+                pdd = today.getDate()
             }
 
         } else {
-
-            pdy = yearoffset(PDYvt, today.getFullYear())
-
-            if ((PDYvt.type === "absolute") || (PDYvt.type === "current")) {
-                if (!isYearValid(pdy, 1600, 2300)) {
-                    resultWarning = errorWarningString(`'year' is invalid. 'year' is less than 1600 or greater than 2300. You can't have 'year' outside of this range.`, resultWarning)
-                }
-
-                if ((PDMvt.type === "relative") || (PDMvt.type === "current")) {
-                    let obj = {
-                        year: pdy,
-                        month: today.getMonth() + 1,
-                        day: (PDDvt.offset === "monthend") ? 1 : pdd
-                    }
-                    let {
-                        year: yy,
-                        month: mm,
-                        day: dd
-                    } = changeMonth(obj, (PDMvt.type === "current") ? 0 : Number(PDMvt.offset))
-                    pdy = yy
-                    pdm = mm
-                    pdd = (pdd === "monthend") ? daysInMonth(pdm, pdy) : pdd
-
-                    pdresult = {
-                        year: pdy,
-                        month: pdm,
-                        day: (PDDvt.offset === "monthend") ? daysInMonth(pdm, pdy) : pdd
-                    }
-                    // return resultsShow()
-
-                } else if (PDMvt.type === "absolute") {
-                    pdresult = {
-                        year: pdy,
-                        month: pdm,
-                        day: (PDDvt.offset === "monthend") ? daysInMonth(pdm, pdy) : pdd
-                    }
-                    // return resultsShow()
-
-                } else {
-                    pdError = true
-                    resultWarning = errorWarningString(`Pivot date has 'day' as an absolute value. It must have 'month' and 'year' in. For relative 'day' such as 'day: "+1", it must not have 'month' or 'year' in. Even if you set 'month: "current"', that's sufficient. Pivot date will be set to today (the default).`, resultWarning)
-                }
-
-            } else if (PDYvt.type === "relative") {
-                if (isNumberSigned(PDYvt.offset)) {
-                    if (Number(PDYvt.offset) > 500) {
-                        resultWarning = errorwarningstring(`'year' is a high number - ${PDYvt.offset}. Are you sure this is correct?.`, resultWarning)
-                    }
-                }
-
-                if (PDMvt.type === "relative") {
-                    let obj = {
-                        year: pdy,
-                        month: today.getMonth() + 1,
-                        day: 1
-                    }
-                    let {
-                        year: yy,
-                        month: mm,
-                        day: dd
-                    } = changeMonth(obj, Number(PDMvt.offset))
-                    pdy = yy
-                    pdm = mm
-                    pdd = (pdd === "monthend") ? daysInMonth(pdm, pdy) : pdd
-
-                    pdresult = {
-                        year: pdy,
-                        month: pdm,
-                        day: pdd
-                    }
-                    // return resultsShow()
-
-                } else if (PDMvt.type === "absolute") {
-                    pdresult = {
-                        year: pdy,
-                        month: pdm,
-                        day: (PDDvt.offset === "monthend") ? daysInMonth(pdm, pdy) : pdd
-                    }
-
-                } else {
-                    pdError = true
-                    resultWarning = errorWarningString(`Pivot date has 'day' as an absolute value. It must have 'month' and 'year' in. For relative 'day' such as 'day: "+1", it must not have 'month' or 'year' in. Even if you set 'month: "current"', that's sufficient. Pivot date will be set to today (the default).`, resultWarning)
-
-                    // return resultsShow()
-                }
-            } else {
-                pdError = true
-                resultWarning = errorWarningString(`Pivot date has 'day' as an absolute value. It must have 'month' and 'year' in. For relative 'day' such as 'day: "+1", it must not have 'month' or 'year' in. Even if you set 'month: "current"', that's sufficient. Pivot date will be set to today (the default).`, resultWarning)
-            }
-
-        }
-
-
-        if (pdError) {
             pdresult = {
                 year: today.getFullYear(),
                 month: today.getMonth() + 1,
                 day: today.getDate()
             }
-
-            pdy = today.getFullYear()
-            pdm = today.getMonth() + 1
-            pdd = today.getDate()
         }
-
 
     } else {
         pdresult = {
@@ -333,7 +335,7 @@ function BlueMoon(datesettings, pivotdate, opts) {
     }
 
 
-    console.log("pdresult", pdresult)
+    // console.log("pdresult", pdresult)
     // console.log(resultWarning)
 
 
@@ -346,10 +348,7 @@ function BlueMoon(datesettings, pivotdate, opts) {
 
 
 
-    // RELATIVE DATE SETTINGS
-
-    // console.log(datesettings)
-
+    // ^RELATIVE DATE SETTINGS
     let Dvt = {},
         Wvt = {},
         Mvt = {},
@@ -393,8 +392,6 @@ function BlueMoon(datesettings, pivotdate, opts) {
 
                 }
             }
-
-            // debugger
         }
 
 
@@ -410,7 +407,7 @@ function BlueMoon(datesettings, pivotdate, opts) {
 
 
 
-    // General checks
+    // ^- General checks
     for (let prop of Object.keys(datesettings)) {
         if (!propertyList.includes(prop)) {
             resultError = errorWarningString(`${prop} is a property that must be one of these property names - ${propertyList.toString()}`, resultError)
@@ -419,7 +416,7 @@ function BlueMoon(datesettings, pivotdate, opts) {
     }
 
 
-    // a quick parse
+    // ^- A quick parse
     if (datesettings.day) {
         Dvt = valuetype(datesettings.day, "d")
         if (Dvt.type === "error") {
@@ -568,10 +565,6 @@ function BlueMoon(datesettings, pivotdate, opts) {
 
         } else if (Dvt.type === "current") {
 
-            // if (datesettings.week) {
-            //     resultError"] = "'day' is 'current'. You can't have any setting for 'week'. You can optionally have settings for 'month' and 'year', they must be absolute ie a specific number, but not for 'week'."
-            //     return result
-            // }
 
             resultWarning = errorWarningString(`'day' is set to 'current'. If you run this frequently, and if the day is 29, 30 or 31 and you are adding 1 month, some months may not have 31 or 30 days in them so you will get an error with a blank result. You can use 'day: "+30" or 'week: "+4"'.`, resultWarning)
 
@@ -601,7 +594,6 @@ function BlueMoon(datesettings, pivotdate, opts) {
 
             } else {
                 result = {
-                    // year: Y,
                     year: Y,
                     month: M,
                     day: pdresult.day
@@ -747,16 +739,6 @@ function BlueMoon(datesettings, pivotdate, opts) {
     }
 
 
-    // --------------------------------------
-
-    // Description
-    if (Dvt.type === "absolute" || Dvt.type === "current") {
-        // if (Wvt.type === "absolute" || Wvt.type === "relative") {
-        if (!datesettings.week) {
-
-        }
-    }
-
 
     function yearoffset(valuetype, yearbase) {
         if (valuetype.type === "absolute") {
@@ -770,18 +752,7 @@ function BlueMoon(datesettings, pivotdate, opts) {
         }
     }
 
-
-
-    function errorWarningString(msg, str) {
-        return (str) ? str + "\n" + msg : msg
-    }
-
-    // function warningstring(msg, warningstring) {
-    //     return (warningstring) ? warningstring + "\n" + msg : msg
-    // }
-
 }
-
 
 
 function valuetype(str, datetype) {
@@ -882,13 +853,18 @@ function valuetype(str, datetype) {
 }
 
 
-function loop(datesettings, pivotdate, datesbefore, datesafter, startofweek) {
+function loop(datesettings, pivotdate, opts) {
+    opts = opts || {};
+    let startOfWeek = opts.startOfWeek || 1;
+    let datesBefore = opts.datesBefore
+    let datesAfter = opts.datesAfter
+
     let arr = [];
     let arrnew = [];
 
-    let iteration = BlueMoon(datesettings, pivotdate, startofweek)
+    let iterate = iteration(datesettings, pivotdate, opts)
 
-    if (isObjectEmpty(iteration)) {
+    if (isObjectEmpty(iterate)) {
         return []
     }
 
@@ -901,286 +877,112 @@ function loop(datesettings, pivotdate, datesbefore, datesafter, startofweek) {
     Yvt = valuetype(datesettings.year, "y")
 
 
-    let zeroiterator = BlueMoon(datesettings, pivotdate, startofweek)
+    let zeroiterator = iteration(datesettings, pivotdate, opts)
 
-    console.log("result", iteration);
-    let startbase = iteration
+    // console.log("result", iterate);
+    let startbase = iterate
 
-    for (let i = 0; i < datesbefore; i++) {
-        iteration = occurrences(datesettings, iteration, -1, Dvt, Mvt, Yvt, startofweek)
-        arr.push(iteration)
-        console.log(iteration)
-        // BlueMoon(datesettings, pivotdate, startofweek = 1)
+    for (let i = 0; i < datesBefore; i++) {
+        iterate = occurrences(datesettings, iterate, -1, Dvt, Mvt, Yvt, startOfWeek)
+        arr.push(iterate)
+        // console.log(iterate)
+        // iteration(datesettings, pivotdate, opts)
     }
 
     arrnew = arr.reverse()
 
     arrnew.push(zeroiterator)
 
-    iteration = startbase
-    for (let i = 0; i < datesafter; i++) {
-        iteration = occurrences(datesettings, iteration, 1, Dvt, Mvt, Yvt, startofweek)
-        arrnew.push(iteration)
-        // console.log(iteration)
-        // BlueMoon(datesettings, pivotdate, startofweek = 1)
+    iterate = startbase
+    for (let i = 0; i < datesAfter; i++) {
+        iterate = occurrences(datesettings, iterate, 1, Dvt, Mvt, Yvt, startOfWeek)
+        arrnew.push(iterate)
+        // console.log(iterate)
+        // iteration(datesettings, pivotdate, opts)
     }
 
-    console.log(arrnew)
+    // console.log(arrnew)
     return arrnew
-}
 
 
-function occurrences(datesettings, pivotdate, forwardbackwards, Dvt, Mvt, Yvt, startofweek) {
-    //forwardbackwards - 1 = forwards
-    // day must be in
 
-    // datesettings, pivotdate, startofweek = 1
-    let newdate = {}
+    function occurrences(datesettings, pivotdate, forwardbackwards, Dvt, Mvt, Yvt, startofweek) {
+        //forwardbackwards - 1 = forwards
 
-    // let dateGreaterThanPivot = compareDateObjs(dateobj, pdresult)
-    // console.log(dateGreaterThanPivot)
+        let newdate = {}
 
-    if ((Dvt.type === "relative") || (Dvt.type === "current")) {
-        return changeDay(pivotdate, DAY_MS * forwardbackwards)
+        // Find out how far we need to increment or decrement
+        // { day: 15 } is monthly, { day: 8, week: 2 } is monthly
+        // { day: 1, month: 2 } is yearly
+        // { day: "-90" } is daily
+        if ((Dvt.type === "relative") || (Dvt.type === "current")) {
+            return changeDay(pivotdate, DAY_MS * forwardbackwards)
 
-    } else if (Dvt.type === "dayofweek") {
-        return changeMonth(pivotdate, 7 * forwardbackwards)
+        } else if (Dvt.type === "dayofweek") {
+            return changeMonth(pivotdate, 7 * forwardbackwards)
 
-    } else if (Dvt.type === "dayofweek weeknum") {
-        let next = changeMonth(pivotdate, 1 * forwardbackwards)
+        } else if (Dvt.type === "dayofweek weeknum") {
+            let next = changeMonth(pivotdate, 1 * forwardbackwards)
 
-        return BlueMoon(datesettings, {
-            year: next.year,
-            month: next.month,
-            day: 1
-        }, startofweek)
+            return iteration(datesettings, {
+                year: next.year,
+                month: next.month,
+                day: 1
+            }, {
+                startofweek: startofweek
+            })
 
-    } else if ((Mvt.type === "relative") || (Mvt.type === "current")) {
-        return changeMonth(pivotdate, forwardbackwards)
-
-    } else if ((Yvt.type === "relative") || (Yvt.type === "current")) {
-        if (datesettings.month) {
-            if (Mvt.type === "absolute") {
-                // month is absolute
-                return {
-                    year: pivotdate.year + (1 * forwardbackwards),
-                    month: pivotdate.month,
-                    day: pivotdate.day
-                }
-            } else {
-                return changeMonth(pivotdate, forwardbackwards)
-            }
-        } else {
+        } else if ((Mvt.type === "relative") || (Mvt.type === "current")) {
             return changeMonth(pivotdate, forwardbackwards)
-        }
 
-    } else {
-        if (datesettings.month) {
-            if (Mvt.type === "absolute") {
-                if (!datesettings.year) {
-                    // month absolute, year empty -> year increment
+        } else if ((Yvt.type === "relative") || (Yvt.type === "current")) {
+            if (datesettings.month) {
+                if (Mvt.type === "absolute") {
+                    // month is absolute
                     return {
                         year: pivotdate.year + (1 * forwardbackwards),
                         month: pivotdate.month,
                         day: pivotdate.day
                     }
-
                 } else {
-                    // day, month and year are absolute
-                    return pivotdate
+                    return changeMonth(pivotdate, forwardbackwards)
                 }
+            } else {
+                return changeMonth(pivotdate, forwardbackwards)
             }
 
         } else {
-            if (!datesettings.year) {
-                // day in but not month or year  => month increment
-                return changeMonth(pivotdate, forwardbackwards)
+            if (datesettings.month) {
+                if (Mvt.type === "absolute") {
+                    if (!datesettings.year) {
+                        // month absolute, year empty -> year increment
+                        return {
+                            year: pivotdate.year + (1 * forwardbackwards),
+                            month: pivotdate.month,
+                            day: pivotdate.day
+                        }
+
+                    } else {
+                        // day, month and year are absolute
+                        return pivotdate
+                    }
+                }
 
             } else {
-                // day, year
-                return changeMonth(pivotdate, forwardbackwards)
-            }
+                if (!datesettings.year) {
+                    // day in but not month or year  => month increment
+                    return changeMonth(pivotdate, forwardbackwards)
 
-        }
-    }
-}
+                } else {
+                    // day, year
+                    return changeMonth(pivotdate, forwardbackwards)
+                }
 
-console.log("*************************************************")
-
-
-// changeDay uses UTC to set and get the day, month and year so that no
-// timezone rules can change the time. UTC is a time standard.
-// In dateobj, month 1 is January
-// 12 midday is used just to be on the safe side
-function changeDay(dateobj, ms) {
-    let dt = new Date(Date.UTC(dateobj.year, dateobj.month - 1, dateobj.day, 12, 0, 0, 0))
-    let dt2 = new Date(dt.valueOf() + ms)
-
-    return {
-        year: dt2.getUTCFullYear(),
-        month: dt2.getUTCMonth() + 1,
-        day: dt2.getUTCDate()
-    }
-}
-
-
-
-function daysInMonth(month, year) {
-    const days = [31, 28 + (isLeapYear(year) ? 1 : 0), 31, 30, 31,
-        30, 31, 31, 30, 31, 30, 31
-    ]
-    return days[month - 1]
-}
-
-function isLeapYear(year) {
-    return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0
-}
-
-function daysInYear(year) {
-    return 365 + (isLeapYear(year) ? 1 : 0)
-}
-
-
-
-
-// Given a date object eg {year: 2022, month: 12, day: 1 },
-// and a number of months, adds the 'months' argument to the date
-// If you increase the month +1 and day is over 28 and the next month
-// doesn't have that day, it returns {} as an error
-// You can add or minus months, eg +5, =5
-function changeMonth(dateobj, months) {
-    let y = Math.floor(Math.abs(months) / 12)
-    let remainder = Math.abs(months % 12)
-    let m
-
-    let result = {}
-
-    if (months >= 0) {
-        if (Number(dateobj.month) + remainder > 12) {
-            y += 1
-            m = Number(dateobj.month) + remainder - 12
-        } else {
-            m = Number(dateobj.month) + remainder
-        }
-
-        result = {
-            year: Number(dateobj.year) + y,
-            month: m,
-            day: Number(dateobj.day)
-        }
-
-    } else {
-        if (Number(dateobj.month) - remainder > 0) {
-            m = Number(dateobj.month) - remainder
-        } else {
-            y += 1
-            m = 12 - remainder + 1
-        }
-
-
-        result = {
-            year: Number(dateobj.year) - y,
-            month: m,
-            day: Number(dateobj.day)
-        }
-    }
-
-    let maxDays = daysInMonth(Number(result.month), Number(result.year))
-
-    if (Number(dateobj.day) <= maxDays) {
-        return result
-    } else {
-        return {}
-    }
-}
-
-
-// Accepts 4 digit years.
-function isYearValid(year, minyear, maxyear) {
-    let text = /^\d{4}$/;
-    let y = Number(year)
-
-    if (y != 0) {
-        if ((y != "") && (!text.test(y))) {
-            return false;
-        }
-
-        if (String(y).length != 4) return false;
-
-        if ((minyear) && (maxyear)) {
-            if ((y < minyear) || (y > maxyear)) {
-                console.log(`Year should be in range ${minyear} to ${maxyear}`);
-                return false;
             }
         }
-
-        return true;
-    } else {
-        return false
-    }
-}
-
-
-// unsigned number, not a decimal, no + or -
-// consecutive numbers only
-function isNumber(char) {
-    return /^\d+$/.test(char);
-}
-
-// It can be signed or unsigned number
-function isNumberSign(char) {
-    return /^[+|-]?\d+$/.test(char);
-}
-
-function isNumberSigned(char) {
-    return /^[+|-]\d+$/.test(char);
-}
-
-// extract numbers out of a string
-function getNumbers(str) {
-    return str.replace(/\D+/g, '')
-}
-
-
-function isObjectEmpty(value) {
-    return (
-        Object.prototype.toString.call(value) === '[object Object]' &&
-        JSON.stringify(value) === '{}'
-    );
-}
-
-
-function nextDayName(daynumberfrom, daynumberto, forward = true) {
-    if (forward) {
-        if (daynumberfrom > daynumberto) {
-            return 7 - (daynumberfrom - daynumberto)
-        } else {
-            return daynumberto - daynumberfrom
-        }
-    } else {
-        if (daynumberfrom >= daynumberto) {
-            return daynumberfrom - daynumberto
-        } else {
-            return 7 - (daynumberto - daynumberfrom)
-        }
-    }
-}
-
-function sameWeekCountDays(daynumberfrom, daynumberto, startofweek = 1) {
-    if (daynumberfrom === daynumberto) {
-        return 0
-    } else if ((daynumberfrom >= startofweek) && (daynumberto >= startofweek)) {
-        // eg start of week - Mon ,   Mon -> Fri = 4 days
-        return daynumberto - daynumberfrom
-    } else {
-        let df = (daynumberfrom < startofweek) ? daynumberfrom + 7 : daynumberfrom
-        let dt = (daynumberto < startofweek) ? daynumberto + 7 : daynumberto
-
-        return dt - df
     }
 
 }
-
 
 
 
@@ -1286,21 +1088,6 @@ function compareDateObjs(dateobj1, dateobj2) {
 }
 
 
-function incrementMonth(dateobj) {
-    let {
-        year: yy,
-        month: mm,
-        day: dd
-    } = changeMonth(dateobj, 1)
-
-    return {
-        year,
-        month,
-        day
-    }
-
-}
-
 
 
 // console.log(sameWeekCountDays(4, 4, 0)) // 0
@@ -1351,7 +1138,7 @@ function testcheckResult() {
         month: 12,
         year: 2022
     }
-    let r = BlueMoon(input)
+    let r = iteration(input)
     console.log(r)
 
     let o = occurrences(r, {
@@ -1668,3 +1455,10 @@ function checkResult(dateobj, pdresult, Yvt, Mvt, Dvt) {
     }
 
 }
+
+
+
+
+
+
+export default BlueMoon

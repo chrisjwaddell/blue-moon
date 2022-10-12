@@ -45,7 +45,7 @@ Day of week can combinate with a Week number and/or a Month.
 ``
 { day: "Mon" }
 ``
-means Monday of the current week. *week* is default *current*. Just like ``{ day: "Mon", week: "current" }``
+means Monday of the current week. *week* is default *current* so it's equivalent to ``{ day: "Mon", week: "current" }``.
 
 ``
 { day: "Monday", week: 2 }
@@ -68,7 +68,7 @@ You can optionally set week as the week number of the year. You could do:
 ``
 Today is set like this. \
 *"current"* can be put on *week*, *month* or *year*. *current* is a relative date type, it's like *"+1"* except that it really means *"+0"*.
-If that date is June 30, 2022 and you have `` { day: "current", month: 7 }`` This would return `` { year: 2022, month: 7, day: 30 }`` but when the date is 1st July, 2022, it would return ``{ day: 1, month: 6, year: 2022 } ``
+If that date is June 30, 2022 and you have `` { day: "current", month: 7 }``. This would return `` { year: 2022, month: 7, day: 30 }`` but when the date is 1st July, 2022, it would return ``{ day: 1, month: 6, year: 2022 } ``
 
 
 ### Relative day
