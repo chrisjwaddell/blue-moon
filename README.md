@@ -206,20 +206,6 @@ You could set the pivot date as:
 
 
 
-## Occur
-Occur lets you return a previous dates or dates in the future. \
-``
-{ occur: "-1" }
-``
-Means the last one that occurred.
-
-The default is ``occur: "+1"``
-
-```
-let nextMothersDay = { day: "Sunday", month: 5 }
-let lastMothersDay = { day: "Sunday", month: 5, occur: "-1" }
-```
-
 
 
 # Get the next or previous dates
@@ -228,12 +214,14 @@ Blue Moon move backwards and forwards and get previous or past dates.
 ``
 BlueMoon({ day: "Mon 1"}, {day: 1, month: 1, year: 2021}, {datesAfter: 12})
 ``
+
 The first Monday of each month in 2021.
 
 
 ``
 let next5MothersDays = BlueMoon({ day: "Sunday 2", month: 5}, {}, {datesAfter: 5})
 ``
+
 Dates of Mothers days for the next five years.
 
 
