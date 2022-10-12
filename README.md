@@ -149,6 +149,7 @@ The difference with this is that if you enter
 Week 1 is the first of that month, and the start of the week probably is in the previous month. In this case, Monday would be the date of the previous month, something like 29th of the previous month. Using the *month* setting, you only get days in that month.
 
 ![Calendar](calendar.jpg)
+The picture above shows that `` {day: "Wed", week: 1, month: 6 }`` specifies Wednesday in week 1 of July, the result is Wesneday in the previous month. ``Wednesday 1`` makes sure it's in July. ``Wed *1`` with the _*_ specifies full week but ``Wed 1`` and ``Wed *1`` give the same result. We can see that for Sunday, they are different. ``Sun *1`` is the first Sunday of a full week, which is the 9th of July.
 
 
 ## Year
