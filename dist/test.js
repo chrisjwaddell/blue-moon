@@ -78,11 +78,14 @@ function testfn() {
 console.log("*************************************************")
 
 
-function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
+function BlueMoon(datesettings, pivotdate, opts) {
 
     // INITIALIZE
     const propertyList = ["day", "week", "month", "year", "occur"]
     const pivotList = ["day", "month", "year"]
+
+    opts = opts || {};
+    let startOfWeek = opts.startofweek || 1;
 
     let result = pdresult = {}
     resultWarning = ""
@@ -345,7 +348,7 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
 
     // RELATIVE DATE SETTINGS
 
-    // console.log(relativedateobject)
+    // console.log(datesettings)
 
     let Dvt = {},
         Wvt = {},
@@ -378,7 +381,7 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
 
 
         if (!isObjectEmpty(result)) {
-            // console.log(relativedateobject)
+            // console.log(datesettings)
             // console.log(Dvt, Wvt, Mvt, Yvt)
 
             // (Dvt.type === "relative") This is a straight out result
@@ -408,7 +411,7 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
 
 
     // General checks
-    for (let prop of Object.keys(relativedateobject)) {
+    for (let prop of Object.keys(datesettings)) {
         if (!propertyList.includes(prop)) {
             resultError = errorWarningString(`${prop} is a property that must be one of these property names - ${propertyList.toString()}`, resultError)
             return resultsShow()
@@ -417,8 +420,8 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
 
 
     // a quick parse
-    if (relativedateobject.day) {
-        Dvt = valuetype(relativedateobject.day, "d")
+    if (datesettings.day) {
+        Dvt = valuetype(datesettings.day, "d")
         if (Dvt.type === "error") {
             resultError = errorWarningString(`'day' is invalid.`, resultError)
             return resultsShow()
@@ -443,8 +446,8 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
     }
 
 
-    if (relativedateobject.week) {
-        Wvt = valuetype(relativedateobject.week, "w")
+    if (datesettings.week) {
+        Wvt = valuetype(datesettings.week, "w")
         if (Wvt.type === "error") {
             resultError = errorWarningString(`'week' is invalid.`, resultError)
             return resultsShow()
@@ -462,8 +465,8 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
         }
     }
 
-    if (relativedateobject.month) {
-        Mvt = valuetype(relativedateobject.month, "m")
+    if (datesettings.month) {
+        Mvt = valuetype(datesettings.month, "m")
         if (Mvt.type === "error") {
             resultError = errorWarningString(`'month' is invalid.`, resultError)
             return resultsShow()
@@ -487,8 +490,8 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
         M = pdresult.month
     }
 
-    if (relativedateobject.year) {
-        Yvt = valuetype(relativedateobject.year, "y")
+    if (datesettings.year) {
+        Yvt = valuetype(datesettings.year, "y")
         if (Yvt.type === "error") {
             resultError = errorWarningString(`'year' is invalid. 'year' isn't a number.`, resultError)
             return resultsShow()
@@ -507,11 +510,11 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
     }
 
 
-    if (relativedateobject.day) {
+    if (datesettings.day) {
         D = Number(Dvt.offset)
 
         if (Dvt.type === "absolute") {
-            if (relativedateobject.week) {
+            if (datesettings.week) {
                 resultError = errorWarningString("'day' is set as an absolute number. You can't have any setting for 'week'. You can optionally have settings for 'month' and 'year', they must be absolute ie a specific number, but not for 'week'.", resultError)
                 return resultsShow()
             }
@@ -541,7 +544,7 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
                 return resultsShow()
             } else {
                 result = {
-                    year: (pdresult.month) > M ? Y + 1 : Y,
+                    year: Y,
                     month: M,
                     day: (Dvt.offset === "monthend") ? daysInMonth(M, Y) : D
                 }
@@ -565,7 +568,7 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
 
         } else if (Dvt.type === "current") {
 
-            // if (relativedateobject.week) {
+            // if (datesettings.week) {
             //     resultError"] = "'day' is 'current'. You can't have any setting for 'week'. You can optionally have settings for 'month' and 'year', they must be absolute ie a specific number, but not for 'week'."
             //     return result
             // }
@@ -599,7 +602,7 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
             } else {
                 result = {
                     // year: Y,
-                    year: (pdresult.month) > M ? Y + 1 : Y,
+                    year: Y,
                     month: M,
                     day: pdresult.day
                 }
@@ -648,20 +651,20 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
             if (Wvt.type === "absolute") {
                 W = Number(Wvt.offset)
 
-                let diff = sameWeekCountDays(dateToDay(firstOfMonth), Dvt.offset, startofweek) + ((Number(Wvt.offset) - 1) * 7)
+                let diff = sameWeekCountDays(dateToDay(firstOfMonth), Dvt.offset, startOfWeek) + ((Number(Wvt.offset) - 1) * 7)
 
                 result = changeDay(firstOfMonth, diff * DAY_MS)
                 return resultsShow()
 
             } else if ((Wvt.type === "current") || (!Wvt.type)) {
 
-                let diff = sameWeekCountDays(dateToDay(monthcurrent), Dvt.offset, startofweek)
+                let diff = sameWeekCountDays(dateToDay(monthcurrent), Dvt.offset, startOfWeek)
 
                 result = changeDay(monthcurrent, diff * DAY_MS)
                 return resultsShow()
 
             } else if (Wvt.type === "relative") {
-                let diff = sameWeekCountDays(dateToDay(monthcurrent), Dvt.offset, startofweek) + ((Number(Wvt.offset)) * 7)
+                let diff = sameWeekCountDays(dateToDay(monthcurrent), Dvt.offset, startOfWeek) + ((Number(Wvt.offset)) * 7)
 
                 result = changeDay(monthcurrent, diff * DAY_MS)
                 return resultsShow()
@@ -714,18 +717,18 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
                     resultWarning = errorWarningString(`There are maximum 4 full weeks in a month. Weekdays in the later part of the week for full weeks as you specified don't always occur so you may get a blank result. Instead of opting for the 4th occurrence of a day, you can opt for the last eg 'day: "Friday -1"' or 'day: "Sunday *-1"'`, resultWarning)
                 }
                 if (Number(Dvt.offset[1].slice(1)) > 0) {
-                    result = weekFullFirst(firstOfMonth, Number(Dvt.offset[0]), Number(Dvt.offset[1].slice(1)), startofweek)
+                    result = weekFullFirst(firstOfMonth, Number(Dvt.offset[0]), Number(Dvt.offset[1].slice(1)), startOfWeek)
                     return resultsShow()
                 } else {
-                    result = weekFullLast(lastOfMonth, Number(Dvt.offset[0]), Math.abs(Number(Dvt.offset[1].slice(1))), startofweek)
+                    result = weekFullLast(lastOfMonth, Number(Dvt.offset[0]), Math.abs(Number(Dvt.offset[1].slice(1))), startOfWeek)
                     return resultsShow()
                 }
             } else {
                 if (Number(Dvt.offset[1]) > 0) {
-                    result = weekFirst(firstOfMonth, Number(Dvt.offset[0]), Number(Dvt.offset[1]), startofweek)
+                    result = weekFirst(firstOfMonth, Number(Dvt.offset[0]), Number(Dvt.offset[1]), startOfWeek)
                     return resultsShow()
                 } else {
-                    result = weekLast(lastOfMonth, Number(Dvt.offset[0]), Math.abs(Number(Dvt.offset[1])), startofweek)
+                    result = weekLast(lastOfMonth, Number(Dvt.offset[0]), Math.abs(Number(Dvt.offset[1])), startOfWeek)
                     return resultsShow()
                 }
             }
@@ -749,7 +752,7 @@ function reldatetest(relativedateobject, pivotdate, startofweek = 1) {
     // Description
     if (Dvt.type === "absolute" || Dvt.type === "current") {
         // if (Wvt.type === "absolute" || Wvt.type === "relative") {
-        if (!relativedateobject.week) {
+        if (!datesettings.week) {
 
         }
     }
@@ -879,11 +882,11 @@ function valuetype(str, datetype) {
 }
 
 
-function loop(relativedateobject, pivotdate, datesbefore, datesafter, startofweek) {
+function loop(datesettings, pivotdate, datesbefore, datesafter, startofweek) {
     let arr = [];
     let arrnew = [];
 
-    let iteration = reldatetest(relativedateobject, pivotdate, startofweek)
+    let iteration = BlueMoon(datesettings, pivotdate, startofweek)
 
     if (isObjectEmpty(iteration)) {
         return []
@@ -893,21 +896,21 @@ function loop(relativedateobject, pivotdate, datesbefore, datesafter, startofwee
         Mvt = {},
         Yvt = {}
 
-    Dvt = valuetype(relativedateobject.day, "d")
-    Mvt = valuetype(relativedateobject.month, "m")
-    Yvt = valuetype(relativedateobject.year, "y")
+    Dvt = valuetype(datesettings.day, "d")
+    Mvt = valuetype(datesettings.month, "m")
+    Yvt = valuetype(datesettings.year, "y")
 
 
-    let zeroiterator = reldatetest(relativedateobject, pivotdate, startofweek)
+    let zeroiterator = BlueMoon(datesettings, pivotdate, startofweek)
 
     console.log("result", iteration);
     let startbase = iteration
 
     for (let i = 0; i < datesbefore; i++) {
-        iteration = occurrences(relativedateobject, iteration, -1, Dvt, Mvt, Yvt, startofweek)
+        iteration = occurrences(datesettings, iteration, -1, Dvt, Mvt, Yvt, startofweek)
         arr.push(iteration)
         console.log(iteration)
-        // reldatetest(relativedateobject, pivotdate, startofweek = 1)
+        // BlueMoon(datesettings, pivotdate, startofweek = 1)
     }
 
     arrnew = arr.reverse()
@@ -916,10 +919,10 @@ function loop(relativedateobject, pivotdate, datesbefore, datesafter, startofwee
 
     iteration = startbase
     for (let i = 0; i < datesafter; i++) {
-        iteration = occurrences(relativedateobject, iteration, 1, Dvt, Mvt, Yvt, startofweek)
+        iteration = occurrences(datesettings, iteration, 1, Dvt, Mvt, Yvt, startofweek)
         arrnew.push(iteration)
         // console.log(iteration)
-        // reldatetest(relativedateobject, pivotdate, startofweek = 1)
+        // BlueMoon(datesettings, pivotdate, startofweek = 1)
     }
 
     console.log(arrnew)
@@ -927,11 +930,11 @@ function loop(relativedateobject, pivotdate, datesbefore, datesafter, startofwee
 }
 
 
-function occurrences(relativedateobject, pivotdate, forwardbackwards, Dvt, Mvt, Yvt, startofweek) {
+function occurrences(datesettings, pivotdate, forwardbackwards, Dvt, Mvt, Yvt, startofweek) {
     //forwardbackwards - 1 = forwards
     // day must be in
 
-    // relativedateobject, pivotdate, startofweek = 1
+    // datesettings, pivotdate, startofweek = 1
     let newdate = {}
 
     // let dateGreaterThanPivot = compareDateObjs(dateobj, pdresult)
@@ -946,7 +949,7 @@ function occurrences(relativedateobject, pivotdate, forwardbackwards, Dvt, Mvt, 
     } else if (Dvt.type === "dayofweek weeknum") {
         let next = changeMonth(pivotdate, 1 * forwardbackwards)
 
-        return reldatetest(relativedateobject, {
+        return BlueMoon(datesettings, {
             year: next.year,
             month: next.month,
             day: 1
@@ -956,7 +959,7 @@ function occurrences(relativedateobject, pivotdate, forwardbackwards, Dvt, Mvt, 
         return changeMonth(pivotdate, forwardbackwards)
 
     } else if ((Yvt.type === "relative") || (Yvt.type === "current")) {
-        if (relativedateobject.month) {
+        if (datesettings.month) {
             if (Mvt.type === "absolute") {
                 // month is absolute
                 return {
@@ -972,9 +975,9 @@ function occurrences(relativedateobject, pivotdate, forwardbackwards, Dvt, Mvt, 
         }
 
     } else {
-        if (relativedateobject.month) {
+        if (datesettings.month) {
             if (Mvt.type === "absolute") {
-                if (!relativedateobject.year) {
+                if (!datesettings.year) {
                     // month absolute, year empty -> year increment
                     return {
                         year: pivotdate.year + (1 * forwardbackwards),
@@ -989,7 +992,7 @@ function occurrences(relativedateobject, pivotdate, forwardbackwards, Dvt, Mvt, 
             }
 
         } else {
-            if (!relativedateobject.year) {
+            if (!datesettings.year) {
                 // day in but not month or year  => month increment
                 return changeMonth(pivotdate, forwardbackwards)
 
@@ -1348,7 +1351,7 @@ function testcheckResult() {
         month: 12,
         year: 2022
     }
-    let r = reldatetest(input)
+    let r = BlueMoon(input)
     console.log(r)
 
     let o = occurrences(r, {

@@ -1,6 +1,6 @@
-# Blue Moon
+# Blue Moon Date API
 
-Blue Moon allows you to enter simple date settings to return one specific date that matches your criteria. It can be in the past or future.
+Blue Moon allows you to find dates based on week, day name, month and other simple date settings to return one specific date that matches your criteria. It can be in the past or future.
 
 ``
 blueMoon({ day: "Sunday -1" })
@@ -40,7 +40,13 @@ This calculates the end of month, whether it's 29th of February or 28th in this 
 
 
 ### Day of week
-Day of week with Week number combines with Month, even if Month isn't specified.
+Day of week can combinate with a Week number and/or a Month.
+
+``
+{ day: "Mon" }
+``
+means Monday of the current week. *week* is default *current*. Just like ``{ day: "Mon", week: "current" }``
+
 ``
 { day: "Monday", week: 2 }
 ``

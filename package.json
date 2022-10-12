@@ -5,6 +5,8 @@
     "main": "index.js",
     "scripts": {
         "build": "rollup -c ./rollup.config.js",
+        "build-simple": "rollup -c ./rollup.config-simple.js",
+        "build-old": "rollup -c ./rollup.config-old.js",
         "dev": "rollup -c -w ./rollup.config.js"
     },
     "keywords": [],
