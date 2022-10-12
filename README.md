@@ -4,8 +4,7 @@ Blue Moon allows you to find dates based on week, day name, month and other simp
 
 ``
 blueMoon({ day: "Sunday -1" })
-``
-
+`` \
 This returns the last Sunday of each month.
 
 ## Uses
@@ -27,15 +26,15 @@ The *day* property is mandatory.
 ### Day of the month
 ``
 { day: 5 }
-``
+`` \
 Refers to the 5th of each month.
 
-``{ day: 25, month: 3 }``
+``{ day: 25, month: 3 }`` \
 Means 25th of March every year.
 
 ``
 { day: "monthend", month: 2 }
-``
+`` \
 This calculates the end of month, whether it's 29th of February or 28th in this case, or 30th or 31st for other months.
 
 
@@ -67,6 +66,7 @@ You can optionally set week as the week number of the year. You could do:
 { day: "current" }
 `` \
 Today is set like this. \
+
 *"current"* can be put on *week*, *month* or *year*. *current* is a relative date type, it's like *"+1"* except that it really means *"+0"*.
 If that date is June 30, 2022 and you have `` { day: "current", month: 7 }``. This would return `` { year: 2022, month: 7, day: 30 }`` but when the date is 1st July, 2022, it would return ``{ day: 1, month: 6, year: 2022 } ``
 
@@ -107,6 +107,7 @@ The first Wedesday of each month that falls on a full week inside of that month.
 ## Week
 Week works in combination with *day* and can also work with *month*. *week* can be absolute, relative or the *current* week.
 *week: 1* is considered to be a week where any day in that week is the first of that month.
+
 ``{ day: "Tuesday", week: "+2" }`` \
 Tuesday in two weeks from now.
 
@@ -146,6 +147,9 @@ The difference with this is that if you enter
 ``{ day: "Monday", week: 1 }
 ``
 Week 1 is the first of that month, and the start of the week probably is in the previous month. In this case, Monday would be the date of the previous month, something like 29th of the previous month. Using the *month* setting, you only get days in that month.
+
+![Calendar](calendar.jpg)
+
 
 ## Year
 Year must be either a four digit specific year eg *2024*, a relative number *"+1" or *current*.
@@ -201,8 +205,9 @@ You can mix and match if day is not relative, such as
 This is the date you want to start from. Like a reference point. You could find the first Sunday in March starting from 2000.
 You could set the pivot date as: \
 ``
-{ day: "Sunday 1", month: 3, pivotdate: { day: 1, month: 1, year: 2000 } }
+{ day: "Sunday 1", month: 3 }, { day: 1, month: 1, year: 2000 }
 ``
+
 
 
 
