@@ -44,18 +44,18 @@ Day of week can combinate with a Week number and/or a Month.
 
 ``
 { day: "Mon" }
-``
+`` \
 means Monday of the current week. *week* is default *current* so it's equivalent to ``{ day: "Mon", week: "current" }``.
 
 ``
 { day: "Monday", week: 2 }
-``
+`` \
 means Monday of the 2nd week of each month.
 
 ### Relative day of the week
 ``
 { day: "Monday", week: "+2" }
-``
+`` \
 means Monday in two weeks. It will always give the Monday two weeks ahead of the current week.
 
 You can optionally set week as the week number of the year. You could do:
@@ -65,7 +65,7 @@ You can optionally set week as the week number of the year. You could do:
 
 ``
 { day: "current" }
-``
+`` \
 Today is set like this. \
 *"current"* can be put on *week*, *month* or *year*. *current* is a relative date type, it's like *"+1"* except that it really means *"+0"*.
 If that date is June 30, 2022 and you have `` { day: "current", month: 7 }``. This would return `` { year: 2022, month: 7, day: 30 }`` but when the date is 1st July, 2022, it would return ``{ day: 1, month: 6, year: 2022 } ``
@@ -76,12 +76,12 @@ For relative days, you cannot have any *week*, *month* or *year* settings.
 
 ``
 { day: "-90" }
-``
+`` \
 90 days ago.
 
 ``
 { day: "+1" }
-``
+`` \
 Tomorrow.
 
 *Note* - You must use quotes for relative values.
@@ -91,26 +91,26 @@ There are some handy options if you are specific about full week or part week.
 
 ``
 { day: "Sunday 3" }
-``
+`` \
 The third Sunday of the current month.
 
 ``
 { day: "Wednesday -2", month: 10 }
-``
+`` \
 The second last Wednesday of October each year.
 
 ``
 { day: "Wedesday *1" }
-``
+`` \
 The first Wedesday of each month that falls on a full week inside of that month. If the first Wedesday starts on the 1st or 2nd, Monday is in the previous month and so this is not considered to be a full week so _Wednesday *1_ would be the week after.
 
 ## Week
 Week works in combination with *day* and can also work with *month*. *week* can be absolute, relative or the *current* week.
 *week: 1* is considered to be a week where any day in that week is the first of that month.
-``{ day: "Tuesday", week: "+2" }``
+``{ day: "Tuesday", week: "+2" }`` \
 Tuesday in two weeks from now.
 
-``{ day: "Monday", week: "current" }``
+``{ day: "Monday", week: "current" }`` \
 Monday of this week.
 
 ``
@@ -124,13 +124,13 @@ Sunday on week 2 of this month.
 If month is omitted, it assumed current month if other settings are specific values.
 
 *day* and *week* work together and *day* and can work with *month*.
-``{ day: "Tuesday", week: 2, month: 6 }``
+``{ day: "Tuesday", week: 2, month: 6 }`` \
 Tuesday in the second week of June. This specific case may be the first Tuesday in June depending on when the first week of June starts.
 
-``{ day: "Tuesday 2", month: 6 }``
+``{ day: "Tuesday 2", month: 6 }`` \
 This is the second Tuesday in June.
 
-``{ day: 15, month: 6, year: 2023 }``
+``{ day: 15, month: 6, year: 2023 }`` \
 The 15th of June, 2023.
 
 So we have four main options: \
