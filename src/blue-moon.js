@@ -883,7 +883,11 @@ function loop(datesettings, pivotdate, opts) {
     let startbase = iterate
 
     for (let i = 0; i < datesBefore; i++) {
-        iterate = occurrences(datesettings, iterate, -1, Dvt, Mvt, Yvt, startOfWeek)
+        if (Dvt.type.slice(0, 9) === "dayofweek") {
+            iterate = iteration(datesettings, occurrences(datesettings, iterate, -1, Dvt, Mvt, Yvt, startOfWeek), opts)
+        } else {
+            iterate = occurrences(datesettings, iterate, -1, Dvt, Mvt, Yvt, startOfWeek)
+        }
         arr.push(iterate)
         // console.log(iterate)
         // iteration(datesettings, pivotdate, opts)
@@ -895,7 +899,11 @@ function loop(datesettings, pivotdate, opts) {
 
     iterate = startbase
     for (let i = 0; i < datesAfter; i++) {
-        iterate = occurrences(datesettings, iterate, 1, Dvt, Mvt, Yvt, startOfWeek)
+        if (Dvt.type.slice(0, 9) === "dayofweek") {
+            iterate = iteration(datesettings, occurrences(datesettings, iterate, 1, Dvt, Mvt, Yvt, startOfWeek), opts)
+        } else {
+            iterate = occurrences(datesettings, iterate, 1, Dvt, Mvt, Yvt, startOfWeek)
+        }
         arrnew.push(iterate)
         // console.log(iterate)
         // iteration(datesettings, pivotdate, opts)
@@ -909,7 +917,10 @@ function loop(datesettings, pivotdate, opts) {
     function occurrences(datesettings, pivotdate, forwardbackwards, Dvt, Mvt, Yvt, startofweek) {
         //forwardbackwards - 1 = forwards
 
-        let newdate = {}
+        let newdate = {};
+
+        let Y = (!datesettings.year) ? pivotdate.year : datesettings.year;
+        let M = (!datesettings.month) ? pivotdate.month : datesettings.month;
 
         // Find out how far we need to increment or decrement
         // { day: 15 } is monthly, { day: 8, week: 2 } is monthly
@@ -919,18 +930,40 @@ function loop(datesettings, pivotdate, opts) {
             return changeDay(pivotdate, DAY_MS * forwardbackwards)
 
         } else if (Dvt.type === "dayofweek") {
-            return changeMonth(pivotdate, 7 * forwardbackwards)
+            if (datesettings.month) {
+                return {
+                    year: Y + (1 * forwardbackwards),
+                    month: M,
+                    day: datesettings.day
+                }
+            } else {
+                // If month is missing, change it by a week ie 7 days
+                return changeDay(pivotdate, 7 * DAY_MS * forwardbackwards)
+            }
+            // return changeMonth(pivotdate, 7 * forwardbackwards)
 
         } else if (Dvt.type === "dayofweek weeknum") {
-            let next = changeMonth(pivotdate, 1 * forwardbackwards)
+            // Use the first day of the month and run an iteration
+            if (datesettings.month) {
+                return {
+                    year: Y + (1 * forwardbackwards),
+                    month: M,
+                    day: 1
+                }
+            } else {
+                let next = changeMonth(pivotdate, 1 * forwardbackwards)
+                // If month is missing, change it by a month and do an iteration
+                // return changeDay(pivotdate, 7 * DAY_MS * forwardbackwards)
+                return {
+                    year: next.year,
+                    month: next.month,
+                    day: 1
+                }
 
-            return iteration(datesettings, {
-                year: next.year,
-                month: next.month,
-                day: 1
-            }, {
-                startofweek: startofweek
-            })
+            }
+
+
+
 
         } else if ((Mvt.type === "relative") || (Mvt.type === "current")) {
             return changeMonth(pivotdate, forwardbackwards)
@@ -940,8 +973,8 @@ function loop(datesettings, pivotdate, opts) {
                 if (Mvt.type === "absolute") {
                     // month is absolute
                     return {
-                        year: pivotdate.year + (1 * forwardbackwards),
-                        month: pivotdate.month,
+                        year: Y + (1 * forwardbackwards),
+                        month: M,
                         day: pivotdate.day
                     }
                 } else {
@@ -957,8 +990,8 @@ function loop(datesettings, pivotdate, opts) {
                     if (!datesettings.year) {
                         // month absolute, year empty -> year increment
                         return {
-                            year: pivotdate.year + (1 * forwardbackwards),
-                            month: pivotdate.month,
+                            year: Y + (1 * forwardbackwards),
+                            month: M,
                             day: pivotdate.day
                         }
 

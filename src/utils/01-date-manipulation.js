@@ -125,7 +125,7 @@ function changeMonth(dateobj, months) {
             m = Number(dateobj.month) - remainder
         } else {
             y += 1
-            m = 12 - (Number(dateobj.month) - remainder)
+            m = 12 + Number(dateobj.month) - remainder
         }
 
 

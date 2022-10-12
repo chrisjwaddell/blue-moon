@@ -1,3 +1,8 @@
+import {
+    terser
+} from 'rollup-plugin-terser';
+import terserOptions from './compress';
+
 export default [{
     input: './src/blue-moon.js',
     output: [{
@@ -8,5 +13,8 @@ export default [{
         // format: 'esm'
         // exports: "named",
         // sourcemap: true
-    }]
+    }],
+    plugins: [
+        terser(terserOptions)
+    ]
 }]
