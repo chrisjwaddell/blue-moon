@@ -159,7 +159,7 @@ This returns the first of the current month in 2023 every time it's run.
 ### Relative year
 ``
 { day: 1, year: "+1" }
-``
+`` \
 This returns the first of the current month of next year every time it's run.
 *Note* - You must use quotes for relative values.
 
@@ -169,8 +169,8 @@ This returns the first of the current month of next year every time it's run.
 If you leave out *month* or *year*, it defaults to *current*.
 ``
 { day: 1 }
-``
-is the same as
+`` \
+is the same as \
 ``
 { day: 1, month: "current", year: "current" }
 ``
@@ -199,7 +199,7 @@ You can mix and match if day is not relative, such as
 
 ## Pivot date
 This is the date you want to start from. Like a reference point. You could find the first Sunday in March starting from 2000.
-You could set the pivot date as:
+You could set the pivot date as: \
 ``
 { day: "Sunday 1", month: 3, pivotdate: { day: 1, month: 1, year: 2000 } }
 ``
@@ -217,7 +217,7 @@ The first Monday of each month in 2021.
 
 
 ``
-let next5MothersDays = BlueMoon({ day: "Sunday 2", month: 5}, {}, {datesAfter: 5}) ``
+let next5MothersDays = BlueMoon({ day: "Sunday 2", month: 5}, {}, {datesAfter: 5}) `` \
 Dates of Mothers days for the next five years.
 
 
