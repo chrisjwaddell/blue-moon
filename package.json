@@ -1,17 +1,17 @@
 {
-    "name": "src",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
+    "name": "bluemoon",
+    "version": "0.0.1",
+    "description": "Javascript Date features library",
+    "repository": "https://github.com/chrisjwaddell/blue-moon",
+    "homepage": "https://github.com/chrisjwaddell/blue-moon",
+    "main": "blue-moon.js",
     "scripts": {
         "build": "rollup -c ./rollup.config.js",
-        "build-simple": "rollup -c ./rollup.config-simple.js",
-        "build-old": "rollup -c ./rollup.config-old.js",
         "dev": "rollup -c -w ./rollup.config.js"
     },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
+    "keywords": ["date", "javascript", "moment"],
+    "author": "Chris Waddell",
+    "license": "MIT",
     "dependencies": {},
     "devDependencies": {
         "rollup": "^2.79.1",

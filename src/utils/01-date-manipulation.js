@@ -180,15 +180,15 @@ function changeMonth(dateobj, months) {
 function nextDayName(daynumberfrom, daynumberto, forward = true) {
     if (forward) {
         if (daynumberfrom > daynumberto) {
-            return 7 - (daynumberfrom - daynumberto)
+            return 7 + daynumberfrom - daynumberto
         } else {
             return daynumberto - daynumberfrom
         }
     } else {
-        if (daynumberfrom > daynumberto) {
+        if (daynumberfrom >= daynumberto) {
             return daynumberfrom - daynumberto
         } else {
-            return 7 - (daynumberfrom - daynumberto)
+            return 7 + daynumberfrom - daynumberto
         }
     }
 }

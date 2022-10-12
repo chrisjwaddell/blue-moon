@@ -1,3 +1,11 @@
+/** @license
+ *  ----------------------------------------------------------------------------
+ *  Blue Moon Date API - <https://github.com/chrisjwaddell/blue-moon>
+ *  Licensed under MIT
+ *  Copyright Chris Waddell
+ *  ----------------------------------------------------------------------------
+ */
+
 import {
     isObjectEmpty
 } from './utils/01-objects';
@@ -23,7 +31,6 @@ import {
 
 
 
-
 import {
     isNumber,
     isNumberSign,
@@ -41,7 +48,6 @@ import {
 import {
     errorWarningString
 } from './utils/05-debugging';
-
 
 
 let today = new Date()

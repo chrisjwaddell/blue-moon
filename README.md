@@ -3,7 +3,7 @@
 Blue Moon allows you to find dates based on week, day name, month and other simple date settings to return one specific date that matches your criteria. It can be in the past or future.
 
 ``
-blueMoon({ day: "Sunday -1" })
+BlueMoon({ day: "Sunday -1" })
 `` \
 This returns the last Sunday of each month.
 
@@ -19,7 +19,7 @@ There are four main date settings: *day*, *week*, *month* and *year*.
 Each setting can be specific, relative or *current*.
 
 ## Day
-Day can be a number such as "15", meaning the 15th of the month, it can be "+5", meaning 5 days in the future, it can be a specific day name such as "Wednesday" or a day and week. It can be a specific day of the month such as "Monday 2" meaning the second Monday of each month.
+Day can be a number such as "15", meaning the 15th of the month, it can be "+5", meaning 5 days in the future, it can be a specific dayname such as "Wednesday", it can be a dayname and week such as "Wednesday 1" or it can be "current". It can be a specific day of the month such as "Monday 2" meaning the second Monday of each month.
 
 The *day* property is mandatory.
 
@@ -36,6 +36,11 @@ Means 25th of March every year.
 { day: "monthend", month: 2 }
 `` \
 This calculates the end of month, whether it's 29th of February or 28th in this case, or 30th or 31st for other months.
+
+``
+{ day: "current", month: "+1" }
+``
+One month from now no matter how many days in the current month. If it's the 18th of February today, the result will be the 18th of March.
 
 
 ### Day of week
@@ -204,6 +209,8 @@ You can mix and match if day is not relative, such as
 
 ## Pivot date
 This is the date you want to start from. Like a reference point. You could find the first Sunday in March starting from 2000.
+Pivot date is the second argument.
+The default is today if pivot date is empty.
 You could set the pivot date as: \
 ``
 { day: "Sunday 1", month: 3 }, { day: 1, month: 1, year: 2000 }
@@ -213,8 +220,15 @@ You could set the pivot date as: \
 
 
 
-## Get the next or previous dates
-Blue Moon move backwards and forwards and get previous or past dates.
+## Options
+There are some extra options.
+
+#### startofweek
+To specify when the start of the week is. The default is 1 - Monday. Sunday is 0.
+
+
+# Get a series of dates - datesBefore and datesAfter
+Blue Moon can move backwards and forwards and get previous or past dates. Use the *datesBefore* and *datesAfter* settings to go forwards or backwards. BlueMoon will return an array of dates if you use any of these settings.
 
 ``
 BlueMoon({ day: "Mon 1"}, {day: 1, month: 1, year: 2021}, {datesAfter: 12})

@@ -95,15 +95,15 @@ var BlueMoon = function () {
     function nextDayName(daynumberfrom, daynumberto, forward = true) {
         if (forward) {
             if (daynumberfrom > daynumberto) {
-                return 7 - (daynumberfrom - daynumberto)
+                return 7 + daynumberfrom - daynumberto
             } else {
                 return daynumberto - daynumberfrom
             }
         } else {
-            if (daynumberfrom > daynumberto) {
+            if (daynumberfrom >= daynumberto) {
                 return daynumberfrom - daynumberto
             } else {
-                return 7 - (daynumberfrom - daynumberto)
+                return 7 + daynumberfrom - daynumberto
             }
         }
     }
@@ -165,6 +165,13 @@ var BlueMoon = function () {
     function errorWarningString(msg, str) {
         return str ? str + "\n" + msg : msg
     }
+    /** @license
+     *  ----------------------------------------------------------------------------
+     *  Blue Moon Date API - <https://github.com/chrisjwaddell/blue-moon>
+     *  Licensed under MIT
+     *  Copyright Chris Waddell
+     *  ----------------------------------------------------------------------------
+     */
     let today = new Date;
 
     function BlueMoon(datesettings, pivotdate, opts) {
