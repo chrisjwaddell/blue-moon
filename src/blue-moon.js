@@ -124,7 +124,7 @@ function iteration(datesettings, pivotdate, opts) {
 
                     if (isNumberSigned(PDYvt.offset)) {
                         if (Number(PDYvt.offset) > 500) {
-                            resultWarning = errorwarningstring(`Pivot date 'year' is a high number - ${PDYvt.offset}. Are you sure this is correct?.`, resultWarning)
+                            resultWarning = errorWarningString(`Pivot date 'year' is a high number - ${PDYvt.offset}. Are you sure this is correct?.`, resultWarning)
                         }
                     }
 
@@ -152,7 +152,7 @@ function iteration(datesettings, pivotdate, opts) {
 
                     if (isNumberSigned(PDMvt.offset)) {
                         if (Number(PDMvt.offset) > 48) {
-                            resultWarning = errorwarningstring("Pivot date 'month' is a high number. Why don't you use years and/or months instead.", resultWarning)
+                            resultWarning = errorWarningString("Pivot date 'month' is a high number. Why don't you use years and/or months instead.", resultWarning)
                         }
                     }
 
@@ -240,7 +240,7 @@ function iteration(datesettings, pivotdate, opts) {
                         } = changeMonth(obj, (PDMvt.type === "current") ? 0 : Number(PDMvt.offset))
                         pdy = yy
                         pdm = mm
-                        pdd = (pdd === "monthend") ? daysInMonth(pdm, pdy) : pdd
+                        pdd = (pdd === "monthend") ? daysInMonth(pdm, pdy) : dd
 
                         pdresult = {
                             year: pdy,
@@ -265,7 +265,7 @@ function iteration(datesettings, pivotdate, opts) {
                 } else if (PDYvt.type === "relative") {
                     if (isNumberSigned(PDYvt.offset)) {
                         if (Number(PDYvt.offset) > 500) {
-                            resultWarning = errorwarningstring(`'year' is a high number - ${PDYvt.offset}. Are you sure this is correct?.`, resultWarning)
+                            resultWarning = errorWarningString(`'year' is a high number - ${PDYvt.offset}. Are you sure this is correct?.`, resultWarning)
                         }
                     }
 
@@ -462,7 +462,7 @@ function iteration(datesettings, pivotdate, opts) {
         } else if (Wvt.type === "relative") {
             if (isNumberSigned(Wvt.offset)) {
                 if (Number(Wvt.offset) > 53) {
-                    resultWarning = errorwarningstring("'week' is a high number. Why don't you use years and/or months instead.", resultWarning)
+                    resultWarning = errorWarningString("'week' is a high number. Why don't you use years and/or months instead.", resultWarning)
                 }
             }
         }
@@ -484,7 +484,7 @@ function iteration(datesettings, pivotdate, opts) {
         } else if (Mvt.type === "relative") {
             if (isNumberSigned(Mvt.offset)) {
                 if (Number(Mvt.offset) > 48) {
-                    resultWarning = errorwarningstring("'month' is a high number. Why don't you use years and/or months instead.", resultWarning)
+                    resultWarning = errorWarningString("'month' is a high number. Why don't you use years and/or months instead.", resultWarning)
                 }
             }
         }
@@ -506,7 +506,7 @@ function iteration(datesettings, pivotdate, opts) {
         } else if (Yvt.type === "relative") {
             if (isNumberSigned(Yvt.offset)) {
                 if (Number(Yvt.offset) > 500) {
-                    resultWarning = errorwarningstring(`'year' is a high number - ${Yvt.offset}. Are you sure this is correct?.`, resultWarning)
+                    resultWarning = errorWarningString(`'year' is a high number - ${Yvt.offset}. Are you sure this is correct?.`, resultWarning)
                 }
             }
         }

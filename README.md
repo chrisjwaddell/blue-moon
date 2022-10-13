@@ -8,9 +8,9 @@ BlueMoon({ day: "Sunday -1" })
 This returns the last Sunday of each month.
 
 ## Uses
-Blue Moon can be useful for setting dates for reports or generally finding specific dates that can be tricky to code. Finding public holidays are another use. It can be hard finding the last Wednesday of the month or Mothers day the second Sunday of May each year.
+Blue Moon can be useful for setting dates for reports or generally finding specific dates that can be tricky to code. Finding public holidays are another use. It can be hard finding the last Wednesday of the month, Monday last week or Mothers day the second Sunday of May each year.
 
-blueMoon is very verbose for getting specific dates for things like reports.
+BlueMoon is very verbose for getting specific dates for things like reports.
 
 It can be relative to the current or pivot date or an absolute date.
 
@@ -63,14 +63,14 @@ means Monday of the 2nd week of each month.
 means Monday in two weeks. It will always give the Monday two weeks ahead of the current week.
 
 You can optionally set week as the week number of the year. You could do:
-{ day: "Monday", week: 15 }, options: { weekasYear: true } }
+``{ day: "Monday", week: 15 }, options: { weekasYear: true } }``
 
 *Note* - You must use quotes for relative values.
 
 ``
 { day: "current" }
 `` \
-Today is set like this. \
+Today is set like this.
 
 *"current"* can be put on *week*, *month* or *year*. *current* is a relative date type, it's like *"+1"* except that it really means *"+0"*.
 If that date is June 30, 2022 and you have `` { day: "current", month: 7 }``. This would return `` { year: 2022, month: 7, day: 30 }`` but when the date is 1st July, 2022, it would return ``{ day: 1, month: 6, year: 2022 } ``
@@ -120,8 +120,8 @@ Tuesday in two weeks from now.
 Monday of this week.
 
 ``
-{ day: "sun", week: 2}
-``
+{ day: "sun", week: 2 }
+`` \
 Sunday on week 2 of this month.
 
 
@@ -188,7 +188,7 @@ This returns the first of the current month you are in, every time you run it, i
 
 ``
 { day: "Monday" }
-``
+`` \
 This returns Monday of the current week. Day of the week is used in conjuction with *week*, if *week* is missing, it assumes ``week: current``
 
 
@@ -226,6 +226,12 @@ There are some extra options.
 #### startofweek
 To specify when the start of the week is. The default is 1 - Monday. Sunday is 0.
 
+``
+BlueMoon({ day: "Mon 1"}, {}, {startofweek: 0})
+``
+Returns the first Monday of the month. The first week is the week that starts at Sunday.
+
+
 
 # Get a series of dates - datesBefore and datesAfter
 Blue Moon can move backwards and forwards and get previous or past dates. Use the *datesBefore* and *datesAfter* settings to go forwards or backwards. BlueMoon will return an array of dates if you use any of these settings.
@@ -239,6 +245,23 @@ The first Monday of each month in 2021.
 ``
 let next5MothersDays = BlueMoon({ day: "Sunday 2", month: 5}, {}, {datesAfter: 5}) `` \
 Dates of Mothers days for the next five years.
+
+
+The way it works is, it works out when the date would change. A date setting like this would change monthly:
+``
+{ day: 5, year: "current" }
+``
+
+A date setting like this would change yearly:
+
+``
+{ day: 5, month: 6 }
+``
+
+A date setting like this would change weekly:
+``
+{ day: "thu" }
+``
 
 
 
