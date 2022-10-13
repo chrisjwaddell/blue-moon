@@ -78,7 +78,6 @@ function BlueMoon(datesettings, pivotdate, opts) {
 
 
 function iteration(datesettings, pivotdate, opts) {
-
     // ^INITIALIZE
     const propertyList = ["day", "week", "month", "year", "occur"]
     const pivotList = ["day", "month", "year"]
@@ -282,7 +281,7 @@ function iteration(datesettings, pivotdate, opts) {
                         } = changeMonth(obj, Number(PDMvt.offset))
                         pdy = yy
                         pdm = mm
-                        pdd = (pdd === "monthend") ? daysInMonth(pdm, pdy) : pdd
+                        pdd = (pdd === "monthend") ? daysInMonth(pdm, pdy) : dd
 
                         pdresult = {
                             year: pdy,
@@ -341,16 +340,8 @@ function iteration(datesettings, pivotdate, opts) {
     }
 
 
-    // console.log("pdresult", pdresult)
-    // console.log(resultWarning)
-
-
 
     if (isObjectEmpty(pdresult)) alert("pdresult empty")
-
-    // console.log(pdy, pdm, pdd)
-
-    // debugger
 
 
 

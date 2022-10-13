@@ -188,6 +188,7 @@ var BlueMoon = function () {
     }
 
     function iteration(datesettings, pivotdate, opts) {
+        console.log('%c' + log.fnName(...arguments) + ' - ', log.logType('watch'))
         const propertyList = ["day", "week", "month", "year", "occur"];
         const pivotList = ["day", "month", "year"];
         opts = opts || {};
@@ -350,7 +351,7 @@ var BlueMoon = function () {
                             } = changeMonth(obj, Number(PDMvt.offset));
                             pdy = yy;
                             pdm = mm;
-                            pdd = pdd === "monthend" ? daysInMonth(pdm, pdy) : pdd;
+                            pdd = pdd === "monthend" ? daysInMonth(pdm, pdy) : dd;
                             pdresult = {
                                 year: pdy,
                                 month: pdm,
@@ -800,6 +801,7 @@ var BlueMoon = function () {
     }
 
     function loop(datesettings, pivotdate, opts) {
+        console.log('%c' + log.fnName(...arguments) + ' - ', log.logType('new'))
         opts = opts || {};
         opts.startOfWeek || 1;
         let datesBefore = opts.datesBefore;
@@ -840,6 +842,7 @@ var BlueMoon = function () {
         return arrnew;
 
         function occurrences(datesettings, pivotdate, forwardbackwards, Dvt, Mvt, Yvt, startofweek) {
+            console.log('%c' + log.fnName(...arguments) + ' - ', log.logType('new'))
             let Y = !datesettings.year ? pivotdate.year : datesettings.year;
             let M = !datesettings.month ? pivotdate.month : datesettings.month;
             if (Dvt.type === "relative" || Dvt.type === "current") {
