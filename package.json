@@ -1,12 +1,13 @@
 {
     "name": "bluemoon",
-    "version": "0.0.1",
+    "version": "0.1.1",
     "description": "Javascript Date features library",
     "repository": "https://github.com/chrisjwaddell/blue-moon",
     "homepage": "https://github.com/chrisjwaddell/blue-moon",
     "main": "blue-moon.js",
     "scripts": {
         "build": "rollup -c ./rollup.config.js",
+        "build-min": "rollup -c ./rollup.config-min.js",
         "dev": "rollup -c -w ./rollup.config.js"
     },
     "keywords": [
