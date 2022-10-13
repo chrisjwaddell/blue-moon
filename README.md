@@ -252,10 +252,10 @@ let next5MothersDays = BlueMoon({ day: "Sunday 2", month: 5}, {}, {datesAfter: 5
 Returns an array of dates of Mothers days for the next five years.
 
 
-The way it works is, it works out when the date would change. A date setting like this would change monthly: \
+The way it works is, it works out when the date would change. A date setting like this would change monthly:
 ``
 { day: 5, year: "current" }
-`` \
+``
 
 A date setting like this would change yearly: \
 ``
