@@ -207,6 +207,7 @@ You can mix and match if day is not relative, such as
 ``
 
 
+
 ## Pivot date
 This is the date you want to start from. Like a reference point. You could find the first Sunday in March starting from 2000.
 Pivot date is the second argument.
@@ -214,8 +215,12 @@ The default is today if pivot date is empty.
 You could set the pivot date as: \
 ``
 { day: "Sunday 1", month: 3 }, { day: 1, month: 1, year: 2000 }
+`` \
+This finds the first Sunday in March 2000. Without pivot date, and with *year* omitted, it assumed ``year: "current"`` to return the first Sunday in March for this year.
 ``
-
+{ day: "Sunday 1", month: 3 }
+`` \
+This finds the first Sunday in March this year.
 
 
 
@@ -239,26 +244,25 @@ Blue Moon can move backwards and forwards and get previous or past dates. Use th
 ``
 BlueMoon({ day: "Mon 1"}, {day: 1, month: 1, year: 2021}, {datesAfter: 12})
 `` \
-The first Monday of each month in 2021.
+The first Monday of each month in 2021. Blue Moon returns an array of 12 dates.
 
 
 ``
 let next5MothersDays = BlueMoon({ day: "Sunday 2", month: 5}, {}, {datesAfter: 5}) `` \
-Dates of Mothers days for the next five years.
+Returns an array of dates of Mothers days for the next five years.
 
 
-The way it works is, it works out when the date would change. A date setting like this would change monthly:
+The way it works is, it works out when the date would change. A date setting like this would change monthly: \
 ``
 { day: 5, year: "current" }
-``
+`` \
 
-A date setting like this would change yearly:
-
+A date setting like this would change yearly: \
 ``
 { day: 5, month: 6 }
 ``
 
-A date setting like this would change weekly:
+A date setting like this would change weekly: \
 ``
 { day: "thu" }
 ``
