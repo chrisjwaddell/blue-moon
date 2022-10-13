@@ -14,7 +14,7 @@ BlueMoon is very verbose for getting specific dates for things like reports.
 
 It can be relative to the current or pivot date or an absolute date.
 
-## Settings
+## Date Settings
 There are four main date settings: *day*, *week*, *month* and *year*.
 Each setting can be specific, relative or *current*.
 
@@ -238,7 +238,7 @@ Returns the first Monday of the month. The first week is the week that starts at
 
 
 
-# Get a series of dates - datesBefore and datesAfter
+## Get a series of dates - datesBefore and datesAfter
 Blue Moon can move backwards and forwards and get previous or past dates. Use the *datesBefore* and *datesAfter* settings to go forwards or backwards. BlueMoon will return an array of dates if you use any of these settings.
 
 ``
