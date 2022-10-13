@@ -246,7 +246,6 @@ function iteration(datesettings, pivotdate, opts) {
                             month: pdm,
                             day: (PDDvt.offset === "monthend") ? daysInMonth(pdm, pdy) : pdd
                         }
-                        // return resultsShow()
 
                     } else if (PDMvt.type === "absolute") {
                         pdresult = {
@@ -254,7 +253,6 @@ function iteration(datesettings, pivotdate, opts) {
                             month: pdm,
                             day: (PDDvt.offset === "monthend") ? daysInMonth(pdm, pdy) : pdd
                         }
-                        // return resultsShow()
 
                     } else {
                         pdError = true
@@ -288,7 +286,6 @@ function iteration(datesettings, pivotdate, opts) {
                             month: pdm,
                             day: pdd
                         }
-                        // return resultsShow()
 
                     } else if (PDMvt.type === "absolute") {
                         pdresult = {
@@ -300,8 +297,6 @@ function iteration(datesettings, pivotdate, opts) {
                     } else {
                         pdError = true
                         resultWarning = errorWarningString(`Pivot date has 'day' as an absolute value. It must have 'month' and 'year' in. For relative 'day' such as 'day: "+1", it must not have 'month' or 'year' in. Even if you set 'month: "current"', that's sufficient. Pivot date will be set to today (the default).`, resultWarning)
-
-                        // return resultsShow()
                     }
                 } else {
                     pdError = true
@@ -368,19 +363,9 @@ function iteration(datesettings, pivotdate, opts) {
             resultError = errorWarningString(`The result has the month greater than the number of days in the month.`, resultError)
             result = {}
         }
-        // console.log(result)
-
-
-        // let dateGreaterThanPivot = compareDateObjs(dateobj, pdresult)
-        // console.log(dateGreaterThanPivot)
-
 
 
         if (!isObjectEmpty(result)) {
-            // console.log(datesettings)
-            // console.log(Dvt, Wvt, Mvt, Yvt)
-
-            // (Dvt.type === "relative") This is a straight out result
 
             if (Dvt.type === "current") {
                 // daily
@@ -876,7 +861,6 @@ function loop(datesettings, pivotdate, opts) {
 
     let zeroiterator = iteration(datesettings, pivotdate, opts)
 
-    // console.log("result", iterate);
     let startbase = iterate
 
     for (let i = 0; i < datesBefore; i++) {
@@ -886,8 +870,6 @@ function loop(datesettings, pivotdate, opts) {
             iterate = occurrences(datesettings, iterate, -1, Dvt, Mvt, Yvt, startOfWeek)
         }
         arr.push(iterate)
-        // console.log(iterate)
-        // iteration(datesettings, pivotdate, opts)
     }
 
     arrnew = arr.reverse()
@@ -902,11 +884,8 @@ function loop(datesettings, pivotdate, opts) {
             iterate = occurrences(datesettings, iterate, 1, Dvt, Mvt, Yvt, startOfWeek)
         }
         arrnew.push(iterate)
-        // console.log(iterate)
-        // iteration(datesettings, pivotdate, opts)
     }
 
-    // console.log(arrnew)
     return arrnew
 
 
@@ -937,7 +916,6 @@ function loop(datesettings, pivotdate, opts) {
                 // If month is missing, change it by a week ie 7 days
                 return changeDay(pivotdate, 7 * DAY_MS * forwardbackwards)
             }
-            // return changeMonth(pivotdate, 7 * forwardbackwards)
 
         } else if (Dvt.type === "dayofweek weeknum") {
             // Use the first day of the month and run an iteration
@@ -1053,7 +1031,6 @@ function weekFullLast(dateobj, daynumber, weeknum, startofweek = 1) {
     let startoflastfullweek = startoflastweeknotfull + 7
 
     let lastdayinfullweek = nextDayName(startofweek, daynumber)
-    // console.log(startoflastfullweek - lastdayinfullweek)
 
     return {
         day: dateobj.day - startoflastfullweek + lastdayinfullweek - ((Number(weeknum) - 1) * 7),
@@ -1080,7 +1057,6 @@ function weekLast(dateobj, daynumber, weeknum, startofweek = 1) {
     let firstfoundoffset = nextDayName(lastofmonthdaynumber, daynumber, false)
 
     return {
-        // day: 1 + firstfoundoffset + ((Number(weeknum) - 1) * 7),
         day: dateobj.day - firstfoundoffset - ((Number(weeknum) - 1) * 7),
         month: dateobj.month,
         year: dateobj.year
@@ -1118,71 +1094,6 @@ function compareDateObjs(dateobj1, dateobj2) {
 }
 
 
-
-
-// console.log(sameWeekCountDays(4, 4, 0)) // 0
-// console.log(sameWeekCountDays(4, 4, 1)) // 0
-// console.log(sameWeekCountDays(4, 4, 3)) // 0
-// console.log(sameWeekCountDays(4, 4, 4)) // 0
-// console.log(sameWeekCountDays(4, 4, 5)) // 0
-// console.log(sameWeekCountDays(4, 4, 6)) // 0
-
-// console.log(sameWeekCountDays(4, 1, 0)) // -3
-// console.log(sameWeekCountDays(4, 1, 1)) // -3
-// debugger
-// console.log(sameWeekCountDays(4, 1, 4)) // 4
-// console.log(sameWeekCountDays(4, 1, 6)) // -3
-
-// console.log(sameWeekCountDays(1, 4, 0)) // 3
-// console.log(sameWeekCountDays(1, 4, 1)) // 3
-// debugger
-// console.log(sameWeekCountDays(1, 4, 4)) // -4
-// console.log(sameWeekCountDays(1, 4, 6)) // 3
-
-
-// console.log("===========================")
-
-// console.log(sameWeekCountDays(dayToNumberThreeLetter("mo"), dayToNumberThreeLetter("fr"), dayToNumberThreeLetter("mo"))) // 0
-// console.log(sameWeekCountDays(dayToNumberThreeLetter("mo"), dayToNumberThreeLetter("sa"), dayToNumberThreeLetter("we"))) // 0
-
-// console.log(sameWeekCountDays(dayToNumberThreeLetter("th"), dayToNumberThreeLetter("mo"), dayToNumberThreeLetter("sa"))) // 3
-
-// console.log(sameWeekCountDays(dayToNumberThreeLetter("mo"), dayToNumberThreeLetter("th"))) // 0
-
-// see if result is less than pivot date
-
-
-function testcheckResult() {
-    let Dvt = {},
-        Mvt = {},
-        Yvt = {}
-    Dvt.type = "absolute"
-    Dvt.offset = "1"
-    Mvt.type = "absolute"
-    Mvt.offset = 12
-    Yvt.type = "absolute"
-    Yvt.offset = 2022
-
-    let input = {
-        day: 1,
-        month: 12,
-        year: 2022
-    }
-    let r = iteration(input)
-    console.log(r)
-
-    let o = occurrences(r, {
-        day: today.getDate(),
-        month: today.getMonth() + 1,
-        year: today.getFullYear()
-    }, Yvt, Mvt, Dvt)
-
-    console.log(o)
-
-
-    // let c = changeDay(r, 10)
-
-}
 
 
 
@@ -1485,8 +1396,6 @@ function checkResult(dateobj, pdresult, Yvt, Mvt, Dvt) {
     }
 
 }
-
-
 
 
 
