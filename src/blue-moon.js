@@ -84,7 +84,7 @@ function iteration(datesettings, pivotdate, opts) {
 
     opts = opts || {};
     let startOfWeek = opts.startofweek || 1;
-    let returnDate = opts.returnDate && true;
+    let returnDate = (opts.returnDate !== undefined) ? Boolean(opts.returnDate) : true;
 
     let result = {}
     let pdresult = {}
@@ -846,7 +846,7 @@ function loop(datesettings, pivotdate, opts) {
     let startOfWeek = opts.startOfWeek || 1;
     let datesBefore = opts.datesBefore
     let datesAfter = opts.datesAfter
-    let returnDate = opts.returnDate && true;
+    let returnDate = (opts.returnDate !== undefined) ? Boolean(opts.returnDate) : true;
 
     let arr = [];
     let arrnew = [];
