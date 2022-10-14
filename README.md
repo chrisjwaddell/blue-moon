@@ -18,13 +18,13 @@ It can be relative to the current or pivot date or an absolute date.
 
 ## Getting Started
 
-Include it in your HTML file: \
+Include it in your HTML file:
 
-`<script src="https://raw.githubusercontent.com/chrisjwaddell/blue-moon/main/dist/blue-moon-min.js"></script>` \
+`<script src="https://raw.githubusercontent.com/chrisjwaddell/blue-moon/main/dist/blue-moon-min.js"></script>`
 
 Or download the file and include it in your project.
 
-Start declaring dates with it like this:
+Start declaring dates with it like this: \
 ``let melbourneCup = BlueMoon( {day: "Tuesday 1", month: 11``
 
 
