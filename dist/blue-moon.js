@@ -1101,8 +1101,6 @@ var BlueMoon = (function () {
 
         arrnew = arr.reverse();
 
-        // arrnew.push(zeroiterator)
-
         if (returnDate) {
             arrnew.push(objToDate(zeroiterator));
         } else {

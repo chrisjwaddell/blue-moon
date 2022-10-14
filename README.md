@@ -239,15 +239,21 @@ To specify when the start of the week is. The default is 1 - Monday. Sunday is 0
 
 ``
 BlueMoon({ day: "Mon 1"}, {}, {startofweek: 0 })
-``
+`` \
 Returns the first Monday of the month. The first week is the week that starts at Sunday.
 
 
 #### returnDate
+The default is to return a Javascript Date object, you can opt to return a Blue Moon date object which is year, month, date.
+
 ``
-BlueMoon({ day: "Mon 1"}, {}, {returnDate: false })
+BlueMoon({ day: "Mon 1"}, {}, { returnDate: false })
+`` \
+This returns a Blue Moon date object like this:
 ``
-The default is to return a Javascript date, you can opt to return an object which is year, month, date.
+Object { year: 2022, month: 10, day: 10 }
+``
+
 
 
 
