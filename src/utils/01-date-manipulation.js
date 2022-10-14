@@ -26,12 +26,6 @@ function isYearValid(year, minyear, maxyear) {
     }
 }
 
-// console.log(isYearValid(2022, 1900, 3000)) // true
-// console.log(isYearValid(0022, 1900, 3000)) // false
-// console.log(isYearValid(2922, 1900, 3000)) // true
-// console.log(isYearValid(2922, 1900, 2300)) // false, Year should be in range 1900 to 2300
-
-
 
 function isLeapYear(year) {
     return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0
@@ -42,15 +36,6 @@ function isLeapYear(year) {
   * @param monthnumber.
   * @param year.
 */
-function daysInMonthOld(monthnumber, year) {
-    if (monthnumber === 4 || monthnumber === 6 || monthnumber === 9 || monthnumber === 11) {
-        return 30
-    } else if (monthnumber !== 2) {
-        return 31
-    }
-    return (isLeap(year)) ? 29 : 28
-}
-
 function daysInMonth(month, year) {
     const days = [31, 28 + (isLeapYear(year) ? 1 : 0), 31, 30, 31,
         30, 31, 31, 30, 31, 30, 31
@@ -81,16 +66,6 @@ function changeDay(dateobj, ms) {
 // Australian time AEST time zone, 2/10/2022 at 2am,
 // it changed to 3am, daylight savings
 // Using GMT just messes things up
-// console.log(changeDay({
-//     year: 2022,
-//     month: 10,
-//     day: 5
-// }, DAY_MS * -3))
-// console.log(changeDay({
-//     year: 2022,
-//     month: 10,
-//     day: 2
-// }, DAY_MS * -3))
 
 
 // Given a date object eg {year: 2022, month: 12, day: 1 },
@@ -144,37 +119,6 @@ function changeMonth(dateobj, months) {
         return {}
     }
 }
-
-
-
-// console.log(changeMonth({
-//     year: 2022,
-//     month: 1,
-//     day: 1
-// }, 2))
-
-// console.log(changeMonth({
-//     year: 2022,
-//     month: 1,
-//     day: 29
-// }, 1))
-// console.log(changeMonth({
-//     year: 2024,
-//     month: 1,
-//     day: 29
-// }, 1))
-// console.log(changeMonth({
-//     year: 2022,
-//     month: 5,
-//     day: 30
-// }, 1))
-// console.log(changeMonth({
-//     year: 2022,
-//     month: 5,
-//     day: 31
-// }, 1))
-
-
 
 
 function nextDayName(daynumberfrom, daynumberto, forward = true) {

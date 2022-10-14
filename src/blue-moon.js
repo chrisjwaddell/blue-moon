@@ -84,6 +84,7 @@ function iteration(datesettings, pivotdate, opts) {
 
     opts = opts || {};
     let startOfWeek = opts.startofweek || 1;
+    let returnDate = opts.returnDate && true;
 
     let result = {}
     let pdresult = {}
@@ -382,6 +383,11 @@ function iteration(datesettings, pivotdate, opts) {
             console.log(`%cWARNING - ${resultWarning}`, 'color: blue; font-size: 16px');
         if (resultError !== "")
             console.error(`%cERROR - ${resultError}`, 'color: red; font-size: 16px');
+
+        if (returnDate) {
+            result = objToDate(result)
+        }
+
         return result
     }
 
@@ -840,11 +846,16 @@ function loop(datesettings, pivotdate, opts) {
     let startOfWeek = opts.startOfWeek || 1;
     let datesBefore = opts.datesBefore
     let datesAfter = opts.datesAfter
+    let returnDate = opts.returnDate && true;
 
     let arr = [];
     let arrnew = [];
 
     let iterate = iteration(datesettings, pivotdate, opts)
+
+    if (returnDate) {
+        iterate = dateToObj(iterate)
+    }
 
     if (isObjectEmpty(iterate)) {
         return []
@@ -860,6 +871,9 @@ function loop(datesettings, pivotdate, opts) {
 
 
     let zeroiterator = iteration(datesettings, pivotdate, opts)
+    if (returnDate) {
+        zeroiterator = dateToObj(zeroiterator)
+    }
 
     let startbase = iterate
 
@@ -869,12 +883,23 @@ function loop(datesettings, pivotdate, opts) {
         } else {
             iterate = occurrences(datesettings, iterate, -1, Dvt, Mvt, Yvt, startOfWeek)
         }
-        arr.push(iterate)
+
+        if (returnDate) {
+            arr.push(objToDate(iterate))
+        } else {
+            arr.push(iterate)
+        }
     }
 
     arrnew = arr.reverse()
 
-    arrnew.push(zeroiterator)
+    if (returnDate) {
+        arrnew.push(objToDate(zeroiterator))
+    } else {
+        arrnew.push(zeroiterator)
+    }
+
+
 
     iterate = startbase
     for (let i = 0; i < datesAfter; i++) {
@@ -883,7 +908,12 @@ function loop(datesettings, pivotdate, opts) {
         } else {
             iterate = occurrences(datesettings, iterate, 1, Dvt, Mvt, Yvt, startOfWeek)
         }
-        arrnew.push(iterate)
+
+        if (returnDate) {
+            arr.push(objToDate(iterate))
+        } else {
+            arr.push(iterate)
+        }
     }
 
     return arrnew
@@ -1065,6 +1095,21 @@ function weekLast(dateobj, daynumber, weeknum, startofweek = 1) {
 }
 
 
+// convert a Blue Moon date object to a javascript Date
+// it returns in the local time it is run on
+function objToDate(obj) {
+    return new Date(obj.year, obj.month - 1, obj.day, 12, 0, 0, 0)
+}
+
+function dateToObj(dt) {
+    return {
+        year: dt.getFullYear(),
+        month: dt.getMonth() + 1,
+        day: dt.getDate()
+    }
+    // return new Date(obj.year, obj.month - 1, obj.day, 12, 0, 0, 0)
+}
+
 function compareDateObjs(dateobj1, dateobj2) {
     // 1 = dateobj1 > dateobj2
     // 0 they're equal
@@ -1092,8 +1137,6 @@ function compareDateObjs(dateobj1, dateobj2) {
 
     return compare
 }
-
-
 
 
 

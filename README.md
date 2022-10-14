@@ -110,7 +110,7 @@ The second last Wednesday of October each year.
 The first Wedesday of each month that falls on a full week inside of that month. If the first Wedesday starts on the 1st or 2nd, Monday is in the previous month and so this is not considered to be a full week so _Wednesday *1_ would be the week after.
 
 ## Week
-Week works in combination with *day* and can also work with *month*. *week* can be absolute, relative or the *current* week.
+Week works in combination with *day* and can also work with *month*. *week* can be absolute, relative or the *current* week. *week* puts you in a seven day range.
 *week: 1* is considered to be a week where any day in that week is the first of that month.
 
 ``{ day: "Tuesday", week: "+2" }`` \
@@ -176,6 +176,12 @@ This returns the first of the current month of next year every time it's run.
 ### Current
 *current* is like a relative year, like *+0*. *day*, *week*, *month* or *year* can be set as *current*.
 
+``
+{ day: "current", month: 1 }
+`` \
+If the date is 15th of March, 2024, this would return ``{ day: 15, month: 3, year: 2024 }
+
+
 If you leave out *month* or *year*, it defaults to *current*.
 ``
 { day: 1 }
@@ -232,9 +238,16 @@ There are some extra options.
 To specify when the start of the week is. The default is 1 - Monday. Sunday is 0.
 
 ``
-BlueMoon({ day: "Mon 1"}, {}, {startofweek: 0})
+BlueMoon({ day: "Mon 1"}, {}, {startofweek: 0 })
 ``
 Returns the first Monday of the month. The first week is the week that starts at Sunday.
+
+
+#### returnDate
+``
+BlueMoon({ day: "Mon 1"}, {}, {returnDate: false })
+``
+The default is to return a Javascript date, you can opt to return an object which is year, month, date.
 
 
 
