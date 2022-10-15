@@ -25,7 +25,7 @@ Include it in your HTML file:
 Or download the file and include it in your project.
 
 Start declaring dates with it like this: \
-``let melbourneCup = BlueMoon( {day: "Tuesday 1", month: 11``
+``let melbourneCup = BlueMoon( {day: "Tuesday 1", month: 11 } )``
 
 
 ## Date Settings
@@ -47,7 +47,7 @@ Refers to the 5th of each month.
 Means 25th of March every year.
 
 ``
-{ day: "monthend", month: 2 }
+let reportMonthEnd = BlueMoon({ day: "monthend", month: 2 })
 `` \
 This calculates the end of month, whether it's 29th of February or 28th in this case, or 30th or 31st for other months.
 
