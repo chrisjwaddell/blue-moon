@@ -259,6 +259,7 @@ Returns the first Monday of the month. The first week is the week that starts at
 
 #### returnDate
 The default is to return a Javascript Date object, you can opt to return a Blue Moon date object which is year, month, date.
+*Note* - It returns the date at the start of the day midnight ie 00:00:00 in your local time zone. Use the Blue Moon date object and convert to another time zone if this is what you want.
 
 ``
 BlueMoon({ day: "Mon 1"}, {}, { returnDate: false })

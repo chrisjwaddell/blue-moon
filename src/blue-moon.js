@@ -1098,7 +1098,7 @@ function weekLast(dateobj, daynumber, weeknum, startofweek = 1) {
 // convert a Blue Moon date object to a javascript Date
 // it returns in the local time it is run on
 function objToDate(obj) {
-    return new Date(obj.year, obj.month - 1, obj.day, 12, 0, 0, 0)
+    return new Date(obj.year, obj.month - 1, obj.day, 0, 0, 0, 0)
 }
 
 function dateToObj(dt) {
