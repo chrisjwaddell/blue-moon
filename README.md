@@ -26,7 +26,9 @@ Or download the file and include it in your project.
 
 Start declaring dates with it like this: \
 ``
-let reportStart = BlueMoon( { day: 1 }) \
+let reportStart = BlueMoon( { day: 1 })
+`` \
+``
 let reportEnd = BlueMoon( { day: "monthend" })
 ``
 
