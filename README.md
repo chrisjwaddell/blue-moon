@@ -24,7 +24,7 @@ Include it in your HTML file:
 
 Or download the file and include it in your project.
 
-Start declaring dates with it like this: \
+To declare a start and end date for data to extract that spans the whole month, you can do this: \
 ``
 let reportStart = BlueMoon( { day: 1 })
 `` \
