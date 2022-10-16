@@ -25,7 +25,10 @@ Include it in your HTML file:
 Or download the file and include it in your project.
 
 Start declaring dates with it like this: \
-``let melbourneCup = BlueMoon( {day: "Tuesday 1", month: 11 } )``
+''
+let reportStart = BlueMoon( { day: 1 })
+let reportEnd = BlueMoon( { day: "monthend" })
+''
 
 
 ## Date Settings
