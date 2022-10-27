@@ -5,6 +5,20 @@ var BlueMoon = (function () {
      * OBJECT
      *******************************************************************************/
 
+    // Checks if an object is a plain object, that is, an object created
+    // by the Object constructor or one with a [[Prototype]] of null.
+    // It excludes arrays, functions, null and dates
+    // which are all technically objects
+
+    function isObjectPlain$1(obj) {
+        return obj === null ? false :
+            obj === undefined ? false :
+            Object.prototype.toString.call(obj) === "[object Object]"
+    }
+
+    // For earlier versions of IE, Object.prototype.toString returns "[object Object]" for null and undefined so those checks are included
+
+
     function isObjectEmpty(value) {
         return (
             Object.prototype.toString.call(value) === '[object Object]' &&
@@ -198,7 +212,7 @@ var BlueMoon = (function () {
     }
 
     const dateToDay = (dateobj) => {
-        if (typeof dateobj !== 'object') {
+        if (!isObjectPlain(dateobj)) {
             return new TypeError('Argument is not an object.')
         }
 
@@ -216,9 +230,6 @@ var BlueMoon = (function () {
         return dayOfTheWeek(Number(day), Number(month), Number(year))
     };
 
-    // Example : dateToDay(day: "1", month: "1", year:"2020") => 3
-    // Example : dateToDay(day: "1", month: "1", year:"2021") => 5
-    // console.log(dateToDay({day: "1", month: "1", year:"2021"})) => 5
 
     // Find dayname for a Date
     // Uses Zeller congruence
@@ -270,6 +281,11 @@ var BlueMoon = (function () {
         opts.startOfWeek || 1;
         let datesBefore = opts.datesBefore;
         let datesAfter = opts.datesAfter;
+
+
+        if (!isObjectPlain$1(datesettings)) {
+            return new TypeError('Argument is not an object.')
+        }
 
 
         // if datesBefore or datesAfter are in, BlueMoon returns an array

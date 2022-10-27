@@ -7,6 +7,7 @@
  */
 
 import {
+    isObjectPlain,
     isObjectEmpty
 } from './utils/01-objects';
 
@@ -61,6 +62,11 @@ function BlueMoon(datesettings, pivotdate, opts) {
     let startOfWeek = opts.startOfWeek || 1;
     let datesBefore = opts.datesBefore
     let datesAfter = opts.datesAfter
+
+
+    if (!isObjectPlain(datesettings)) {
+        return new TypeError('Argument is not an object.')
+    }
 
 
     // if datesBefore or datesAfter are in, BlueMoon returns an array
