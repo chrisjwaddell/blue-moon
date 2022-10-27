@@ -10,7 +10,7 @@ var BlueMoon = (function () {
     // It excludes arrays, functions, null and dates
     // which are all technically objects
 
-    function isObjectPlain$1(obj) {
+    function isObjectPlain(obj) {
         return obj === null ? false :
             obj === undefined ? false :
             Object.prototype.toString.call(obj) === "[object Object]"
@@ -212,9 +212,6 @@ var BlueMoon = (function () {
     }
 
     const dateToDay = (dateobj) => {
-        if (!isObjectPlain(dateobj)) {
-            return new TypeError('Argument is not an object.')
-        }
 
         const {
             year,
@@ -222,7 +219,7 @@ var BlueMoon = (function () {
             day
         } = dateobj;
 
-        if (day < 0 || day > 31 || month > 12 || month < 0) {
+        if (day < 0 || day > 31 || month > 12 || month < 1) {
             return new TypeError('Date is not valid.')
         }
 
@@ -234,26 +231,35 @@ var BlueMoon = (function () {
     // Find dayname for a Date
     // Uses Zeller congruence
     // https://www.geeksforgeeks.org/zellers-congruence-find-day-date/
+    // https: //github.com/TheAlgorithms/JavaScript/blob/master/Conversions/DateToDay.js
     function dayOfTheWeek(day, month, year) {
-        if (month == 1) {
-            month = 13;
+        // In case of Jan and Feb:
+        // Year: we consider it as previous year
+        // e.g., 1/1/1987 here year is 1986 (-1)
+        // Month: we consider value as 13 & 14 respectively
+        if (month < 3) {
             year--;
+            month += 12;
         }
-        if (month == 2) {
-            month = 14;
-            year--;
-        }
-        let q = day;
-        let m = month;
-        let k = year % 100;
-        let j = parseInt(year / 100, 10);
-        let h = q + parseInt(13 * (m + 1) / 5, 10) + k + parseInt(k / 4, 10) + parseInt(j / 4, 10) + 5 * j;
-        h = h % 7;
 
-        h -= 1;
-        if (h === -1) h = 6;
+        // divide year into century and the last two digits of the century
+        const yearDigits = year % 100;
+        const century = Math.floor(year / 100);
 
-        return h
+        /*
+        In mathematics, remainders of divisions are usually defined to always be positive;
+        As an example, -2 mod 7 = 5.
+        Many programming languages including JavaScript implement the remainder of `n % m` as `sign(n) * (abs(n) % m)`.
+        This means the result has the same sign as the numerator. Here, `-2 % 7 = -1 * (2 % 7) = -2`.
+        To ensure a positive numerator, the formula is adapted: `- 2 * century` is replaced with `+ 5 * century`
+        which does not alter the resulting numbers mod 7 since `7 - 2 = 5`
+        The following example shows the issue with modulo division:
+        Without the adaption, the formula yields `weekDay = -6` for the date 2/3/2014;
+        With the adaption, it yields the positive result `weekDay = 7 - 6 = 1` (Sunday), which is what we need to index the array
+        */
+        const weekDay = (day + Math.floor((month + 1) * 2.6) + yearDigits + Math.floor(yearDigits / 4) + Math.floor(century / 4) + 5 * century) % 7;
+
+        return weekDay
     }
 
     /* ******************************************************************************
@@ -283,7 +289,7 @@ var BlueMoon = (function () {
         let datesAfter = opts.datesAfter;
 
 
-        if (!isObjectPlain$1(datesettings)) {
+        if (!isObjectPlain(datesettings)) {
             return new TypeError('Argument is not an object.')
         }
 
