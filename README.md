@@ -5,15 +5,14 @@ Blue Moon allows you to find dates based on week, day name, month and other simp
 ``
 BlueMoon({ day: "Sunday -1" })
 `` \
-This returns the last Sunday of each month.
+This returns the last Sunday of the current month.
 
 ## Uses
 Blue Moon can be useful for setting dates for reports or generally finding specific dates that can be tricky to code. Finding public holidays are another use. It can be hard finding the last Wednesday of the month, Monday last week or Mothers day the second Sunday of May each year.
 
 BlueMoon is very verbose for getting specific dates for things like reports.
 
-It can be relative to the current or pivot date or an absolute date.
-
+It can be relative to the current date or a pivot date or an absolute date.
 
 
 ## Getting Started
@@ -46,7 +45,7 @@ The *day* property is mandatory.
 ``
 { day: 5 }
 `` \
-Refers to the 5th of each month.
+Refers to the 5th of the current month.
 
 ``{ day: 25, month: 3 }`` \
 Means 25th of March every year.
@@ -58,8 +57,8 @@ This calculates the end of month, whether it's 29th of February or 28th in this 
 
 ``
 { day: "current", month: "+1" }
-``
-One month from now no matter how many days in the current month. If it's the 18th of February today, the result will be the 18th of March.
+`` \
+This calculates one month from now no matter how many days in the current month. If it's the 18th of February today, the result will be the 18th of March.
 
 
 ### Day of week
@@ -92,7 +91,7 @@ You can optionally set week as the week number of the year. You could do:
 Today is set like this.
 
 *"current"* can be put on *week*, *month* or *year*. *current* is a relative date type, it's like *"+1"* except that it really means *"+0"*.
-If that date is June 30, 2022 and you have `` { day: "current", month: 7 }``. This would return `` { year: 2022, month: 7, day: 30 }`` but when the date is 1st July, 2022, it would return ``{ day: 1, month: 6, year: 2022 } ``
+If the current date is June 30, 2022 and you have `` { day: "current", month: 7 }``. This would return `` { year: 2022, month: 7, day: 30 }`` but when the date is 1st July, 2022, it would return ``{ day: 1, month: 7, year: 2022 } ``
 
 
 ### Relative day
@@ -177,7 +176,7 @@ The picture above shows that `` {day: "Wed", week: 1, month: 6 }`` specifies Wed
 
 
 ## Year
-Year must be either a four digit specific year eg *2024*, a relative number *"+1" or *current*.
+Year must be either a four digit specific year eg *2024*, a relative number *+1* or *current*.
 
 ### Specific year
 ``
@@ -305,10 +304,4 @@ A date setting like this would change weekly: \
 ``
 { day: "thu" }
 ``
-
-
-
-
-
-
 
