@@ -644,7 +644,11 @@ function iteration(datesettings, pivotdate, opts) {
 
             } else if ((Wvt.type === "current") || (!Wvt.type)) {
 
-                let diff = sameWeekCountDays(dateToDay(monthcurrent), Dvt.offset, startOfWeek)
+                let diff = 0
+                if (!Wvt.type) {
+                    // diff = 7
+                }
+                // let diff = sameWeekCountDays(dateToDay(monthcurrent), Dvt.offset, startOfWeek)
 
                 result = changeDay(monthcurrent, diff * DAY_MS)
                 return resultsShow()
@@ -859,9 +863,10 @@ function loop(datesettings, pivotdate, opts) {
 
     let iterate = iteration(datesettings, pivotdate, opts)
 
-    if (returnDate) {
-        iterate = dateToObj(iterate)
+    if (Object.prototype.toString.call(iterate) !== "[object Date]") {
+        iterate = objToDate(iterate)
     }
+
 
     if (isObjectEmpty(iterate)) {
         return []
@@ -877,9 +882,11 @@ function loop(datesettings, pivotdate, opts) {
 
 
     let zeroiterator = iteration(datesettings, pivotdate, opts)
-    if (returnDate) {
-        zeroiterator = dateToObj(zeroiterator)
+
+    if (Object.prototype.toString.call(iterate) !== "[object Date]") {
+        iterate = objToDate(iterate)
     }
+
 
     let startbase = iterate
 
@@ -890,8 +897,14 @@ function loop(datesettings, pivotdate, opts) {
             iterate = occurrences(datesettings, iterate, -1, Dvt, Mvt, Yvt, startOfWeek)
         }
 
+        if (Object.prototype.toString().call(iterate) === "[object Date]") {
+            iterate = objToDate(iterate)
+        }
+
+
         if (returnDate) {
             arr.push(objToDate(iterate))
+            // arr.push(iterate)
         } else {
             arr.push(iterate)
         }
@@ -899,11 +912,7 @@ function loop(datesettings, pivotdate, opts) {
 
     arrnew = arr.reverse()
 
-    if (returnDate) {
-        arrnew.push(objToDate(zeroiterator))
-    } else {
-        arrnew.push(zeroiterator)
-    }
+    arrnew.push(zeroiterator)
 
 
 
@@ -915,11 +924,12 @@ function loop(datesettings, pivotdate, opts) {
             iterate = occurrences(datesettings, iterate, 1, Dvt, Mvt, Yvt, startOfWeek)
         }
 
-        if (returnDate) {
-            arr.push(objToDate(iterate))
-        } else {
-            arr.push(iterate)
+        if (Object.prototype.toString.call(iterate) !== "[object Date]") {
+            iterate = objToDate(iterate)
         }
+
+        arr.push(iterate)
+
     }
 
     return arrnew
@@ -928,11 +938,12 @@ function loop(datesettings, pivotdate, opts) {
 
     function occurrences(datesettings, pivotdate, forwardbackwards, Dvt, Mvt, Yvt, startofweek) {
         //forwardbackwards - 1 = forwards
-
         let newdate = {};
 
-        let Y = (!datesettings.year) ? pivotdate.year : datesettings.year;
-        let M = (!datesettings.month) ? pivotdate.month : datesettings.month;
+        // let Y = (!datesettings.year) ? pivotdate.year : datesettings.year;
+        let Y = (!datesettings.year) ? pivotdate.getFullYear() : datesettings.year;
+        // let M = (!datesettings.month) ? pivotdate.month : datesettings.month;
+        let M = (!datesettings.month) ? pivotdate.getMonth() + 1 : datesettings.month;
 
         // Find out how far we need to increment or decrement
         // { day: 15 } is monthly, { day: 8, week: 2 } is monthly
@@ -946,7 +957,8 @@ function loop(datesettings, pivotdate, opts) {
                 return {
                     year: Y + (1 * forwardbackwards),
                     month: M,
-                    day: datesettings.day
+                    // day: datesettings.day
+                    day: pivotdate.getDate()
                 }
             } else {
                 // If month is missing, change it by a week ie 7 days
@@ -986,7 +998,8 @@ function loop(datesettings, pivotdate, opts) {
                     return {
                         year: Y + (1 * forwardbackwards),
                         month: M,
-                        day: pivotdate.day
+                        // day: pivotdate.day
+                        day: pivotdate.getDate()
                     }
                 } else {
                     return changeMonth(pivotdate, forwardbackwards)
@@ -1003,7 +1016,8 @@ function loop(datesettings, pivotdate, opts) {
                         return {
                             year: Y + (1 * forwardbackwards),
                             month: M,
-                            day: pivotdate.day
+                            // day: pivotdate.day
+                            day: pivotdate.getDate()
                         }
 
                     } else {

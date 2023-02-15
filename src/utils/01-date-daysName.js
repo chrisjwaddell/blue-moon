@@ -46,7 +46,7 @@ function dayOfTheWeek(day, month, year) {
     */
     const weekDay = (day + Math.floor((month + 1) * 2.6) + yearDigits + Math.floor(yearDigits / 4) + Math.floor(century / 4) + 5 * century) % 7
 
-    return weekDay
+    return weekDay - 1
 }
 
 
