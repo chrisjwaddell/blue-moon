@@ -53,7 +53,18 @@ function daysInYear(year) {
 // In dateobj, month 1 is January
 // 12 midday is used just to be on the safe side
 function changeDay(dateobj, ms) {
-    let dt = new Date(Date.UTC(dateobj.year, dateobj.month - 1, dateobj.day, 12, 0, 0, 0))
+    let d
+    if (Object.prototype.toString.call(dateobj) !== "[object Object]") {
+        d = {
+            day: dateobj.getDate(),
+            month: dateobj.getMonth() + 1,
+            year: dateobj.getFullYear()
+        }
+    } else {
+        d = dateobj
+    }
+
+    let dt = new Date(Date.UTC(d.year, d.month - 1, d.day, 12, 0, 0, 0))
     let dt2 = new Date(dt.valueOf() + ms)
 
     return {
@@ -124,7 +135,7 @@ function changeMonth(dateobj, months) {
 function nextDayName(daynumberfrom, daynumberto, forward = true) {
     if (forward) {
         if (daynumberfrom > daynumberto) {
-            return 7 + daynumberfrom - daynumberto
+            return 7 - daynumberfrom + daynumberto
         } else {
             return daynumberto - daynumberfrom
         }
@@ -132,7 +143,7 @@ function nextDayName(daynumberfrom, daynumberto, forward = true) {
         if (daynumberfrom >= daynumberto) {
             return daynumberfrom - daynumberto
         } else {
-            return 7 + daynumberfrom - daynumberto
+            return 7 - daynumberfrom + daynumberto
         }
     }
 }

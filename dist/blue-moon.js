@@ -97,7 +97,18 @@ var BlueMoon = (function () {
     // In dateobj, month 1 is January
     // 12 midday is used just to be on the safe side
     function changeDay(dateobj, ms) {
-        let dt = new Date(Date.UTC(dateobj.year, dateobj.month - 1, dateobj.day, 12, 0, 0, 0));
+        let d;
+        if (Object.prototype.toString.call(dateobj) !== "[object Object]") {
+            d = {
+                day: dateobj.getDate(),
+                month: dateobj.getMonth() + 1,
+                year: dateobj.getFullYear()
+            };
+        } else {
+            d = dateobj;
+        }
+
+        let dt = new Date(Date.UTC(d.year, d.month - 1, d.day, 12, 0, 0, 0));
         let dt2 = new Date(dt.valueOf() + ms);
 
         return {
@@ -168,7 +179,7 @@ var BlueMoon = (function () {
     function nextDayName(daynumberfrom, daynumberto, forward = true) {
         if (forward) {
             if (daynumberfrom > daynumberto) {
-                return 7 + daynumberfrom - daynumberto
+                return 7 - daynumberfrom + daynumberto
             } else {
                 return daynumberto - daynumberfrom
             }
@@ -176,7 +187,7 @@ var BlueMoon = (function () {
             if (daynumberfrom >= daynumberto) {
                 return daynumberfrom - daynumberto
             } else {
-                return 7 + daynumberfrom - daynumberto
+                return 7 - daynumberfrom + daynumberto
             }
         }
     }
@@ -259,7 +270,7 @@ var BlueMoon = (function () {
         */
         const weekDay = (day + Math.floor((month + 1) * 2.6) + yearDigits + Math.floor(yearDigits / 4) + Math.floor(century / 4) + 5 * century) % 7;
 
-        return weekDay
+        return weekDay - 1
     }
 
     /* ******************************************************************************
@@ -868,7 +879,9 @@ var BlueMoon = (function () {
 
                 } else if ((Wvt.type === "current") || (!Wvt.type)) {
 
-                    let diff = sameWeekCountDays(dateToDay(monthcurrent), Dvt.offset, startOfWeek);
+                    let diff = 0;
+                    if (!Wvt.type) ;
+                    // let diff = sameWeekCountDays(dateToDay(monthcurrent), Dvt.offset, startOfWeek)
 
                     result = changeDay(monthcurrent, diff * DAY_MS);
                     return resultsShow()
@@ -1083,9 +1096,10 @@ var BlueMoon = (function () {
 
         let iterate = iteration(datesettings, pivotdate, opts);
 
-        if (returnDate) {
-            iterate = dateToObj(iterate);
+        if (Object.prototype.toString.call(iterate) !== "[object Date]") {
+            iterate = objToDate(iterate);
         }
+
 
         if (isObjectEmpty(iterate)) {
             return []
@@ -1101,9 +1115,11 @@ var BlueMoon = (function () {
 
 
         let zeroiterator = iteration(datesettings, pivotdate, opts);
-        if (returnDate) {
-            zeroiterator = dateToObj(zeroiterator);
+
+        if (Object.prototype.toString.call(iterate) !== "[object Date]") {
+            iterate = objToDate(iterate);
         }
+
 
         let startbase = iterate;
 
@@ -1114,8 +1130,14 @@ var BlueMoon = (function () {
                 iterate = occurrences(datesettings, iterate, -1, Dvt, Mvt, Yvt);
             }
 
+            if (Object.prototype.toString().call(iterate) === "[object Date]") {
+                iterate = objToDate(iterate);
+            }
+
+
             if (returnDate) {
                 arr.push(objToDate(iterate));
+                // arr.push(iterate)
             } else {
                 arr.push(iterate);
             }
@@ -1123,11 +1145,7 @@ var BlueMoon = (function () {
 
         arrnew = arr.reverse();
 
-        if (returnDate) {
-            arrnew.push(objToDate(zeroiterator));
-        } else {
-            arrnew.push(zeroiterator);
-        }
+        arrnew.push(zeroiterator);
 
 
 
@@ -1139,11 +1157,12 @@ var BlueMoon = (function () {
                 iterate = occurrences(datesettings, iterate, 1, Dvt, Mvt, Yvt);
             }
 
-            if (returnDate) {
-                arr.push(objToDate(iterate));
-            } else {
-                arr.push(iterate);
+            if (Object.prototype.toString.call(iterate) !== "[object Date]") {
+                iterate = objToDate(iterate);
             }
+
+            arr.push(iterate);
+
         }
 
         return arrnew
@@ -1152,8 +1171,10 @@ var BlueMoon = (function () {
 
         function occurrences(datesettings, pivotdate, forwardbackwards, Dvt, Mvt, Yvt, startofweek) {
 
-            let Y = (!datesettings.year) ? pivotdate.year : datesettings.year;
-            let M = (!datesettings.month) ? pivotdate.month : datesettings.month;
+            // let Y = (!datesettings.year) ? pivotdate.year : datesettings.year;
+            let Y = (!datesettings.year) ? pivotdate.getFullYear() : datesettings.year;
+            // let M = (!datesettings.month) ? pivotdate.month : datesettings.month;
+            let M = (!datesettings.month) ? pivotdate.getMonth() + 1 : datesettings.month;
 
             // Find out how far we need to increment or decrement
             // { day: 15 } is monthly, { day: 8, week: 2 } is monthly
@@ -1167,7 +1188,8 @@ var BlueMoon = (function () {
                     return {
                         year: Y + (1 * forwardbackwards),
                         month: M,
-                        day: datesettings.day
+                        // day: datesettings.day
+                        day: pivotdate.getDate()
                     }
                 } else {
                     // If month is missing, change it by a week ie 7 days
@@ -1207,7 +1229,8 @@ var BlueMoon = (function () {
                         return {
                             year: Y + (1 * forwardbackwards),
                             month: M,
-                            day: pivotdate.day
+                            // day: pivotdate.day
+                            day: pivotdate.getDate()
                         }
                     } else {
                         return changeMonth(pivotdate, forwardbackwards)
@@ -1224,7 +1247,8 @@ var BlueMoon = (function () {
                             return {
                                 year: Y + (1 * forwardbackwards),
                                 month: M,
-                                day: pivotdate.day
+                                // day: pivotdate.day
+                                day: pivotdate.getDate()
                             }
 
                         } else {
@@ -1318,15 +1342,6 @@ var BlueMoon = (function () {
     // it returns in the local time it is run on
     function objToDate(obj) {
         return new Date(obj.year, obj.month - 1, obj.day, 0, 0, 0, 0)
-    }
-
-    function dateToObj(dt) {
-        return {
-            year: dt.getFullYear(),
-            month: dt.getMonth() + 1,
-            day: dt.getDate()
-        }
-        // return new Date(obj.year, obj.month - 1, obj.day, 12, 0, 0, 0)
     }
 
     return BlueMoon;
