@@ -79,10 +79,6 @@ means Monday of the 2nd week of each month.
 { day: "Monday", week: "+2" }
 `` \
 means Monday in two weeks. It will always give the Monday two weeks ahead of the current week.
-
-You can optionally set week as the week number of the year. You could do:
-``{ day: "Monday", week: 15 }, options: { weekasYear: true } }``
-
 *Note* - You must use quotes for relative values.
 
 ``
@@ -147,7 +143,7 @@ Sunday on week 2 of this month.
 ## Month
 If month is omitted, it assumed current month if other settings are specific values.
 
-*day* and *week* work together and *day* and can work with *month*.
+*day* and *week* work together and *day* can work with *month*.
 ``{ day: "Tuesday", week: 2, month: 6 }`` \
 Tuesday in the second week of June. This specific case may be the first Tuesday in June depending on when the first week of June starts.
 
@@ -236,6 +232,7 @@ You can mix and match if day is not relative, such as
 This is the date you want to start from. Like a reference point. You could find the first Sunday in March starting from 2000.
 Pivot date is the second argument.
 The default is today if pivot date is empty.
+It must be an object that represents a specific date with *day*, *month* and *year* properties.
 You could set the pivot date as: \
 ``
 { day: "Sunday 1", month: 3 }, { day: 1, month: 1, year: 2000 }
@@ -272,7 +269,6 @@ This returns a Blue Moon date object like this:
 ``
 Object { year: 2022, month: 10, day: 10 }
 ``
-
 
 
 
