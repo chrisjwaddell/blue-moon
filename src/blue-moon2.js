@@ -28,16 +28,17 @@ import {dateToDay, dayOfTheWeek} from "./utils/01-date-daysName"
 
 import {errorWarningString} from "./utils/05-debugging"
 
-function BlueMoon(datesettings, pivotDate, options) {
+// let today = new Date()
+
+function BlueMoon2(datesettings, pivotDate, options) {
 	// ^INITIALIZE
 	let settings = options || {}
-	settings.pivotDate = settings.pivotDate ?? {}
-	settings.resultAsDateObject = settings.resultAsDateObject ?? true
 	settings.startOfWeek = settings.startOfWeek ?? 1
+	settings.resultAsDateObject = settings.resultAsDateObject ?? true
 
 	let today = new Date()
 
-	let pivd = settings.pivotDate
+	let pivd = pivotDate || {}
 	if (isObjectEmpty(pivd)) {
 		pivd = dateToObj(today)
 	}
@@ -216,10 +217,6 @@ function BlueMoon(datesettings, pivotDate, options) {
 
 			arrLoop.push(newpivd)
 		}
-
-		// let arrResult = arrLoop.map((cv) =>
-		// 	dateDWMY(dsCheck.D, dsCheck.W, dsCheck.M, dsCheck.Y, cv, settings)
-		// )
 
 		let arrResult = []
 
@@ -1140,4 +1137,4 @@ function BlueMoon(datesettings, pivotDate, options) {
 	}
 }
 
-export default BlueMoon
+export default BlueMoon2

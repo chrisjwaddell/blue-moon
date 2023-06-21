@@ -191,10 +191,11 @@ var BlueMoon = (function () {
 	}
 	function BlueMoon(datesettings, pivotDate, options) {
 		let settings = options || {}
-		settings.startOfWeek = settings.startOfWeek ?? 1
+		settings.pivotDate = settings.pivotDate ?? {}
 		settings.resultAsDateObject = settings.resultAsDateObject ?? true
+		settings.startOfWeek = settings.startOfWeek ?? 1
 		let today = new Date()
-		let pivd = pivotDate || {}
+		let pivd = settings.pivotDate
 		if (isObjectEmpty(pivd)) {
 			pivd = dateToObj(today)
 		}
