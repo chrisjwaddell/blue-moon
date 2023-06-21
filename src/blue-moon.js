@@ -28,7 +28,7 @@ import {dateToDay, dayOfTheWeek} from "./utils/01-date-daysName"
 
 import {errorWarningString} from "./utils/05-debugging"
 
-function BlueMoon(datesettings, pivotDate, options) {
+function BlueMoon(datesettings, options) {
 	// ^INITIALIZE
 	let settings = options || {}
 	settings.pivotDate = settings.pivotDate ?? {}
