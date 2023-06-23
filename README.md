@@ -59,6 +59,8 @@ Blue Moon has two arguments:
 There are four main date settings: *day*, *week*, *month* and *year*.
 Each setting can be specific, relative or *current*.
 
+The *day* property is mandatory. The other properties are optional.
+
 #### Day
 Day can be a number such as "15", meaning the 15th of the month, it can be "+5", meaning 5 days in the future, it can be a specific dayname such as "Wednesday", it can be a dayname and week such as "Wednesday 1" or it can be "current". It can be a specific day of the month such as "Monday 2" meaning the second Monday of each month.
 
