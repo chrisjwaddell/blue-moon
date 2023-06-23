@@ -46,7 +46,7 @@ let reportEnd = BlueMoon( { day: "monthend" })
 <br>
 
 
-## Basic Usage
+## How to use Blue Moon
 
 Blue Moon has two arguments:
 <br>
@@ -57,7 +57,12 @@ Blue Moon has two arguments:
 ### Date Settings
 
 There are four main date settings: *day*, *week*, *month* and *year*.
+<br>
+
 Each setting can be specific, relative or *current*.
+relative - { day: "+1" } 
+absolute - { day: 5, month: 3 } 
+current - { day: "current", month: "+1" }
 
 The *day* property is mandatory. The other properties are optional.
 
@@ -66,7 +71,7 @@ Day can be a number such as "15", meaning the 15th of the month, it can be "+5",
 
 The *day* property is mandatory.
 
-### Day of the month
+##### Day of the month
 ``
 { day: 5 }
 ``
@@ -90,21 +95,21 @@ This calculates the end of month, whether it's 29th of February or 28th in this 
 This calculates one month from now no matter how many days in the current month. If it's the 18th of February today, the result will be the 18th of March.
 
 
-#### Day of week
-Day of week can combinate with a Week number and/or a Month.
+##### Day of week
+Day of week can combinate with a Week number or a Month.
 
 ``
 { day: "Mon" }
 ``
 <br>
-means Monday of the current week. *week* is default *current* so it's equivalent to ``{ day: "Mon", week: "current" }``.
+means Monday of the current week. *week* is default *current* so it's equivalent to ``{ day: "Mon", week: "current" }``. When it goes into the next week, it's always Monday of the current week.
 
 ``
 { day: "Monday", week: 2 }
 `` \
 means Monday of the 2nd week of each month.
 
-### Relative day of the week
+##### Relative day of the week
 ``
 { day: "Monday", week: "+2" }
 `` \
@@ -154,8 +159,9 @@ The second last Wednesday of October each year.
 The first Wedesday of each month that falls on a full week inside of that month. If the first Wedesday starts on the 1st or 2nd, Monday is in the previous month and so this is not considered to be a full week so _Wednesday *1_ would be the week after.
 
 #### Week
-Week works in combination with *day* and can also work with *month*. *week* can be absolute, relative or the *current* week. *week* puts you in a seven day range.
-*week: 1* is considered to be a week where any day in that week is the first of that month.
+Week works in combination with *day*. *week* can be absolute, relative or the *current* week. *week* puts you in a seven day range.
+When week is an absolute number, it is the week number for the year.
+*{ day: "Mon", week: 18* is considered to be the Monday of the 18th week or the year.
 
 ``{ day: "Tuesday", week: "+2" }`` \
 Tuesday in two weeks from now.
@@ -164,9 +170,10 @@ Tuesday in two weeks from now.
 Monday of this week.
 
 ``
-{ day: "sun", week: 2 }
+{ day: "Sun", week: 2 }
 `` \
-Sunday on week 2 of this month.
+Sunday on week 2 of the year.
+It counts the first week that isn't full. 1/1 of that year is the first week even if that day is in the middle of the week.
 
 
 
@@ -204,7 +211,7 @@ The picture above shows that `` {day: "Wed", week: 1, month: 6 }`` specifies Wed
 #### Year
 Year must be either a four digit specific year eg *2024*, a relative number *+1* or *current*.
 
-### Specific year
+##### Specific year
 ``
 { day: 1, year: "2023" }
 `` \
