@@ -189,7 +189,7 @@ var BlueMoon = (function () {
 	function errorWarningString(msg, str) {
 		return str ? str + "\n" + msg : msg
 	}
-	function BlueMoon(datesettings, pivotDate, options) {
+	function BlueMoon(datesettings, options) {
 		let settings = options || {}
 		settings.pivotDate = settings.pivotDate ?? {}
 		settings.resultAsDateObject = settings.resultAsDateObject ?? true

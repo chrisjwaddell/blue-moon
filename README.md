@@ -9,7 +9,7 @@ BlueMoon({ day: "Sunday -1", month: 5 })
 This returns the last Sunday of May of the current year.
 
 ## Uses
-Blue Moon is useful for setting dates for reports or generally finding specific dates that can be tricky to code. Finding public holidays are another use. It can be hard finding the last Wednesday of the month, Monday last week or Mothers day the second Sunday of May each year.
+Blue Moon is useful for setting dates for reports or generally finding specific dates that can be tricky to code. Finding public holidays are another use. It can be hard finding the last Wednesday of the month, Monday last week or the second Sunday of May each year.
 
 BlueMoon is very verbose for getting specific dates for things like reports. eg 
 <br>
@@ -55,8 +55,6 @@ Blue Moon has two arguments:
 
 
 ### Date Settings
-
-
 
 There are four main date settings: *day*, *week*, *month* and *year*.
 Each setting can be specific, relative or *current*.
