@@ -60,8 +60,11 @@ There are four main date settings: *day*, *week*, *month* and *year*.
 <br>
 
 Each setting can be specific, relative or *current*.
+<br>
 relative - { day: "+1" } 
+<br>
 absolute - { day: 5, month: 3 } 
+<br>
 current - { day: "current", month: "+1" }
 
 The *day* property is mandatory. The other properties are optional.
@@ -114,6 +117,7 @@ means Monday of the 2nd week of each month.
 { day: "Monday", week: "+2" }
 `` \
 means Monday in two weeks. It will always give the Monday two weeks ahead of the current week.
+<br>
 *Note* - You must use quotes for relative values.
 
 ``
@@ -121,8 +125,8 @@ means Monday in two weeks. It will always give the Monday two weeks ahead of the
 `` \
 Today is set like this.
 
-*"current"* can be put on *week*, *month* or *year*. *current* is a relative date type, it's like *"+1"* except that it really means *"+0"*.
-If the current date is June 30, 2022 and you have `` { day: "current", month: 7 }``. This would return `` { year: 2022, month: 7, day: 30 }`` but when the date is 1st July, 2022, it would return ``{ day: 1, month: 7, year: 2022 } ``
+*"current"* can be put on *week*, *month* or *year*. *current* is a relative date type, it really means *"+0"*.
+If the current date is June 30, 2022 and you have `` { day: "current", month: 8 }``. This would return `` { year: 2022, month: 8, day: 30 }`` but when the date is 1st July, 2022, it would return ``{ day: 1, month: 8, year: 2022 } ``
 
 
 ##### Relative day
@@ -274,7 +278,7 @@ There are four options:
 * pivotdate - the date you start from
 * loop - you can loop forward or backwards, Blue Moon will return an array of dates in either the past or future
 * resultAsDateObject - By default, Blue Moon returns a date as an object in the format of *{ day: d, month: m, year: y }*
-* startofweek - the default is Monday.
+* startOfWeek - the default is Monday.
 
 
 #### Pivot date
@@ -282,53 +286,102 @@ This is the date you want to start from. Like a reference point. You could find 
 Pivot date is the second argument.
 The default is today if pivot date is empty.
 It must be an object that represents a specific date with *day*, *month* and *year* properties.
-You could set the pivot date as: \
+You could set the pivot date as:
+<br>
 ``
 { day: "Sunday 1", month: 3 }, { day: 1, month: 1, year: 2000 }
-`` \
+``
+<br>
 This finds the first Sunday in March 2000. Without pivot date, and with *year* omitted, it assumed ``year: "current"`` to return the first Sunday in March for this year.
+<br>
 ``
 { day: "Sunday 1", month: 3 }
-`` \
+``
+<br>
 This finds the first Sunday in March this year.
 
 
 #### loop
-Blue Moon can move backwards and forwards and get previous or past dates. Use the *loop* option to go forwards or backwards. BlueMoon will return an array of dates.
+This can be a useful feature returning an array of dates.
+It can move backwards and forwards in time to get previous or past dates. 
 
 ``
 BlueMoon({ day: "Mon 1"}, {pivotDate: {day: 1, month: 1, year: 2021}, loop: 12})
-`` \
-The first Monday of each month in 2021. Blue Moon returns an array of 12 dates.
-
-
 ``
-let next5MothersDays = BlueMoon({ day: "Sunday 2", month: 5}, { loop: 5}) `` \
-Returns an array of dates of Mothers days for the next five years.
-
-
-The way it works is, it works out when the date would change. A date setting like this would change monthly: \
-``
-{ day: 5, year: "current" }
-``
-
-A date setting like this would change yearly:
 <br>
+The first Monday of each month in 2021. Blue Moon returns an array of 12 dates of the first Monday of each month in 2021.
+
 
 ``
-{ day: 5, month: 6 }
-``
-
-A date setting like this would change weekly:
+let next5MothersDays = BlueMoon({ day: "Sunday 2", month: 5}, { loop: -5}) ``
 <br>
+Returns an array of dates of Mothers days for the last five years.
 
+Blue Moon categorizes the frequency based on the type of *day* value. The date can change daily, weekly or yearly.
+
+Daily
 ``
-{ day: "thu" }
+BlueMoon({ day: "current" }, { loop: 10 })
+``
+<br>
+This would return the next 10 days
 ``
 
 
+Weekly
+``
+BlueMoon( { day: "Mon" }, { loop: 5 })
+``
+The would return an array of 5 values with Monday this current week and the next 4 Mondays.
 
-#### startofweek
+
+Monthly
+``
+BlueMoon( { day: 1 }, { loop: 5 })
+``
+<br>
+This returns the first of the current month and the first of the next four months.
+``
+BlueMoon( { day: "monthend" }, { loop: -5 })
+``
+<br>
+Returns the month end of this month and the last four months.
+``
+BlueMoon( { day: "Sunday 3" }, { loop: 2 })
+``
+<br>
+Returns the 3rd Sunday of this month and the 3rd Sunday of the next two months.
+``
+
+
+Yearly
+``
+BlueMoon( { day: "Mon", week: 15 }, { loop: 2 })
+``
+<br>
+Returns Monday of the 15th week of this year, and same for next year.
+``
+BlueMoon( { day: 10, month: 4 }, { loop: 2 })
+``
+<br>
+Returns 10th of April of this year and next year.
+``
+BlueMoon( { day: "Sunday 3", month: 4}, { loop: 2 })
+``
+<br>
+Returns 3rd Sunday of April of this year and next year.
+
+
+
+
+
+#### resultAsDateObject
+The default is to return a Blue Moon date object (which is an object with *day*, *month* and *year*). You can opt to return a Javascript Date.
+*Note* - If you return a Javascript date, it returns the date at the start of the day midnight ie 00:00:00 in your local time zone.
+
+
+
+#### startOfWeek
 To specify when the start of the week is. The default is 1 - Monday. Sunday is 0.
 
 ``
@@ -338,17 +391,6 @@ BlueMoon({ day: "Mon 1"}, { startofweek: 0 })
 Returns the first Monday of the month. The first week is the week that starts at Sunday.
 
 
-#### returnDate
-The default is to return a Javascript Date object, you can opt to return a Blue Moon date object which is year, month, date.
-*Note* - It returns the date at the start of the day midnight ie 00:00:00 in your local time zone. Use the Blue Moon date object and convert to another time zone if this is what you want.
-
-``
-BlueMoon({ day: "Mon 1"}, { returnDate: false })
-`` \
-This returns a Blue Moon date object like this:
-``
-Object { year: 2022, month: 10, day: 10 }
-``
 
 
 
