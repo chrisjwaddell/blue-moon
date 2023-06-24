@@ -320,6 +320,7 @@ Returns an array of dates of Mothers days for the last five years.
 Blue Moon categorizes the frequency based on the type of *day* value. The date can change daily, weekly or yearly.
 
 Daily
+<br>
 ``
 BlueMoon({ day: "current" }, { loop: 10 })
 ``
@@ -329,6 +330,7 @@ This would return the next 10 days
 
 
 Weekly
+<br>
 ``
 BlueMoon( { day: "Mon" }, { loop: 5 })
 ``
@@ -336,6 +338,7 @@ The would return an array of 5 values with Monday this current week and the next
 
 
 Monthly
+<br>
 ``
 BlueMoon( { day: 1 }, { loop: 5 })
 ``
@@ -355,6 +358,7 @@ Returns the 3rd Sunday of this month and the 3rd Sunday of the next two months.
 
 
 Yearly
+<br>
 ``
 BlueMoon( { day: "Mon", week: 15 }, { loop: 2 })
 ``

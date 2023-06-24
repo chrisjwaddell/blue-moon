@@ -10,7 +10,8 @@ export default [
 		output: [
 			{
 				file: "./dist/blue-moon.js",
-				format: "iife",
+				// format: "iife",
+				format: "umd",
 				name: "BlueMoon",
 			},
 		],

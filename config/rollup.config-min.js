@@ -8,7 +8,8 @@ export default [
 			{
 				file: "./dist/blue-moon-min.js",
 				// format: 'es'
-				format: "iife",
+				// format: "iife",
+				format: "umd",
 				name: "BlueMoon",
 				// format: 'esm'
 				// exports: "named",

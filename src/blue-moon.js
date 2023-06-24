@@ -1,3 +1,11 @@
+/** @license
+ *  ----------------------------------------------------------------------------
+ *  Blue Moon Date API - <https://github.com/chrisjwaddell/blue-moon>
+ *  Licensed under MIT
+ *  Copyright Chris Waddell
+ *  ----------------------------------------------------------------------------
+ */
+
 import {isObjectPlain, isObjectEmpty} from "./utils/01-objects"
 
 import {
