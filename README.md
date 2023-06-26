@@ -45,6 +45,11 @@ let reportEnd = BlueMoon( { day: "monthend" })
 
 <br>
 
+To use it in Node.js, place blue-moon.js in your directory and include:
+``
+const BlueMoon = require("./blue-moon")
+``
+
 
 ## How to use Blue Moon
 
