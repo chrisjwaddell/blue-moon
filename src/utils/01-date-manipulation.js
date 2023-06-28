@@ -6,12 +6,12 @@ function isYearValid(year, minyear, maxyear) {
 	let text = /^\d{4}$/
 	let y = Number(year)
 
-	if (y != 0) {
-		if (y != "" && !text.test(y)) {
+	if (y !== 0) {
+		if (y !== "" && !text.test(y)) {
 			return false
 		}
 
-		if (String(y).length != 4) return false
+		if (String(y).length !== 4) return false
 
 		if (minyear && maxyear) {
 			if (y < minyear || y > maxyear) {
