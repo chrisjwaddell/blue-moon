@@ -390,7 +390,6 @@ Returns 3rd Sunday of April of this year and next year.
 
 
 
-
 #### resultAsDateObject
 The default is to return a Blue Moon date object (which is an object with *day*, *month* and *year*). You can opt to return a Javascript Date.
 *Note* - If you return a Javascript date, it returns the date at the start of the day midnight ie 00:00:00 in your local time zone.
