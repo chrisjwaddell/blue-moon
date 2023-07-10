@@ -22,8 +22,7 @@ let endNextMonth = BlueMoon({ day: "monthend", month: "+1" })
 ```
 <br>
 
-
-It can be relative to the current date or a pivot date or an absolute date.
+It can be relative to the current date, a pivot date or an absolute date.
 
 <br>
 
@@ -33,9 +32,12 @@ Include it in your HTML file:
 
 `<script src="https://cdn.rawgit.com/chrisjwaddell/blue-moon/main/dist/blue-moon-min.js"></script>`
 
-Or download the file and include it in your project.
+Or download the file and include it in your Node project, place blue-moon.js in your directory and include:
+``
+const BlueMoon = require("./blue-moon")
+``
 
-To declare a start and end date for data to extract that spans the whole month, you can do this: \
+To declare a start and end date, you can do this: \
 ``
 let reportStart = BlueMoon( { day: 1 })
 `` \
@@ -44,11 +46,6 @@ let reportEnd = BlueMoon( { day: "monthend" })
 ``
 
 <br>
-
-To use it in Node.js, place blue-moon.js in your directory and include:
-``
-const BlueMoon = require("./blue-moon")
-``
 
 
 ## How to use Blue Moon
@@ -66,11 +63,11 @@ There are four main date settings: *day*, *week*, *month* and *year*.
 
 Each setting can be specific, relative or *current*.
 <br>
-relative - { day: "+1" } 
+relative - { day: "+1" }  // tomorrow
 <br>
-absolute - { day: 5, month: 3 } 
+absolute - { day: 5, month: 3 }   // 5th of March this year
 <br>
-current - { day: "current", month: "+1" }
+current - { day: "current", month: "+1" }   // one month from now
 
 The *day* property is mandatory. The other properties are optional.
 
@@ -104,7 +101,7 @@ This calculates one month from now no matter how many days in the current month.
 
 
 ##### Day of week
-Day of week can combinate with a Week number or a Month.
+Day of week can combine with a Week number or a Month.
 
 ``
 { day: "Mon" }
@@ -214,7 +211,7 @@ The difference with this is that if you enter
 Week 1 is the first of that month, and the start of the week probably is in the previous month. In this case, Monday would be the date of the previous month, something like 29th of the previous month. Using the *month* setting, you only get days in that month.
 
 ![Calendar](calendar.jpg)
-The picture above shows that `` {day: "Wed", week: 1, month: 6 }`` specifies Wednesday in week 1 of July. Week 1 being the week that the 1st is in. The result is Wesnesday in the previous month. ``Wednesday 1`` makes sure it's in July. ``Wed *1`` with the __*__ specifies full week but ``Wed 1`` and ``Wed *1`` give the same result. We can see that for Sunday, they are different. ``Sun *1`` is the first Sunday of a full week, which is the 9th of July.
+The picture above shows that `` {day: "Wed", week: 1, month: 6 }`` specifies Wednesday in week 1 of July. Week 1 being the week that the 1st is in. The result is Wednesday in the previous month. ``Wednesday 1`` makes sure it's in July. ``Wed *1`` with the __*__ specifies full week but ``Wed 1`` and ``Wed *1`` give the same result. We can see that for Sunday, they are different. ``Sun *1`` is the first Sunday of a full week, which is the 9th of July.
 
 
 #### Year
