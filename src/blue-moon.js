@@ -36,11 +36,11 @@ import {dateToDay, dayOfTheWeek} from "./utils/01-date-daysName"
 
 import {errorWarningString} from "./utils/05-debugging"
 
-function BlueMoon(datesettings, options) {
+function BlueMoon(datesettings) {
 	// ^INITIALIZE
-	let settings = options || {}
+	let settings = datesettings || {}
 	settings.pivotDate = settings.pivotDate ?? {}
-	settings.resultAsDateObject = settings.resultAsDateObject ?? true
+	settings.resultAsDateObject = settings.resultAsDateObject ?? false
 	settings.startOfWeek = settings.startOfWeek ?? 1
 
 	let today = new Date()
@@ -120,7 +120,7 @@ function BlueMoon(datesettings, options) {
 			settings
 		)
 
-		return settings.resultAsDateObject ? res : objToDate(res)
+		return settings.resultAsDateObject ? objToDate(res) : res
 	}
 
 	// ^ Loop setting
@@ -231,7 +231,7 @@ function BlueMoon(datesettings, options) {
 
 		let arrResult = []
 
-		if (settings.resultAsDateObject) {
+		if (!settings.resultAsDateObject) {
 			arrResult = arrLoop.map((cv) =>
 				dateDWMY(
 					dsCheck.D,
@@ -920,7 +920,17 @@ function BlueMoon(datesettings, options) {
 	// Which are both arguments from the main BlueMoon function
 	// return { warnings: "", errors: "", TypeErrors }
 	function datePropertiesAndChecks(dateObject, ds) {
-		const propertyList = ["day", "week", "month", "year"]
+		const propertyList = [
+			"day",
+			"week",
+			"month",
+			"year",
+			"pivotDate",
+			"resultAsDateObject",
+			"loop",
+			"startOfWeek",
+			"warnings",
+		]
 		let Dvt = {},
 			Wvt = {},
 			Mvt = {},
