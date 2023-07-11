@@ -42,6 +42,7 @@ function BlueMoon(datesettings) {
 	settings.pivotDate = settings.pivotDate ?? {}
 	settings.resultAsDateObject = settings.resultAsDateObject ?? false
 	settings.startOfWeek = settings.startOfWeek ?? 1
+	settings.warnings = settings.warnings ?? true
 
 	let today = new Date()
 
@@ -53,12 +54,14 @@ function BlueMoon(datesettings) {
 	const invalidDate = () => new Date("")
 
 	// errorMsg: boolean, if true, red, else blue
-	const showMsg = (msg, errorMsg) =>
-		console.log(
-			`%c` + (errorMsg ? "ERROR" : "WARNING") + ` - ${msg}`,
-			"color: " + (errorMsg ? "red" : "blue") + "; font-size: 16px"
-		)
-
+	const showMsg = (msg, errorMsg) => {
+		if ((settings.warnings && !errorMsg) || errorMsg) {
+			console.log(
+				`%c` + (errorMsg ? "ERROR" : "WARNING") + ` - ${msg}`,
+				"color: " + (errorMsg ? "red" : "blue") + "; font-size: 16px"
+			)
+		}
+	}
 	// ^RELATIVE DATE SETTINGS
 
 	// Pivot date
