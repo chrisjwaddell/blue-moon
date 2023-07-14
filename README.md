@@ -317,7 +317,6 @@ BlueMoon({ day: "+14" })
 ``
 <br>
 You cannot have any *week*, *month* or *year* settings. This wouldn't make sense. Relative day is a particular number of days ahead or behind today.
-You can however set *day* as *current*.
 
 You can mix and match if day is not relative, such as <br>
 ``
@@ -325,7 +324,7 @@ BlueMoon({ day: "current", month: "+1", year: "current"})
 ``
 <br>
 ``
-BlueMoon({ day: "Monday", week: 2, month: 6, year: "current"})
+BlueMoon({ day: "Monday", week: 2, year: "current"})
 ``
 <br>
 ``
@@ -342,7 +341,7 @@ There are four options:
 <br>
 * pivotdate - the date you start from
 * loop - you can loop forward or backwards, Blue Moon will return an array of dates in either the past or future
-* resultAsDateObject - By default, Blue Moon returns a date as an object in the format of *{ day: d, month: m, year: y }*
+* resultAsDateObject - Default is false. Setting *resultAsDateObject* to true will return a Javascript date type.
 * startOfWeek - the default is Monday.
 
 
@@ -368,13 +367,13 @@ This finds the first Sunday in March this year.
 
 #### loop
 This can be a useful feature returning an array of dates.
-It can move backwards and forwards in time to get previous or past dates. 
+It can move backwards and forwards in time to get past or future dates. 
 
 ``
 BlueMoon({ day: "Mon 1", pivotDate: {day: 1, month: 1}, loop: 12})
 ``
 <br>
-Blue Moon returns an array 12 dates, the first Monday of each month this year.
+Blue Moon returns an array of twelve dates, the first Monday of each month this year.
 
 
 ``
