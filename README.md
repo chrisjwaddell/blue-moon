@@ -55,11 +55,11 @@ There are four main date properties: *day*, *week*, *month* and *year*.
 
 Each setting can be specific, relative or *current*.
 <br>
-relative - BlueMoon({ day: "+1" }) // tomorrow
+relative - ``BlueMoon({ day: "+1" }) // tomorrow ``
 <br>
-absolute - BlueMoon({ day: 5, month: 3 })  // 5th of March this year
+absolute - ``BlueMoon({ day: 5, month: 3 })  // 5th of March this year  ``
 <br>
-current - BlueMoon({ day: "current", month: "+1" })   // one month from now
+current - ``BlueMoon({ day: "current", month: "+1" })   // one month from now ``
 
 The *day* property is mandatory. The other properties are optional.
 
@@ -194,18 +194,18 @@ BlueMoon({ day: "Tuesday", week: "+2" })
 <br>
 Tuesday in two weeks from now.
 
-<br>
+<br> 
 ``
 BlueMoon({ day: "Monday", week: "current" })
-``
-<br>
+`` 
+<br> 
 Monday of this week.
 
-<br>
+<br> 
 ``
 BlueMoon({ day: "Sun", week: 2 })
-``
-<br>
+`` 
+<br> 
 Sunday on week 2 of the year.
 It counts the first week that isn't full. 1/1 of that year is the first week even if that day is in the middle of the week.
 
