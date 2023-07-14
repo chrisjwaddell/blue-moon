@@ -192,8 +192,7 @@ is considered to be the Monday of the 18th week or the year.
 BlueMoon({ day: "Tuesday", week: "+2" })
 ``
 <br>
-Tuesday in two weeks from now.
-<br>
+Tuesday in two weeks from now. <br> 
 ``
 BlueMoon({ day: "Monday", week: "current" })
 `` 
