@@ -192,16 +192,15 @@ is considered to be the Monday of the 18th week or the year.
 BlueMoon({ day: "Tuesday", week: "+2" })
 ``
 <br>
-Tuesday in two weeks from now.
+Tuesday in two weeks from now. <br>
 
-<br> 
+
 ``
 BlueMoon({ day: "Monday", week: "current" })
 `` 
 <br> 
-Monday of this week.
+Monday of this week. <br>
 
-<br> 
 ``
 BlueMoon({ day: "Sun", week: 2 })
 `` 
@@ -220,21 +219,18 @@ If month is omitted, it assumed current month if other settings are specific val
 BlueMoon({ day: "Tuesday", week: 2, month: 6 })
 ``
 <br>
-Tuesday in the second week of June. This specific case may be the first Tuesday in June depending on when the first week of June starts.
+Tuesday in the second week of June. This specific case may be the first Tuesday in June depending on when the first week of June starts. <br>
 
-<br> 
 ``
 BlueMoon({ day: "Tuesday 2", month: 6 })
 `` 
-<br>
-This is the second Tuesday in June.
-
-
 <br> 
+This is the second Tuesday in June. <br>
+
 ``
 BlueMoon({ day: 15, month: 6, year: 2023 })
 `` 
-<br>
+<br> 
 The 15th of June, 2023.
 
 So we have four main options:
