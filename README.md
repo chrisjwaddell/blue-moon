@@ -1,6 +1,6 @@
 # Blue Moon Date API
 
-Blue Moon allows you to find dates based on day name, week number of the month or year, month, month-end and other date settings to return one specific date that matches your criteria. It can be in the past or future.
+Blue Moon allows you to create dates based on day name, day number, week, month, month-end and other date settings to return one specific date that matches your criteria. It can be in the past or future.
 
 ``
 BlueMoon({ day: "Sunday -1", month: 5 })
@@ -128,7 +128,21 @@ means Monday in two weeks. It will always give the Monday two weeks ahead of the
 Today is set like this.
 
 *"current"* can be put on *week*, *month* or *year*. *current* is a relative date type, it really means *"+0"*.
-If the current date is June 30, 2022 and you have `` { day: "current", month: 8 }``. This would return `` { year: 2022, month: 8, day: 30 }`` but when the date is 1st July, 2022, it would return ``{ day: 1, month: 8, year: 2022 } ``
+If the current date is June 30, 2022 and you have <br>
+``
+{ day: "current", month: 8 }
+``
+<br>
+This would return <br>
+``
+{ year: 2022, month: 8, day: 30 }
+``
+<br>
+but when the date is 1st July, 2022, it would return <br>
+``
+{ day: 1, month: 8, year: 2022 }
+``
+<br>
 
 
 ##### Relative day
@@ -136,12 +150,14 @@ For relative days, you cannot have any *week*, *month* or *year* settings.
 
 ``
 { day: "-90" }
-`` \
+``
+<br>
 90 days ago.
 
 ``
 { day: "+1" }
-`` \
+``
+<br>
 Tomorrow.
 
 *Note* - You must use quotes for relative values.
@@ -151,33 +167,49 @@ There are some handy options if you are specific about full week or part week.
 
 ``
 { day: "Sunday 3" }
-`` \
+``
+<br>
 The third Sunday of the current month.
 
 ``
 { day: "Wednesday -2", month: 10 }
-`` \
+``
+<br>
 The second last Wednesday of October each year.
 
 ``
 { day: "Wedesday *1" }
-`` \
+``
+<br>
 The first Wedesday of each month that falls on a full week inside of that month. If the first Wedesday starts on the 1st or 2nd, Monday is in the previous month and so this is not considered to be a full week so _Wednesday *1_ would be the week after.
 
 #### Week
 Week works in combination with *day*. *week* can be absolute, relative or the *current* week. *week* puts you in a seven day range.
-When week is an absolute number, it is the week number for the year.
-*{ day: "Mon", week: 18* is considered to be the Monday of the 18th week or the year.
-
-``{ day: "Tuesday", week: "+2" }`` \
-Tuesday in two weeks from now.
-
-``{ day: "Monday", week: "current" }`` \
-Monday of this week.
+When week is an absolute number, it is the week number for the year. <br>
+``
+{ day: "Mon", week: 18 }
+``
+<br>
+is considered to be the Monday of the 18th week or the year.
 
 ``
+{ day: "Tuesday", week: "+2" }
+``
+<br>
+Tuesday in two weeks from now.
+
+<br>
+``
+{ day: "Monday", week: "current" }
+``
+<br>
+Monday of this week.
+
+<br>
+``
 { day: "Sun", week: 2 }
-`` \
+``
+<br>
 Sunday on week 2 of the year.
 It counts the first week that isn't full. 1/1 of that year is the first week even if that day is in the middle of the week.
 
@@ -187,27 +219,46 @@ It counts the first week that isn't full. 1/1 of that year is the first week eve
 If month is omitted, it assumed current month if other settings are specific values.
 
 *day* and *week* work together and *day* can work with *month*.
-``{ day: "Tuesday", week: 2, month: 6 }`` \
+<br>
+``
+{ day: "Tuesday", week: 2, month: 6 }
+``
+<br>
 Tuesday in the second week of June. This specific case may be the first Tuesday in June depending on when the first week of June starts.
 
-``{ day: "Tuesday 2", month: 6 }`` \
+<br>
+``
+{ day: "Tuesday 2", month: 6 }
+``
+<br>
 This is the second Tuesday in June.
 
-``{ day: 15, month: 6, year: 2023 }`` \
+
+<br>
+``
+{ day: 15, month: 6, year: 2023 }
+``
+<br>
 The 15th of June, 2023.
 
-So we have four main options: \
-\<dayname\> \<occurrence number\> - Picks the day from the month. It counts the first day occurrence regardless of whether or not the first week overlapped into the previous week. eg ``{day: "Fri 2"`` \
-\<dayname\> -\<occurrence number\> - Picks the day that occurred in the month, the **last** being -1.  eg ``{day: "Sat -1"``\
-\<dayname\> *\<occurrence number\> - Picks the day from only **full weeks**. eg ``{day: "Fri *2"`` \
-\<dayname\> *-\<occurrence number\> - **Full week**, from the **last** week of the month. eg ``{day: "Sun *-2"``
+So we have four main options:
+\<dayname\> \<occurrence number\> - Picks the day from the month. It counts the first day occurrence regardless of whether or not the first week overlapped into the previous week. eg 
+``
+{ day: "Fri 2" }
+``
+<br>
+\<dayname\> -\<occurrence number\> - Picks the day that occurred in the month, the **last** being -1.  eg ``{ day: "Sat -1 }"`` <br>
+\<dayname\> *\<occurrence number\> - Picks the day from only **full weeks**. eg ``{ day: "Fri *2" }`` <br>
+\<dayname\> *-\<occurrence number\> - **Full week**, from the **last** week of the month. eg ``{ day: "Sun *-2" } `` <br>
 
 *Note*
-There is also: \
+There is also: <br>
 \<dayname\> \<week\>
 The difference with this is that if you enter
-``{ day: "Monday", week: 1 }
 ``
+{ day: "Monday", week: 1 }
+``
+<br>
 Week 1 is the first of that month, and the start of the week probably is in the previous month. In this case, Monday would be the date of the previous month, something like 29th of the previous month. Using the *month* setting, you only get days in that month.
 
 ![Calendar](calendar.jpg)
@@ -236,7 +287,11 @@ This returns the first of the current month of next year every time it's run.
 ``
 { day: "current", month: 1 }
 `` <br>
-If the date is 15th of March, 2024, this would return ``{ day: 15, month: 3, year: 2024 }
+If the date is 15th of March, 2024, this would return 
+``
+{ day: 15, month: 3, year: 2024 }
+``
+<br>
 
 
 If you leave out *month* or *year*, it defaults to *current*.<br>
@@ -252,7 +307,8 @@ This returns the first of the current month you are in, every time you run it, i
 
 ``
 { day: "Monday" }
-`` \
+``
+<br>
 This returns Monday of the current week. Day of the week is used in conjuction with *week*, if *week* is missing, it assumes ``week: current``
 
 
@@ -260,6 +316,7 @@ For *day*, if you set it as relative eg
 ``
 { day: "+14" }
 ``
+<br>
 You cannot have any *week*, *month* or *year* settings. This wouldn't make sense. Relative day is a particular number of days ahead or behind today.
 You can however set *day* as *current*.
 
