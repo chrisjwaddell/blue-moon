@@ -48,26 +48,18 @@ let reportEnd = BlueMoon( { day: "monthend" })
 <br>
 
 
-## How to use Blue Moon
-
-Blue Moon has two arguments:
-<br>
-
-*BlueMoon(datesettings, options)*
-
-
 ### Date Settings
 
-There are four main date settings: *day*, *week*, *month* and *year*.
+There are four main date properties: *day*, *week*, *month* and *year*.
 <br>
 
 Each setting can be specific, relative or *current*.
 <br>
-relative - { day: "+1" }  // tomorrow
+relative - BlueMoon({ day: "+1" }) // tomorrow
 <br>
-absolute - { day: 5, month: 3 }   // 5th of March this year
+absolute - BlueMoon({ day: 5, month: 3 })  // 5th of March this year
 <br>
-current - { day: "current", month: "+1" }   // one month from now
+current - BlueMoon({ day: "current", month: "+1" })   // one month from now
 
 The *day* property is mandatory. The other properties are optional.
 
@@ -78,12 +70,14 @@ The *day* property is mandatory.
 
 ##### Day of the month
 ``
-{ day: 5 }
+BlueMoon({ day: 5 })
 ``
 <br>
 Refers to the 5th of the current month.
 
-``{ day: 25, month: 3 }``
+``
+BlueMoon({ day: 25, month: 3 })
+``
 <br>
 Means 25th of March every year.
 
@@ -94,7 +88,7 @@ let reportMonthEnd = BlueMoon({ day: "monthend", month: 2 })
 This calculates the end of month, whether it's 29th of February or 28th in this case, or 30th or 31st for other months.
 
 ``
-{ day: "current", month: "+1" }
+BlueMoon({ day: "current", month: "+1" })
 ``
 <br>
 This calculates one month from now no matter how many days in the current month. If it's the 18th of February today, the result will be the 18th of March.
@@ -104,43 +98,45 @@ This calculates one month from now no matter how many days in the current month.
 Day of week can combine with a Week number or a Month.
 
 ``
-{ day: "Mon" }
+BlueMoon({ day: "Mon" })
 ``
 <br>
 means Monday of the current week. *week* is default *current* so it's equivalent to ``{ day: "Mon", week: "current" }``. When it goes into the next week, it's always Monday of the current week.
 
 ``
-{ day: "Monday", week: 2 }
+BlueMoon({ day: "Monday", week: 2 })
 `` \
 means Monday of the 2nd week of each month.
 
 ##### Relative day of the week
 ``
-{ day: "Monday", week: "+2" }
-`` \
+BlueMoon({ day: "Monday", week: "+2" })
+``
+<br>
 means Monday in two weeks. It will always give the Monday two weeks ahead of the current week.
 <br>
 *Note* - You must use quotes for relative values.
 
 ``
-{ day: "current" }
-`` \
+BlueMoon({ day: "current" })
+``
+<br>
 Today is set like this.
 
 *"current"* can be put on *week*, *month* or *year*. *current* is a relative date type, it really means *"+0"*.
 If the current date is June 30, 2022 and you have <br>
 ``
-{ day: "current", month: 8 }
+BlueMoon({ day: "current", month: 8 })
 ``
 <br>
 This would return <br>
 ``
-{ year: 2022, month: 8, day: 30 }
+BlueMoon({ year: 2022, month: 8, day: 30 })
 ``
 <br>
 but when the date is 1st July, 2022, it would return <br>
 ``
-{ day: 1, month: 8, year: 2022 }
+BlueMoon({ day: 1, month: 8, year: 2022 })
 ``
 <br>
 
@@ -149,13 +145,13 @@ but when the date is 1st July, 2022, it would return <br>
 For relative days, you cannot have any *week*, *month* or *year* settings.
 
 ``
-{ day: "-90" }
+BlueMoon({ day: "-90" })
 ``
 <br>
 90 days ago.
 
 ``
-{ day: "+1" }
+BlueMoon({ day: "+1" })
 ``
 <br>
 Tomorrow.
@@ -166,19 +162,19 @@ Tomorrow.
 There are some handy options if you are specific about full week or part week.
 
 ``
-{ day: "Sunday 3" }
+BlueMoon({ day: "Sunday 3" })
 ``
 <br>
 The third Sunday of the current month.
 
 ``
-{ day: "Wednesday -2", month: 10 }
+BlueMoon({ day: "Wednesday -2", month: 10 })
 ``
 <br>
 The second last Wednesday of October each year.
 
 ``
-{ day: "Wedesday *1" }
+BlueMoon({ day: "Wedesday *1" })
 ``
 <br>
 The first Wedesday of each month that falls on a full week inside of that month. If the first Wedesday starts on the 1st or 2nd, Monday is in the previous month and so this is not considered to be a full week so _Wednesday *1_ would be the week after.
@@ -187,27 +183,27 @@ The first Wedesday of each month that falls on a full week inside of that month.
 Week works in combination with *day*. *week* can be absolute, relative or the *current* week. *week* puts you in a seven day range.
 When week is an absolute number, it is the week number for the year. <br>
 ``
-{ day: "Mon", week: 18 }
+BlueMoon({ day: "Mon", week: 18 })
 ``
 <br>
 is considered to be the Monday of the 18th week or the year.
 
 ``
-{ day: "Tuesday", week: "+2" }
+BlueMoon({ day: "Tuesday", week: "+2" })
 ``
 <br>
 Tuesday in two weeks from now.
 
 <br>
 ``
-{ day: "Monday", week: "current" }
+BlueMoon({ day: "Monday", week: "current" })
 ``
 <br>
 Monday of this week.
 
 <br>
 ``
-{ day: "Sun", week: 2 }
+BlueMoon({ day: "Sun", week: 2 })
 ``
 <br>
 Sunday on week 2 of the year.
@@ -221,42 +217,42 @@ If month is omitted, it assumed current month if other settings are specific val
 *day* and *week* work together and *day* can work with *month*.
 <br>
 ``
-{ day: "Tuesday", week: 2, month: 6 }
+BlueMoon({ day: "Tuesday", week: 2, month: 6 })
 ``
 <br>
 Tuesday in the second week of June. This specific case may be the first Tuesday in June depending on when the first week of June starts.
 
-<br>
+<br> 
 ``
-{ day: "Tuesday 2", month: 6 }
-``
+BlueMoon({ day: "Tuesday 2", month: 6 })
+`` 
 <br>
 This is the second Tuesday in June.
 
 
-<br>
+<br> 
 ``
-{ day: 15, month: 6, year: 2023 }
-``
+BlueMoon({ day: 15, month: 6, year: 2023 })
+`` 
 <br>
 The 15th of June, 2023.
 
 So we have four main options:
 \<dayname\> \<occurrence number\> - Picks the day from the month. It counts the first day occurrence regardless of whether or not the first week overlapped into the previous week. eg 
 ``
-{ day: "Fri 2" }
+BlueMoon({ day: "Fri 2" })
 ``
 <br>
-\<dayname\> -\<occurrence number\> - Picks the day that occurred in the month, the **last** being -1.  eg ``{ day: "Sat -1 }"`` <br>
-\<dayname\> *\<occurrence number\> - Picks the day from only **full weeks**. eg ``{ day: "Fri *2" }`` <br>
-\<dayname\> *-\<occurrence number\> - **Full week**, from the **last** week of the month. eg ``{ day: "Sun *-2" } `` <br>
+\<dayname\> -\<occurrence number\> - Picks the day that occurred in the month, the **last** being -1.  eg ``BlueMoon({ day: "Sat -1" })`` <br>
+\<dayname\> *\<occurrence number\> - Picks the day from only **full weeks**. eg ``BlueMoon({ day: "Fri *2" })`` <br>
+\<dayname\> *-\<occurrence number\> - **Full week**, from the **last** week of the month. eg ``BlueMoon({ day: "Sun *-2" }) `` <br>
 
 *Note*
 There is also: <br>
 \<dayname\> \<week\>
 The difference with this is that if you enter
 ``
-{ day: "Monday", week: 1 }
+BlueMoon({ day: "Monday", week: 1 })
 ``
 <br>
 Week 1 is the first of that month, and the start of the week probably is in the previous month. In this case, Monday would be the date of the previous month, something like 29th of the previous month. Using the *month* setting, you only get days in that month.
@@ -270,13 +266,13 @@ Year must be either a four digit specific year eg *2024*, a relative number *+1*
 
 ##### Specific year
 ``
-{ day: 1, year: "2023" }
+BlueMoon({ day: 1, year: "2023" })
 `` <br>
 This returns the first of the current month in 2023 every time it's run.
 
 ### Relative year
 ``
-{ day: 1, year: "+1" }
+BlueMoon({ day: 1, year: "+1" })
 `` <br>
 This returns the first of the current month of next year every time it's run.
 *Note* - You must use quotes for relative values.
@@ -285,36 +281,39 @@ This returns the first of the current month of next year every time it's run.
 *current* is like a relative year, like *+0*. *day*, *week*, *month* or *year* can be set as *current*.
 
 ``
-{ day: "current", month: 1 }
+BlueMoon({ day: "current", month: 1 })
 `` <br>
 If the date is 15th of March, 2024, this would return 
 ``
-{ day: 15, month: 3, year: 2024 }
+BlueMoon({ day: 15, month: 3, year: 2024 })
 ``
 <br>
 
 
 If you leave out *month* or *year*, it defaults to *current*.<br>
 ``
-{ day: 1 }
-`` <br>
+BlueMoon({ day: 1 })
+``
+<br>
 is the same as <br>
 ``
-{ day: 1, month: "current", year: "current" }
+BlueMoon({ day: 1, month: "current", year: "current" })
 ``
 <br>
 This returns the first of the current month you are in, every time you run it, it will return the first of that month of the current year you are in.
 
 ``
-{ day: "Monday" }
+BlueMoon({ day: "Monday" })
 ``
 <br>
-This returns Monday of the current week. Day of the week is used in conjuction with *week*, if *week* is missing, it assumes ``week: current``
+This returns Monday of the current week. Day of the week is used in conjuction with *week*, if *week* is missing, it assumes 
+``week: current``
+
 
 
 For *day*, if you set it as relative eg
 ``
-{ day: "+14" }
+BlueMoon({ day: "+14" })
 ``
 <br>
 You cannot have any *week*, *month* or *year* settings. This wouldn't make sense. Relative day is a particular number of days ahead or behind today.
@@ -322,15 +321,15 @@ You can however set *day* as *current*.
 
 You can mix and match if day is not relative, such as <br>
 ``
-{ day: "current", month: "+1", year: "current"}
+BlueMoon({ day: "current", month: "+1", year: "current"})
 ``
 <br>
 ``
-{ day: "Monday", week: 2, month: 6, year: "current"}
+BlueMoon({ day: "Monday", week: 2, month: 6, year: "current"})
 ``
 <br>
 ``
-{ day: 15, month: "+1", year: "current"}
+BlueMoon({ day: 15, month: "+1", year: "current"})
 ``
 
 
@@ -355,13 +354,13 @@ It must be an object that represents a specific date with *day*, *month* and *ye
 You could set the pivot date as:
 <br>
 ``
-{ day: "Sunday 1", month: 3 }, { day: 1, month: 1, year: 2000 }
+BlueMoon({ day: "Sunday 1", month: 3, pivotDate: { day: 1, month: 1, year: 2000 } } )
 ``
 <br>
 This finds the first Sunday in March 2000. Without pivot date, and with *year* omitted, it assumed ``year: "current"`` to return the first Sunday in March for this year.
 <br>
 ``
-{ day: "Sunday 1", month: 3 }
+BlueMoon({ day: "Sunday 1", month: 3 })
 ``
 <br>
 This finds the first Sunday in March this year.
@@ -372,14 +371,15 @@ This can be a useful feature returning an array of dates.
 It can move backwards and forwards in time to get previous or past dates. 
 
 ``
-BlueMoon({ day: "Mon 1"}, {pivotDate: {day: 1, month: 1}, loop: 12})
+BlueMoon({ day: "Mon 1", pivotDate: {day: 1, month: 1}, loop: 12})
 ``
 <br>
 Blue Moon returns an array 12 dates, the first Monday of each month this year.
 
 
 ``
-let next5MothersDays = BlueMoon({ day: "Sunday 2", month: 5}, { loop: 5}) ``
+let next5MothersDays = BlueMoon({ day: "Sunday 2", month: 5}, { loop: 5})
+``
 <br>
 Returns an array of dates of Mothers days for the next five years.
 
@@ -388,7 +388,7 @@ Blue Moon categorizes the frequency based on the type of *day* value. The date c
 Daily
 <br>
 ``
-BlueMoon({ day: "current" }, { loop: 10 })
+BlueMoon({ day: "current" loop: 10 })
 ``
 <br>
 This would return the next 10 days
@@ -398,26 +398,27 @@ This would return the next 10 days
 Weekly
 <br>
 ``
-BlueMoon( { day: "Mon" }, { loop: 5 })
-`` <br>
+BlueMoon( { day: "Mon", loop: 5 })
+``
+<br>
 The would return an array of 5 values with Monday this current week and the next 4 Mondays.
 
 
 Monthly
 <br>
 ``
-BlueMoon( { day: 1 }, { loop: 5 })
+BlueMoon( { day: 1, loop: 5 })
 ``
 <br>
 This returns the first of the current month and the first of the next four months. <br>
 ``
-BlueMoon( { day: "monthend" }, { loop: -5 })
+BlueMoon( { day: "monthend", loop: -5 })
 ``
 <br>
 Returns the month end of this month and the last four months.
 <br>
 ``
-BlueMoon( { day: "Sunday 3" }, { loop: 2 })
+BlueMoon( { day: "Sunday 3", loop: 2 })
 ``
 <br>
 Returns the 3rd Sunday of this month and the 3rd Sunday of the next two months.
@@ -427,23 +428,22 @@ Returns the 3rd Sunday of this month and the 3rd Sunday of the next two months.
 Yearly
 <br>
 ``
-BlueMoon( { day: "Mon", week: 15 }, { loop: 2 })
+BlueMoon( { day: "Mon", week: 15, loop: 2 })
 ``
 <br>
 Returns Monday of the 15th week of this year, and same for next year.
 <br>
 ``
-BlueMoon( { day: 10, month: 4 }, { loop: 2 })
+BlueMoon( { day: 10, month: 4, loop: 2 })
 ``
 <br>
 Returns 10th of April of this year and next year.
 <br>
 ``
-BlueMoon( { day: "Sunday 3", month: 4}, { loop: 2 })
+BlueMoon( { day: "Sunday 3", month: 4, loop: 2 })
 ``
 <br>
 Returns 3rd Sunday of April of this year and next year.
-
 
 
 
@@ -452,7 +452,7 @@ The default is to return a Blue Moon date object (which is an object with *day*,
 *Note* - If you return a Javascript date, it returns the date at the start of the day midnight ie 00:00:00 in your local time zone.
 
 ``
-const intIndependenceDay = BlueMoon( { day: 4, month: 7}, { resultAsDateObject: true, loop: 5 })
+const intIndependenceDay = BlueMoon( { day: 4, month: 7, resultAsDateObject: true, loop: 5 })
 ``
 <br>
 This gives you the next five Independence Days as a javascript date.
@@ -462,7 +462,7 @@ This gives you the next five Independence Days as a javascript date.
 To specify when the start of the week is. The default is 1 - Monday. Sunday is 0.
 
 ``
-BlueMoon({ day: "Mon 1"}, { startOfWeek: 0 })
+BlueMoon({ day: "Mon 1", startOfWeek: 0 })
 ``
 <br>
 Returns the first Monday of the month. The first week is the week that starts at Sunday.
