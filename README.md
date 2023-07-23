@@ -461,6 +461,14 @@ BlueMoon({ day: "Mon 1", startOfWeek: 0 })
 Returns the first Monday of the month. The first week is the week that starts at Sunday.
 
 
+#### warnings
+Turn off warnings in the console. The default is true. 
+
+``
+BlueMoon({ day: 31 })
+``
+<br>
+You will get a warning with this setting because next month may return 
 
 
 
