@@ -1,4 +1,4 @@
-const DAY_MS = 86400000
+const DAY_MS = 86_400_000
 
 // Accepts 4 digit years.
 // Min and max values optional

@@ -12,7 +12,24 @@
             background-color: #ffffff;
             margin: 0;
         }
+
+        .modal {
+            display: block;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            translate: transform(-50%, -50%);
+            border-radius: 10px;
+            z-index: 10;
+        }
     </style>
+
+    <dialog data-modal class="modal">
+        <p>Test dialog</p>
+        <button>Cancel</button>
+    </dialog>
+
+    <button>OK</button>
 </head>
 
 <body>
