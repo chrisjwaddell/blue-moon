@@ -15,7 +15,6 @@ function isYearValid(year, minyear, maxyear) {
 
 		if (minyear && maxyear) {
 			if (y < minyear || y > maxyear) {
-				console.log(`Year should be in range ${minyear} to ${maxyear}`)
 				return false
 			}
 		}
@@ -26,6 +25,8 @@ function isYearValid(year, minyear, maxyear) {
 	}
 }
 
+// if the year is divisible by 100 and not divisible by 400, leap year is skipped
+// Years 1700, 1800, and 1900 were not leap years. 2100 will not be a leap year
 function isLeapYear(year) {
 	return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0
 }
@@ -57,10 +58,18 @@ function daysInYear(year) {
 	return 365 + (isLeapYear(year) ? 1 : 0)
 }
 
-// changeDay uses UTC to set and get the day, month and year so that no
-// timezone rules can change the time. UTC is a time standard.
+// changeDay takes date from your local timezone and converts to UTC
+// Given a date object eg {year: 2022, month: 12, day: 1 },
 // In dateobj, month 1 is January
-// 12 midday is used just to be on the safe side
+// ms is a number of milliseconds to change the date object by
+
+// It increases (or decreases) days from UTC so that timezone rule
+// changes don't affect it.
+// Since timezone rules adjust usually by 1/2 hr, 1 hr, or 2 hrs usually
+// changeDay granularity is to the day so this will not be affected
+// by hour adjustments
+// The default time is 12 midday used just to be on the safe side
+// UTC is a time standard.
 function changeDay(dateobj, ms) {
 	let d
 	if (Object.prototype.toString.call(dateobj) !== "[object Object]") {
@@ -157,22 +166,7 @@ function changeYear(dateobj, years) {
 	}
 }
 
-function nextDayName(daynumberfrom, daynumberto, forward = true) {
-	if (forward) {
-		if (daynumberfrom > daynumberto) {
-			return 7 - daynumberfrom + daynumberto
-		} else {
-			return daynumberto - daynumberfrom
-		}
-	} else {
-		if (daynumberfrom >= daynumberto) {
-			return daynumberfrom - daynumberto
-		} else {
-			return 7 - daynumberfrom + daynumberto
-		}
-	}
-}
-
+// moving forward or back a few days
 function sameWeekCountDays(daynumberfrom, daynumberto, startofweek = 1) {
 	if (daynumberfrom === daynumberto) {
 		return 0
@@ -196,6 +190,5 @@ export {
 	changeDay,
 	changeMonth,
 	changeYear,
-	nextDayName,
 	sameWeekCountDays,
 }
