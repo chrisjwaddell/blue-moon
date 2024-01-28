@@ -6,7 +6,7 @@
  *  ----------------------------------------------------------------------------
  */
 
-import {isObjectPlain, isObjectEmpty} from "./utils/01-objects"
+import {isObjectPlain, isObjectEmpty} from "./utils/01-object.js"
 
 import {
 	daysNameList,
@@ -30,7 +30,7 @@ import {
 	isNumberSign,
 	isNumberSigned,
 	getNumbers,
-} from "./utils/01-numbers"
+} from "./utils/01-number.js"
 
 import {dateToDay, dayOfTheWeek} from "./utils/01-date-daysName"
 

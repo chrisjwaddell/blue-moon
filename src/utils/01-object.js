@@ -8,22 +8,20 @@
 // which are all technically objects
 
 function isObjectPlain(obj) {
-    return obj === null ? false :
-        obj === undefined ? false :
-        Object.prototype.toString.call(obj) === "[object Object]"
+	return obj === null
+		? false
+		: obj === undefined
+		? false
+		: Object.prototype.toString.call(obj) === "[object Object]"
 }
 
 // For earlier versions of IE, Object.prototype.toString returns "[object Object]" for null and undefined so those checks are included
 
-
 function isObjectEmpty(value) {
-    return (
-        Object.prototype.toString.call(value) === '[object Object]' &&
-        JSON.stringify(value) === '{}'
-    );
+	return (
+		Object.prototype.toString.call(value) === "[object Object]" &&
+		JSON.stringify(value) === "{}"
+	)
 }
 
-export {
-    isObjectPlain,
-    isObjectEmpty
-}
+export {isObjectPlain, isObjectEmpty}
