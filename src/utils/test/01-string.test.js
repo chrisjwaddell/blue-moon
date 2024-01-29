@@ -1,4 +1,4 @@
-import {getCharacters} from "../01-object"
+import {getCharacters} from "../01-string"
 
 describe("getCharacters tests", () => {
 	test("getCharacters('abc2314def')", () => {
