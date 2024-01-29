@@ -889,30 +889,48 @@ function BlueMoon(datesettings) {
 		fullWeek = false,
 		startOfWeek = 1
 	) {
-		let cur = dayOfTheWeek(1, month, year)
-
-		let moveDays = sameWeekFromTo(cur, destDayNumber, startOfWeek)
+		let dayFinal
+		let moveDays = 0
 		let firstOccurrence = 0
 
-		if (fullWeek) {
-			let startOfFirstFullWeek = sameWeekFromTo(
-				cur,
-				startOfWeek,
+		if (occurrenceOfDay > 0) {
+			let cur = dayOfTheWeek(1, month, year)
+
+			moveDays = sameWeekFromTo(cur, destDayNumber, startOfWeek)
+			firstOccurrence = 0
+
+			if (fullWeek) {
+				let startOfFirstFullWeek = sameWeekFromTo(
+					cur,
+					startOfWeek,
+					startOfWeek
+				)
+				startOfFirstFullWeek =
+					startOfFirstFullWeek === 0
+						? 0
+						: 7 + sameWeekFromTo(cur, startOfWeek, startOfWeek)
+
+				firstOccurrence =
+					startOfFirstFullWeek +
+					sameWeekFromTo(startOfWeek, destDayNumber, startOfWeek)
+			} else {
+				firstOccurrence = moveDays < 0 ? moveDays + 7 : moveDays
+			}
+
+			dayFinal = firstOccurrence + 7 * (occurrenceOfDay - 1) + 1
+		} else if (occurrenceOfDay < 0) {
+			let lastDay = daysInMonth(month, year)
+
+			moveDays = sameWeekCountDays(
+				dayOfTheWeek(lastDay, month, year),
+				destDayNumber,
 				startOfWeek
 			)
-			startOfFirstFullWeek =
-				startOfFirstFullWeek === 0
-					? 0
-					: 7 + sameWeekFromTo(cur, startOfWeek, startOfWeek)
+			firstOccurrence = moveDays > 0 ? moveDays - 7 : moveDays
 
-			firstOccurrence =
-				startOfFirstFullWeek +
-				sameWeekFromTo(startOfWeek, destDayNumber, startOfWeek)
-		} else {
-			firstOccurrence = moveDays < 0 ? moveDays + 7 : moveDays
+			dayFinal =
+				lastDay + firstOccurrence - (Math.abs(occurrenceOfDay) - 1) * 7
 		}
-
-		let dayFinal = firstOccurrence + 7 * (occurrenceOfDay - 1) + 1
 
 		return dayFinal > daysInMonth(month, year)
 			? invalidDate()

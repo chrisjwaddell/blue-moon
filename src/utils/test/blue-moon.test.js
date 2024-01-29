@@ -1355,6 +1355,22 @@ describe("day: 'Wednesday -2'", () => {
 	})
 
 	test("", () => {
+		expect(BlueMoon({day: "Wednesday -2", month: 1, year: 2024})).toEqual({
+			day: 24,
+			month: 1,
+			year: 2024,
+		})
+	})
+
+	test("", () => {
+		expect(BlueMoon({day: "Wednesday -2", month: 5, year: 2024})).toEqual({
+			day: 22,
+			month: 5,
+			year: 2024,
+		})
+	})
+
+	test("", () => {
 		expect(BlueMoon({day: "Wednesday -2", month: 1, year: 2030})).toEqual({
 			day: 23,
 			month: 1,
