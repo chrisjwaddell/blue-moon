@@ -1,7 +1,4 @@
 import {terser} from "rollup-plugin-terser"
-// import {
-//     terser
-// } from 'rollup-plugin-terser';
 import terserOptions from "./non-min"
 
 export default [
@@ -10,7 +7,6 @@ export default [
 		output: [
 			{
 				file: "./dist/blue-moon.js",
-				// format: "iife",
 				format: "umd",
 				name: "BlueMoon",
 			},

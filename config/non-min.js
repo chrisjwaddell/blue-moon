@@ -4,6 +4,5 @@ export default {
 	mangle: false,
 	format: {
 		comments: /^\**!|@preserve|@license|@cc_on/i,
-		// comments: /\s*\*./,
 	},
 }
