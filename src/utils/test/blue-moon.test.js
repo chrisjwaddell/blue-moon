@@ -1450,3 +1450,214 @@ describe("day: 'Thursday *1'", () => {
 		})
 	})
 })
+
+// *******************************************************************************
+// *******************************************************************************
+
+// PIVOTDATE
+
+describe("pivotDate tests", () => {
+	test("", () => {
+		expect(
+			BlueMoon({day: 1, pivotDate: {day: 1, month: 1, year: 2010}})
+		).toEqual({
+			day: 1,
+			month: 1,
+			year: 2010,
+		})
+	})
+
+	test("", () => {
+		expect(
+			BlueMoon({
+				day: "Tue *2",
+				month: 1,
+				pivotDate: {day: 1, month: 1, year: 2010},
+			})
+		).toEqual({
+			day: 12,
+			month: 1,
+			year: 2010,
+		})
+	})
+
+	test("", () => {
+		expect(
+			BlueMoon({
+				day: "Thursday *1",
+				month: 5,
+				pivotDate: {day: 1, month: 1, year: 2010},
+			})
+		).toEqual({
+			day: 6,
+			month: 5,
+			year: 2010,
+		})
+	})
+
+	test("", () => {
+		expect(
+			BlueMoon({
+				day: "+1",
+				pivotDate: {day: 1, month: 1, year: 2010},
+			})
+		).toEqual({
+			day: 2,
+			month: 1,
+			year: 2010,
+		})
+	})
+
+	test("", () => {
+		expect(
+			BlueMoon({
+				day: 1,
+				month: 4,
+				pivotDate: {day: 1, month: 1, year: 2010},
+			})
+		).toEqual({
+			day: 1,
+			month: 4,
+			year: 2010,
+		})
+	})
+
+	//-------
+	test("", () => {
+		expect(
+			BlueMoon({day: 1, pivotDate: {day: 20, month: 6, year: 2022}})
+		).toEqual({
+			day: 1,
+			month: 6,
+			year: 2022,
+		})
+	})
+
+	test("", () => {
+		expect(
+			BlueMoon({
+				day: "Tue *2",
+				pivotDate: {day: 20, month: 6, year: 2022},
+			})
+		).toEqual({
+			day: 14,
+			month: 6,
+			year: 2022,
+		})
+	})
+
+	test("", () => {
+		expect(
+			BlueMoon({
+				day: "Tue *2",
+				month: 1,
+				pivotDate: {day: 20, month: 6, year: 2022},
+			})
+		).toEqual({
+			day: 11,
+			month: 1,
+			year: 2022,
+		})
+	})
+
+	test("", () => {
+		expect(
+			BlueMoon({
+				day: "Thursday *1",
+				month: 5,
+				pivotDate: {day: 20, month: 6, year: 2022},
+			})
+		).toEqual({
+			day: 5,
+			month: 5,
+			year: 2022,
+		})
+	})
+
+	test("", () => {
+		expect(
+			BlueMoon({
+				day: "+1",
+				pivotDate: {day: 20, month: 6, year: 2022},
+			})
+		).toEqual({
+			day: 21,
+			month: 6,
+			year: 2022,
+		})
+	})
+
+	test("", () => {
+		expect(
+			BlueMoon({
+				day: 1,
+				month: 4,
+				pivotDate: {day: 20, month: 6, year: 2022},
+			})
+		).toEqual({
+			day: 1,
+			month: 4,
+			year: 2022,
+		})
+	})
+})
+
+
+// *******************************************************************************
+// *******************************************************************************
+
+// LOOP
+
+describe("loop tests", () => {
+	test("", () => {
+		expect(
+			BlueMoon({day: 1, loop: 12 } )
+		).toEqual([
+{year: 2024, month: 1, day: 1}
+{year: 2024, month: 2, day: 1}
+{year: 2024, month: 3, day: 1}
+{year: 2024, month: 4, day: 1}
+{year: 2024, month: 5, day: 1}
+{year: 2024, month: 6, day: 1}
+{year: 2024, month: 7, day: 1}
+{year: 2024, month: 8, day: 1}
+{year: 2024, month: 9, day: 1}
+{year: 2024, month: 10, day: 1}
+{year: 2024, month: 11, day: 1}
+{year: 2024, month: 12, day: 1}
+        ])
+	})
+
+
+	test("", () => {
+		expect(
+			BlueMoon( { day: "Sunday 2", pivotDate: { day: 1, month: 1, year: 2024 }, loop: 24 } )
+		).toEqual([
+{day: 14, month: 1, year: 2024},
+{day: 11, month: 2, year: 2024},
+{day: 10, month: 3, year: 2024},
+{day: 14, month: 4, year: 2024},
+{day: 12, month: 5, year: 2024},
+{day: 9, month: 6, year: 2024},
+{day: 14, month: 7, year: 2024},
+{day: 11, month: 8, year: 2024},
+{day: 8, month: 9, year: 2024},
+{day: 13, month: 10, year: 2024},
+{day: 10, month: 11, year: 2024},
+{day: 8, month: 12, year: 2024},
+{day: 12, month: 1, year: 2025},
+{day: 9, month: 2, year: 2025},
+{day: 9, month: 3, year: 2025},
+{day: 13, month: 4, year: 2025},
+{day: 11, month: 5, year: 2025},
+{day: 8, month: 6, year: 2025},
+{day: 13, month: 7, year: 2025},
+{day: 10, month: 8, year: 2025},
+{day: 14, month: 9, year: 2025},
+{day: 12, month: 10, year: 2025},
+{day: 9, month: 11, year: 2025},
+{day: 14, month: 12, year: 2025}
+        ])
+	})
+
+})
