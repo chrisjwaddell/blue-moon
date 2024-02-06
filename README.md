@@ -63,7 +63,6 @@ current - ``BlueMoon({ day: "current", month: "+1" })   // one month from now ``
 
 The *day* property is mandatory. The other properties are optional.
 
-*Note* - ``{ day: 1 }`` is the same as ``{ day: "+1" }``.
 
 
 #### Day
@@ -159,7 +158,10 @@ BlueMoon({ day: "+1" })
 <br>
 Tomorrow.
 
-*Note* - You must use quotes for relative values.
+*Note* - You must use quotes for relative values. Relative dates have a "+" or "-". <br>
+``{ day: "+1" }`` is tomorrow but ``{ day: +1 }`` is the first day of the current month.
+``{ day: 2 }`` is the same as ``{ day: "2" }``
+
 
 ##### Relative day of the month
 There are some handy options if you are specific about full week or part week.
@@ -336,10 +338,11 @@ BlueMoon({ day: 15, month: "+1", year: "current"})
 
 There are four options:
 <br>
-* pivotdate - the date you start from
+* pivotDate - the date you start from
 * loop - you can loop forward or backwards, Blue Moon will return an array of dates in either the past or future
 * resultAsDateObject - Default is false. Setting *resultAsDateObject* to true will return a Javascript date type.
 * startOfWeek - the default is Monday.
+* warnings - warnings in the console. It warns you when you are at a date over 28 and want to increase the date by one month and the next month may not have as many days in that month.
 
 
 #### Pivot date
@@ -452,6 +455,7 @@ const intIndependenceDay = BlueMoon( { day: 4, month: 7, resultAsDateObject: tru
 ``
 <br>
 This gives you the next five Independence Days as a javascript date.
+
 
 
 #### startOfWeek
