@@ -158,7 +158,7 @@ BlueMoon({ day: "+1" })
 <br>
 Tomorrow.
 
-*Note* - You must use quotes for relative values. Relative dates have a "+" or "-". <br>
+*Note* - For relative days, you must use quotes and either "+" or "-". <br>
 ``{ day: "+1" }`` is tomorrow but ``{ day: +1 }`` is the first day of the current month.
 ``{ day: 2 }`` is the same as ``{ day: "2" }``
 
