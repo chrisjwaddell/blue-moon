@@ -37,12 +37,12 @@ Or download the file and include it in your Node project, place blue-moon.js in 
 const BlueMoon = require("./blue-moon")
 ``
 
-To declare a start and end date, you can do this: \
+To declare a start and end date that spans the start of the year to the end of the year, you can do this: \
 ``
-let reportStart = BlueMoon( { day: 1 })
+let reportStart = BlueMoon( { day: 1, month: 1 })
 `` \
 ``
-let reportEnd = BlueMoon( { day: "monthend" })
+let reportEnd = BlueMoon( { day: "monthend", month: 12 })
 ``
 
 <br>
@@ -62,6 +62,9 @@ absolute - ``BlueMoon({ day: 5, month: 3 })  // 5th of March this year  ``
 current - ``BlueMoon({ day: "current", month: "+1" })   // one month from now ``
 
 The *day* property is mandatory. The other properties are optional.
+
+*Note* - ``{ day: 1 }`` is the same as ``{ day: "+1" }``.
+
 
 #### Day
 Day can be a number such as "15", meaning the 15th of the month, it can be "+5", meaning 5 days in the future, it can be a specific dayname such as "Wednesday", it can be a dayname and week such as "Wednesday 1" or it can be "current". It can be a specific day of the month such as "Monday 2" meaning the second Monday of each month.
@@ -241,10 +244,10 @@ BlueMoon({ day: "Fri 2" })
 \<dayname\> *\<occurrence number\> - Picks the day from only **full weeks**. eg ``BlueMoon({ day: "Fri *2" })`` <br>
 \<dayname\> *-\<occurrence number\> - **Full week**, from the **last** week of the month. eg ``BlueMoon({ day: "Sun *-2" }) `` <br>
 
-*Note*
-There is also: <br>
+*Note* - There is also: <br>
 \<dayname\> \<week\>
-The difference with this is that if you enter
+<br>
+The difference with this is that if you enter <br>
 ``
 BlueMoon({ day: "Monday", week: 1 })
 ``
@@ -415,7 +418,7 @@ BlueMoon( { day: "Sunday 3", loop: 2 })
 ``
 <br>
 Returns the 3rd Sunday of this month and the 3rd Sunday of the next two months.
-``
+
 
 
 Yearly
