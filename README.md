@@ -14,11 +14,11 @@ Blue Moon is useful for setting dates for reports or generally finding specific 
 BlueMoon is very verbose for getting specific dates for things like reports. eg 
 <br>
 ```
-let startThisMonth = BlueMoon({ day: 1 })
-let endThisMonth = BlueMoon({ day: "monthend" })
+const startThisMonth = BlueMoon({ day: 1 })
+const endThisMonth = BlueMoon({ day: "monthend" })
 
-let startNextMonth = BlueMoon({ day: 1, month: "+1" })
-let endNextMonth = BlueMoon({ day: "monthend", month: "+1" })
+const startNextMonth = BlueMoon({ day: 1, month: "+1" })
+const endNextMonth = BlueMoon({ day: "monthend", month: "+1" })
 ```
 <br>
 
@@ -39,10 +39,10 @@ const BlueMoon = require("./blue-moon")
 
 To declare a start and end date that spans the start of the year to the end of the year, you can do this: \
 ``
-let reportStart = BlueMoon( { day: 1, month: 1 })
+const reportStart = BlueMoon( { day: 1, month: 1 })
 `` \
 ``
-let reportEnd = BlueMoon( { day: "monthend", month: 12 })
+const reportEnd = BlueMoon( { day: "monthend", month: 12 })
 ``
 
 <br>
@@ -84,7 +84,7 @@ BlueMoon({ day: 25, month: 3 })
 Means 25th of March every year.
 
 ``
-let reportMonthEnd = BlueMoon({ day: "monthend", month: 2 })
+const reportMonthEnd = BlueMoon({ day: "monthend", month: 2 })
 ``
 <br>
 This calculates the end of month, whether it's 29th of February or 28th in this case, or 30th or 31st for other months.
@@ -111,6 +111,12 @@ BlueMoon({ day: "Monday", week: 2 })
 means Monday of the 2nd week of each month.
 
 ##### Relative day of the week
+``
+BlueMoon( {day: "Thu", week: "-1" } )
+``
+<br>
+Thursday last week
+
 ``
 BlueMoon({ day: "Monday", week: "+2" })
 ``
@@ -163,6 +169,7 @@ Tomorrow.
 ``{ day: 2 }`` is the same as ``{ day: "2" }``
 
 
+
 ##### Relative day of the month
 There are some handy options if you are specific about full week or part week.
 
@@ -172,11 +179,25 @@ BlueMoon({ day: "Sunday 3" })
 <br>
 The third Sunday of the current month.
 
+
+``
+const marketDay = BlueMoon( { day: "Sunday 2", pivotDate: { day: 1, month: 1 }, loop: 24 } )
+``
+<br>
+Market day is the second Sunday of every month.
+This will find the second Sunday of every month from 1st of January this current year for the next 24 months.
+
 ``
 BlueMoon({ day: "Wednesday -2", month: 10 })
 ``
 <br>
 The second last Wednesday of October each year.
+
+``
+BlueMoon( { day: "Monday 1", loop: 10 } )
+``
+<br>
+The first Monday of the current month and the next 9 months
 
 ``
 BlueMoon({ day: "Wedesday *1" })
@@ -377,7 +398,7 @@ Blue Moon returns an array of twelve dates, the first Monday of each month this 
 
 
 ``
-let next5MothersDays = BlueMoon({ day: "Sunday 2", month: 5}, { loop: 5})
+const next5MothersDays = BlueMoon({ day: "Sunday 2", month: 5}, { loop: 5})
 ``
 <br>
 Returns an array of dates of Mothers days for the next five years.
