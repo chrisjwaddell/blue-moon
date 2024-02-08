@@ -191,7 +191,7 @@ This will find the second Sunday of every month from 1st of January this current
 BlueMoon({ day: "Wednesday -2", month: 10 })
 ``
 <br>
-The second last Wednesday of October each year.
+The second last Wednesday of October of the current year.
 
 ``
 BlueMoon( { day: "Monday 1", loop: 10 } )
@@ -212,7 +212,7 @@ When week is an absolute number, it is the week number for the year. <br>
 BlueMoon({ day: "Mon", week: 18 })
 ``
 <br>
-is considered to be the Monday of the 18th week or the year.
+is considered to be the Monday of the 18th week of the year.
 
 ``
 BlueMoon({ day: "Tuesday", week: "+2" })
@@ -294,7 +294,7 @@ This returns the first of the current month in 2023 every time it's run.
 ``
 BlueMoon({ day: 1, year: "+1" })
 `` <br>
-This returns the first of the current month of next year every time it's run.
+This returns the first of the current month of next year every time it's run. <br>
 *Note* - You must use quotes for relative values.
 
 ##### Current
@@ -398,7 +398,7 @@ Blue Moon returns an array of twelve dates, the first Monday of each month this 
 
 
 ``
-const next5MothersDays = BlueMoon({ day: "Sunday 2", month: 5}, { loop: 5})
+const next5MothersDays = BlueMoon({ day: "Sunday 2", month: 5, loop: 5})
 ``
 <br>
 Returns an array of dates of Mothers days for the next five years.
@@ -408,7 +408,7 @@ Blue Moon categorizes the frequency based on the type of *day* value. The date c
 Daily
 <br>
 ``
-BlueMoon({ day: "current" loop: 10 })
+BlueMoon({ day: "current", loop: 10 })
 ``
 <br>
 This would return the next 10 days
@@ -496,7 +496,12 @@ Turn off warnings in the console. The default is true.
 BlueMoon({ day: 31 })
 ``
 <br>
-You will get a warning with this setting because next month may return 
+You will get a warning with this setting because next month may return an incorrect date because it may not have 31 days in the month.
 
+``
+BlueMoon({ day: 31, warnings: false })
+``
+<br>
+However, this won't give a warning.
 
 
