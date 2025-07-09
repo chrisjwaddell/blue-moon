@@ -1,5 +1,10 @@
-# Blue Moon Date API
-
+<!-- PROJECT LOGO -->
+<div align="center">
+    <img src="dist/images/logo.jpg" alt="Logo" width="200" height="90">
+    <h1 align="center">Blue Moon</h1>
+    <h3>A unique Javascript date library</h3>
+    <br />
+</div>
 Blue Moon allows you to create dates based on day name, day number, week, month, month-end and other date settings to return one specific date that matches your criteria. It can be in the past or future.
 
 ``
